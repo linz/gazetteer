@@ -1,9 +1,3 @@
-<style type="text/css">
-    table { border-spacing: 2px; padding: 5px }
-    tr { vertical-align:top }
-</style>
-
-
 Gazetteer
 =========
 
@@ -60,6 +54,10 @@ User roles and security
 
 There are a number of postgres database roles used to control access to the database. These are:
 
+<style type="text/css">
+    table { border-spacing: 2px; padding: 5px }
+    tr { vertical-align:top }
+</style>
 <table>
     <tr>
         <td>gazetteer_user</td>
