@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<!ATTLIST div object_type CDATA #IMPLIED>
+<!ATTLIST span object_type CDATA #IMPLIED>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-NZ" xml:lang="en-NZ" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>@!name.name!@</title>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/name.js"></script>
+    <script type="text/javascript" src="js/name_validator.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/name.css" />
+</head>
+<body>
+<div class="data">
+    <div class="idblock">
+    @!name.name_id!@/@!name.feat_id!@
+    <span id="button_bar"></span>
+    <span id="favourite_button" />@!name.name_id!@</span>
+    </div>
+    <h1>@!name.name!@</h1>
+    <!--(if name.status == 'UNEW')-->
+    <div class="edit-update object-type" object_type="Name" id="new_name_edit">
+          <p>Enter the correct spelling of the name</p>
+          <input type="text" name="name" value=@!name.name!@" class="edit-value"  id="@!id(name,'name')!@" />
+    </div>
+    <a href="javascript:0" id="new_name_edit_edit_link" class="show-edit-update action-link">Edit name</a>
+    <!--(end)-->
+
+    <p>Process: @! lookup('NPRO',name.process ) !@
+    <input type="hidden" name="default_name_process" value="@!name.process!@"/>
+    <!--(if name.status == 'UNEW')-->
+    <span class="edit-update object-type" object_type="Name">
+        <select name="name_process" class="edit-value" id="@!id(name,'process')!@">
+        $!lookupOptions('NPRO', True)!$
+        </select>
+    </span>
+    <!--(end)-->
+    </p>
+
+    <p>Status: @! lookup('NSTS',name.status ) !@
+    <span class="edit-update object-type" object_type="Name">
+        <select name="name_status" class="edit-value" id="@!id(name,'status')!@">
+        $!lookupOptions('NSTS')!$
+        </select>
+    </span>
+    </p>
+
+    <h2>Other names</h2>
+    <!--(if len(name.feature.names) > 1)-->
+            <!--(for aname in name.feature.names)-->
+                <!--(if aname != name)-->
+                <p><a class="name_link" href="?id=@!aname.name_id!@">@!aname.name!@</a> (@! lookup('NSTS',aname.status) !@)</p>
+                <!--(end)-->
+            <!--(end)-->
+    <!--(else)-->
+    <p>There are no other names for this feature.</p>
+    <!--(end)-->
+    <div class="edit-new-template object-type" id="new_name_template" object_type="Name">
+        <p>To create a new name for this feature enter the name below and save the edits.  You can then select the name and update its status, events, and annotations.</p>
+        <input type="hidden" name="_item_type_name" value="name for this feature" />
+        <input type="hidden" class="edit-value" name="feat_id" value="@!name.feature.feat_id!@" />
+        <input type="hidden" class="edit-value" name="status" value="UNEW" />
+        <div class="form_row">
+            <span class="form_label">Name: </span>
+            <div class="form_row_input">
+                <input type="text" name="name" class="edit-value fill" />
+            </div>
+        </div>
+     </div>
+
+
+    <h2>Feature information</h2>
+    <div id="@!id(name.feature)!@" class="editable-item">
+        <p><span class="infotype">Feature type:</span> @!lookup('FTYP',name.feature.feat_type)!@ (@!lookup('FCLS',lookupCategory('FTYP',name.feature.feat_type))!@)</p>
+        <p><span class="infotype">Description: </span>$! htmlText(name.feature.description) !$</p>
+    <span class="author">(@!name.feature.updated_by!@: @!dateFormat(name.feature.update_date)!@)</span>
+    <div class="edit-update">
+        <div class="object-type" object_type="Feature">
+            <div class="form_row">
+                <span class="form_label">Feature type: </span>
+        <select name="feat_type_category">
+        $!lookupOptions('FCLS')!$
+        </select>
+        <select name="feat_type" class="edit-value" id="@!id(name.feature,'feat_type')!@">
+        $!lookupOptions('FTYP')!$
+        </select>
+    </div>
+    <div class="form_row">
+        <span class="form_label">Description: </span>
+        <div class="form_row_input">
+        <textarea class="edit-value" id="@!id(name.feature,'description')!@"></textarea>
+    </div>
+    </div>
+        </div>
+    </div>
+    <!--(for coord in getCoordinates(name.feature))-->
+        <p><span class="infotype">$!coord[0]!$: </span>$!coord[1]!$</p>
+    <!--(end)-->
+    <div class="edit-update">
+        <p>Enter new coordinates.  Coordinates can either be latitude and longitude
+        in a geocentric datum (eg NZGD2000, RSRGD2000, WGS84), or NZTM.  Latitudes
+        and longitudes can be either as degrees (eg.&nbsp;40.3S&nbsp;171.5E),
+        degrees and minutes (eg.&nbsp;40&nbsp;03.25S&nbps;171&nbsp;35.2E) or 
+        degrees, minutes, and seconds (eg.&nbsp;40&nbsp;03&nbsp;15.2S&nbsp;170&nbsp;35&nbsp;06.9E).
+        These can be latitude/longitude or longitude/latitude.
+        </p>
+        <div class="object-type" object_type="Feature">
+        <input type="text" name="setLocation" size="32" class="edit-value" id="@!id(name.feature)!@.setLocation"/>
+    </div>
+    </div>
+    </div>
+
+    <h2>Feature annotations</h2>
+    <div class="edit-new-template object-type" id="new_annotation_template" object_type="FeatureAnnotation">
+        <p>New annotation details</p>
+        <input type="hidden" class="edit-value" name="feat_id" value="@!name.feature.feat_id!@" />
+        <div class="form_row">
+            <span class="form_label">Type: </span>
+        <select name="annotation_type" class="edit-value">
+        $!lookupOptions('FANT')!$
+        </select>
+        </div>
+        <div class="form_row">
+            <span class="form_label">Annotation: </span>
+            <div class="form_row_input">
+                <textarea name="annotation" class="edit-value"></textarea>
+            </div>
+        </div>
+    </div>
+    <!--(if len(name.feature.annotations) == 0 )-->
+    <p>There are no annotations for this feature</p>
+    <!--(end)-->
+    <!--(for annot in sortFeatureAnnotations(name.feature.annotations))-->
+    <div id="@!id(annot)!@" class="editable-item can-delete">
+    <p class="annot">
+    <span class="infotype">@!lookup('FANT',annot.annotation_type)!@: </span>
+    $! htmlText(annot.annotation) !$
+    <span class="author">(@!annot.updated_by!@: @!dateFormat(annot.update_date)!@)</span>
+    </p>
+    <div class="edit-update object-type" object_type="FeatureAnnotation">
+            <div class="form_row">
+                <span class="form_label">Type: </span>
+            <select name="annotation_type" class="edit-value" id="@!id(annot,'annotation_type')!@">
+            $!lookupOptions('FANT')!$
+            </select>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Annotation: </span>
+                <div class="form_row_input">
+            <textarea name="annotation" class="edit-value" id="@!id(annot,'annotation')!@"></textarea>
+        </div>
+            </div>
+    </div>
+    </div>
+    <!--(end)-->
+
+    <h2>Events</h2>
+    <div id="new_event_template" class="edit-new-template object-type" object_type="Event">
+        <p>New event details</p>
+        <input type="hidden" class="edit-value" name="name_id" value="@!name.name_id!@" />
+        <div class="form_row">
+            <span class="form_label">Type: </span><select name="event_type" class="edit-value">
+        $!lookupOptions('NEVT')!$
+        </select>
+        </div>
+        <div class="form_row">
+            <span class="form_label">Authority: </span><select name="authority" class="edit-value">
+        $!lookupOptions('AUTH')!$
+        </select>
+        </div>
+        <div class="form_row">
+            <span class="form_label">Date: </span>
+            <div class="form_row_input">
+            <input name="event_date" class="edit-value" type="text" size="12"/>
+        </div>
+        </div>
+        <div class="form_row">
+            <span class="form_label">Reference: </span>
+            <div class="form_row_input">
+            <input name="event_reference" class="edit-value fill" type="text" size="50"/>
+        </div>
+        </div>
+        <div class="form_row">
+            <span class="form_label">Notes: </span>
+            <div class="form_row_input">
+            <textarea name="notes" class="edit-value" ></textarea>
+        </div>
+        </div>
+    </div>
+    <!--(if len(name.events) == 0 )-->
+    <p>There are no events associated with this name</p>
+    <!--(end)-->
+    <!--(for event in sortEvents(name.events))-->
+        <div id="@!id(event)!@" class="editable-item can-delete">
+        <p class="event"><span class="infotype">@!lookup('NEVT',event.event_type)!@</span> 
+        <span class="eventdate">(@!dateFormat(event.event_date)!@)</span>:
+        @!event.event_reference!@
+        <span class="author">(@!event.updated_by!@: @!dateFormat(event.update_date)!@)</span>
+        </p>
+        <!--(if event.notes)-->
+        <p class="eventnotes"><span class="infotype">Notes:</span> $! htmlText(event.notes) !$</p>
+        <!--(end)-->
+        <div class="edit-update can-delete object-type" object_type="Event">
+            <div class="form_row">
+                <span class="form_label">Type: </span><select name="event_type" class="edit-value" id="@!id(event,'event_type')!@">
+            $!lookupOptions('NEVT')!$
+            </select>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Authority: </span><select name="authority" class="edit-value" id="@!id(event,'authority')!@">
+            $!lookupOptions('AUTH')!$
+            </select>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Date: </span>
+                <div class="form_row_input">
+                <input name="event_date" class="edit-value" type="text" size="12" id="@!id(event,'event_date')!@" />
+            </div>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Reference: </span>
+                <div class="form_row_input">
+                <input name="event_reference" class="edit-value fill" type="text" size="50" id="@!id(event,'event_reference')!@" />
+            </div>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Notes: </span>
+                <div class="form_row_input">
+                <textarea class="edit-value" name="notes" id="@!id(event,'notes')!@"></textarea>
+            </div>
+            </div>
+        </div>
+        </div>
+    <!--(end)-->
+
+    <h2>Name annotations</h2>
+    <div class="edit-new-template object-type" id="new_annotation_template" object_type="NameAnnotation">
+        <p>New annotation details</p>
+        <input type="hidden" class="edit-value" name="name_id" value="@!name.name_id!@" />
+        <div class="form_row">
+            <span class="form_label">Type: </span>
+        <select name="annotation_type" class="edit-value">
+        $!lookupOptions('NANT')!$
+        </select>
+        </div>
+        <div class="form_row">
+            <span class="form_label">Annotation: </span>
+                <div class="form_row_input">
+            <textarea name="annotation" class="edit-value"></textarea>
+        </div>
+        </div>
+    </div>
+    <!--(if len(name.annotations) == 0 )-->
+    <p>There are no annotations for this name</p>
+    <!--(end)-->
+    <!--(for annot in sortNameAnnotations(name.annotations))-->
+    <div id="@!id(annot)!@" class="editable-item can-delete">
+    <p class="annot">
+    <span class="infotype">@!lookup('NANT',annot.annotation_type)!@: </span>
+    $! htmlText(annot.annotation) !$
+    <span class="author">(@!annot.updated_by!@: @!dateFormat(annot.update_date)!@)</span>
+    </p>
+    <div class="edit-update object-type" object_type="NameAnnotation">
+            <div class="form_row">
+                <span class="form_label">Type: </span>
+            <select name="annotation_type" class="edit-value" id="@!id(annot,'annotation_type')!@">
+            $!lookupOptions('NANT')!$
+            </select>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Annotation: </span>
+                <div class="form_row_input">
+            <textarea name="annotation" class="edit-value" id="@!id(annot,'annotation')!@"></textarea>
+        </div>
+            </div>
+    </div>
+    </div>
+    <!--(end)-->
+
+    <h2>Feature/Name associations</h2>
+    <div class="edit-new-template object-type" id="new_association_template" object_type="Association">
+        <p>New association details</p>
+        <p>Note: to associate this name with another name or feature you must first open that name
+        or feature in another window</p>
+        <input type="hidden" class="edit-value" name="name_id_from" value="@!name.name_id!@" />
+        <div class="form_row">
+        <select name="assoc_type" class="edit-value">
+        $!getAssociationTypeOptions()!$
+        </select>
+        <select name="name_id_to" class="edit-value viewed-name-lookup">
+        </select>
+        </div>
+    </div>
+    <!--(for assoc in getAssociations())-->
+    <div id="@!id(assoc.association)!@" class="editable-item can-delete">
+        <p>
+        @!assoc.text!@ 
+        <a class="name_link" href="?id=@!assoc.name.name_id!@">@!assoc.name.name!@</a>
+        <span class="author">(@!assoc.association.updated_by!@: @!dateFormat(assoc.association.update_date)!@)</span>
+        </p>
+    </div>
+    <!--(else)-->
+    <p>There are no other names or features associated with this one.</p>
+    <!--(end)-->
+
+</div>
+</body>
+</html>

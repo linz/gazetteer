@@ -1,0 +1,86 @@
+body
+{
+	font-family: verdana, arial, geneva, sans-serif;
+	font-size: 8pt;
+	margin: 8px 8px 8px 28px;
+}
+
+
+h1 
+{
+	margin-left: -20px;
+	font-size: 14pt;
+	font-weight: normal;
+}
+
+h2 
+{
+	margin-left: -20px;
+	font-size: 11pt;
+	font-weight: normal;
+	font-style: italic;
+}
+
+span.infotype,
+span.eventdate,
+span.author,
+div.idblock
+{
+	color: #888888;
+}
+
+span.author
+{
+	float: right;
+}
+
+div.idblock
+{
+	vertical-align: top;
+	float: right;
+}
+
+div.edit-item,
+div.edit-new-item
+{
+	background-color: #EEEEEE;
+	border-width: 1px;
+	border-color: #BBBBBB;
+	border-style: solid;
+	margin-bottom: 5px;
+	padding: 2px 5px 2px 5px;
+}
+
+
+.edit-update,
+.edit-restore,
+.edit-new-item,
+div.edit-new-item
+{
+	background-color: yellow;
+}
+
+div.edit-new-template
+{
+	display: none;
+}
+
+div.form_row span.form_label
+{
+	float: left;
+	width: 8em;
+	margin: 0 8px 0 0;
+}
+
+div.form_row input,
+div.form_row div.form_row_input
+{
+	overflow: hidden;
+	margin: 0 8px 0 0;
+}
+
+div.form_row_input input.fill,
+div.form_row_input textarea
+{
+	width: 100%;
+}

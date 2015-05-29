@@ -1,0 +1,72 @@
+status nsts
+feat_id_src fid
+feat_type type
+nzgb_ref *NZGZ *NZGH
+nzgb_date *NZGZ *NZGH
+nzgb_no *NZGZ *NZGH
+nzgb_page *NZGZ *NZGH
+district %LDIS %ISLD
+map_series
+map_sheet
+map_ref
+crd_projection geom
+crd_north geom
+crd_east geom
+crd_datum geom
+crd_latitude geom
+crd_longitude geom
+info_ref @FLRF
+info_origin desc1
+info_description desc @HORM/DISN
+info_note desc1 @HORM
+update_by
+update_date
+gis_point
+gis_feat
+geom_type @UFGT/USON
+accuracy @UFAC/USON
+accuracy_rating @NTAR
+cpa_legislation @CPAL
+cpa_section @CPAL
+conservancy @DOCC
+desc_code @NTDC
+doc_cons_unit_no @DOCR
+doc_gaz_date *DOCG
+doc_gaz_no *DOCG
+doc_gaz_page *DOCG
+doc_gaz_ref *DOCG
+duplication
+edition
+gebco @UFGP/USON
+region @UFRG/USON
+rev_gaz_date *NZGR *NZGS
+rev_gaz_no *NZGR *NZGS
+rev_gaz_page *NZGR *NZGS
+rev_gaz_ref *NZGR *NZGS
+rev_treaty_date *TSLR
+rev_treaty_page *TSLR
+rev_treaty_legislation *TSLR
+scufn @UFAD/USON
+treaty_date *TSLG
+treaty_page *TSLG
+treaty_legislation *TSLG
+usea_id
+stat_legislation
+stat_leg_date
+stat_leg_page
+height @SCHT/AN*
+ant_pn_ref *CLCT
+ant_pgaz_ref *CLCT
+isonmap
+ant_nz250000_map @NOTE
+ant_us250000_map @NOTE
+ant_50000_map
+scar_id @SCID/AN*
+scar_rec_by @SCRB/AN*
+ant_lamps_code
+ant_info_notes
+is_moved_in_lamps
+ant_updates
+scar_desc
+ischecked
+cpa_gazettal
