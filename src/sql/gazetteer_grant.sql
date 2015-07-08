@@ -1,4 +1,15 @@
-﻿-- Set privileges and ownership of objects in gazetteer schema
+﻿-- ###############################################################################
+-- 
+--  Copyright 2015 Crown copyright (c)
+--  Land Information New Zealand and the New Zealand Government.
+--  All rights reserved
+-- 
+--  This program is released under the terms of the new BSD license. See the 
+--  LICENSE file for more information.
+-- 
+-- ###############################################################################
+
+-- Set privileges and ownership of objects in gazetteer schema
 
 set search_path=public;
 set search_path=public;

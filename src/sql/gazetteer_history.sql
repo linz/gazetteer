@@ -1,4 +1,15 @@
-﻿-- Create tables and triggers to support keeping a history of changes to tables.
+﻿-- ###############################################################################
+-- 
+--  Copyright 2015 Crown copyright (c)
+--  Land Information New Zealand and the New Zealand Government.
+--  All rights reserved
+-- 
+--  This program is released under the terms of the new BSD license. See the 
+--  LICENSE file for more information.
+-- 
+-- ###############################################################################
+
+-- Create tables and triggers to support keeping a history of changes to tables.
 
 SET search_path=gazetteer, public;
 

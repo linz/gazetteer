@@ -1,4 +1,15 @@
-﻿-- Script to generate a web data set for web database.  This is temporary
+﻿-- ###############################################################################
+-- 
+--  Copyright 2015 Crown copyright (c)
+--  Land Information New Zealand and the New Zealand Government.
+--  All rights reserved
+-- 
+--  This program is released under the terms of the new BSD license. See the 
+--  LICENSE file for more information.
+-- 
+-- ###############################################################################
+
+-- Script to generate a web data set for web database.  This is temporary
 -- version, based on the import tables rather than on the real data.  Mainly
 -- doing stuff to try and get the spatial layers about right...
 
