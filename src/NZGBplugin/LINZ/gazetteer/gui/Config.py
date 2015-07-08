@@ -1,5 +1,5 @@
 
-# Configuration settings for electoral address GUI
+# Configuration settings for NZGB plugin
 
 from PyQt4.QtCore import *
 
@@ -17,7 +17,10 @@ def set( item, value ):
     settings().setValue(item,value)
 
 def get( item, default='' ):
-    value = str(settings().value(item,default).toString())
+    value=settings().value(item,default)
+    if 'toString' in dir(value):
+        value=value.toString()
+    value = str(value)
     return value
 
 def remove( item ):

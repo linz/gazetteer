@@ -64,20 +64,26 @@ $body$
 $body$
 LANGUAGE sql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION gaz_plainTextWords( string TEXT )
-RETURNS text[]
+CREATE OR REPLACE FUNCTION gaz_plainText2( string TEXT )
+RETURNS TEXT
 AS
 $body$
-      SELECT regexp_split_to_array(
-       trim(
+      SELECT trim(
        regexp_replace(
        regexp_replace(
        lower(gaz_plaintext($1)),
          E'[\\'']','','g'),  -- Characters to delete
          E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g') -- Alternative separators 
          )
-         ,E'\\s+')
+$body$
+LANGUAGE sql IMMUTABLE
+SET search_path FROM CURRENT;
 
+CREATE OR REPLACE FUNCTION gaz_plainTextWords( string TEXT )
+RETURNS text[]
+AS
+$body$
+      SELECT regexp_split_to_array( gaz_plaintext2( $1 ),E'\\s+')
 $body$
 LANGUAGE sql IMMUTABLE
 SET search_path FROM CURRENT;
@@ -303,6 +309,8 @@ LANGUAGE plpgsql
 SET search_path FROM CURRENT;
 
 GRANT EXECUTE ON FUNCTION gaz_plainText( text ) TO gazetteer_user;
+GRANT EXECUTE ON FUNCTION gaz_textHasMacrons( string TEXT ) TO gazetteer_user;
+GRANT EXECUTE ON FUNCTION gaz_plainText2( text ) TO gazetteer_user;
 GRANT EXECUTE ON FUNCTION gaz_plainTextWords( text ) TO gazetteer_user;
 GRANT EXECUTE ON FUNCTION gaz_canDeleteSystemCode(CHAR(4), CHAR(4)) TO gazetteer_user;
 GRANT EXECUTE ON FUNCTION gaz_nameRelationshipIsTwoWay( VARCHAR(4)) TO gazetteer_user;

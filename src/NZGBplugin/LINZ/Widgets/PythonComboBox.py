@@ -37,11 +37,11 @@ class PythonComboBox( QComboBox ):
         
     def setSelectedItem( self, data ):
         for i in range(self.count()):
-            if self.itemData(i).toPyObject() == data:
+            if self.itemData(i) == data:
                 self.setCurrentIndex(i)
         
     def selectedItem( self ):
         index = self.currentIndex()
         if index == -1:
             return None
-        return self.itemData( index ).toPyObject()
+        return self.itemData( index )

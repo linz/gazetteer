@@ -2,6 +2,8 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+
+
 # DictionaryListView and DictionaryListModel.  
 # 
 # Note: I think I have missed an opportunity to use features already
@@ -126,8 +128,8 @@ class DictionaryListView( QTableView ):
 
     def selectedItems( self ):
         if self._dictionaryList:
-           list = self._dictionaryList
-           return [list.getItem(r) for r in self.selectedRows()]
+            list = self._dictionaryList
+            return [list.getItem(r) for r in self.selectedRows()]
         return []
 
     def rowCount( self ):
@@ -294,7 +296,8 @@ class DictionaryListModel( QAbstractTableModel ):
             return str(self._list[self._index[row]].get(self._columns[col],''))
         elif role == Qt.BackgroundRole and not self._editable[col] and self._readonlyBrush:
             return self._readonlyBrush
-        return QVariant()
+        #return QVariant()
+        return None
 
     def setData( self, index, value, role ):
         if not index.isValid() or role != Qt.EditRole:
@@ -304,7 +307,7 @@ class DictionaryListModel( QAbstractTableModel ):
         if not self._editable[col]:
             return False
         item = self.getItem( row )
-        item[self._columns[col]] = str(value.toString())
+        item[self._columns[col]] = str(value)
         self.dataChanged.emit(index,index)
         return True
 
@@ -313,7 +316,7 @@ class DictionaryListModel( QAbstractTableModel ):
             if orientation == Qt.Horizontal:
                 if self._headers and section < len(self._headers):
                     return self._headers[section]
-        return QVariant()
+        return None
 
     def sort( self, column, order ):
         self.layoutAboutToBeChanged.emit()

@@ -84,3 +84,10 @@ div.form_row_input textarea
 {
 	width: 100%;
 }
+
+textarea.edit-value
+{
+	max-height: 400px;
+	resize: vertical;
+}
+

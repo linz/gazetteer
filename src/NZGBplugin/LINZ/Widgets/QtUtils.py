@@ -39,5 +39,5 @@ def comboValue( widget ):
     index = widget.currentIndex()
     if index == -1:
         return None
-    return widget.itemData( index ).toPyObject()
+    return widget.itemData( index )
 

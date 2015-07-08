@@ -18,35 +18,33 @@ from LINZ.gazetteer.gui import FormUtils
 #             attribs[name] = value
 #     return attribs
 
-def openFeatRefPointForm( dlg, layerId, featureId ):
+def openFeatRefPointForm(dlg, layerId, featureId):
     newFeature = featureId == 0
-
-    label = dlg.findChild(QWidget,'action_label')
-    name = dlg.findChild(QWidget,'name')
-    feat_type = dlg.findChild(QWidget,'feat_type')
-    feat_type_combo = dlg.findChild(QWidget,'feat_type_combo')
-    buttons = dlg.findChild(QWidget,'buttonBox')
-
+    label = dlg.findChild(QWidget, 'action_label')
+    name = dlg.findChild(QWidget, 'name')
+    feat_type = dlg.findChild(QWidget, 'feat_type')
+    feat_type_combo = dlg.findChild(QWidget, 'feat_type_combo')
+    buttons = dlg.findChild(QWidget, 'buttonBox')
     feat_type.hide()
     name.setEnabled(newFeature)
     feat_type_combo.setEnabled(newFeature)
-    FormUtils.populateCodeCombo( feat_type_combo, 'FTYP')
+    FormUtils.populateCodeCombo(feat_type_combo, 'FTYP')
 
     if newFeature:
         name.setText('')
         feat_type_combo.setCurrentIndex(0)
         label.setText('Enter the name and type of the new feature')
-        buttons.setStandardButtons( QDialogButtonBox.Ok | QDialogButtonBox.Cancel )
+        buttons.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
     else:
         index = feat_type_combo.findData(feat_type.text())
-        feat_type_combo.setCurrentIndex( index )
+        feat_type_combo.setCurrentIndex(index)
         label.setText('Use the gazetteer edit form to update information for existing features')
-        buttons.setStandardButtons( QDialogButtonBox.Ok )
+        buttons.setStandardButtons(QDialogButtonBox.Ok)
 
-    def setFeatType( index ):
-         index = feat_type_combo.currentIndex()
-         if index >= 0:
-             feat_type.setText( feat_type_combo.itemData(index).toString())
+    def setFeatType(index):
+        index = feat_type_combo.currentIndex()
+        if index >= 0:
+            feat_type.setText(feat_type_combo.itemData(index))
 
     def validate():
         if not newFeature:
@@ -54,7 +52,7 @@ def openFeatRefPointForm( dlg, layerId, featureId ):
             return
         featname = unicode(name.text()).strip()
         if name.text() == '':
-            QMessageBox.information(dlg,'Name missing','You must enter a name for the new feature')
+            QMessageBox.information(dlg, 'Name missing', 'You must enter a name for the new feature')
         else:
             # feat_type.show()
             dlg.accept()
@@ -64,15 +62,18 @@ def openFeatRefPointForm( dlg, layerId, featureId ):
     buttons.accepted.disconnect(dlg.accept)
     buttons.accepted.connect(validate)
 
-def openFeatGeomForm( dlg, layerId, featureId ):
-    label = dlg.findChild(QWidget,'action_label')
-    feat_id = dlg.findChild(QWidget,'feat_id')
+def openFeatGeomForm(dlg, lyr, feature):
+    label = dlg.findChild(QWidget, 'action_label')
+    feat_id = dlg.findChild(QWidget, 'feat_id')
     feat_id.hide()
+    layerId=lyr.id()
+    featureId=feature.id()
     layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
-    ss=layer.subsetString()
-    if ss and ss.startsWith('feat_id='):
-        feat_id.setText(ss.mid(8))
-    layer = QgsMapLayerRegistry.instance().mapLayer( layerId )
+    ss = layer.subsetString()
+    if ss and ss.startswith('feat_id='):
+        # SJ: QString method changed
+        feat_id.setText(ss[8:])
+    layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
     type = layer.geometryType()
     if type == QGis.Point:
         stype = 'point'
@@ -80,6 +81,6 @@ def openFeatGeomForm( dlg, layerId, featureId ):
         stype = 'line'
     else:
         stype = 'polygon'
-    label.setText('Add new '+stype) # +' to ' + name.name )
+    label.setText('Add new ' + stype)  # +' to ' + name.name )
 
 

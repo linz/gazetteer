@@ -8,6 +8,5 @@ class UCaseRegExpValidator( QRegExpValidator ):
         QRegExpValidator.__init__( self, QRegExp(regexp), parent )
         
     def validate( self, string, pos ):
-        string.replace(0,string.size(),string.toUpper())
-        return QRegExpValidator.validate(self,string,pos)
+        return QRegExpValidator.validate(self,string.upper(),pos)
     

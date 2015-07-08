@@ -12,21 +12,21 @@ class Layers( QObject ):
 
     startEdit = pyqtSignal( name='startEdit')
     endEdit = pyqtSignal( name='endEdit')
-    nameSelected = pyqtSignal( QString, name='nameSelected' )
+    nameSelected = pyqtSignal( str, name='nameSelected' )
 
     _layerDefs =  [
-        {'id':'fpoly', 'group':'feature', 'table':'feature_polygon','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm' },
-        {'id':'fline', 'group':'feature', 'table':'feature_line','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm' },
-        {'id':'fpoint', 'group':'feature', 'table':'feature_point','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm' },
-        {'id':'frefpt', 'group':'feature', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'form': 'featrefpt.ui', 'init': 'openFeatRefPointForm' },
-        {'id':'spoly', 'group':'search', 'table':'feature_polygon','geom':'shape','key':'geom_id' },
-        {'id':'sline', 'group':'search', 'table':'feature_line','geom':'shape','key':'geom_id' },
-        {'id':'spoint', 'group':'search', 'table':'feature_point','geom':'shape','key':'geom_id' },
-        {'id':'srefpt', 'group':'search', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'init': 'openFeatRefPointForm' },
+        {'id':'fpoly', 'group':'feature', 'table':'feature_polygon','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QGis.WKBMultiPolygon },
+        {'id':'fline', 'group':'feature', 'table':'feature_line','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QGis.WKBMultiLineString },
+        {'id':'fpoint', 'group':'feature', 'table':'feature_point','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QGis.WKBMultiPoint },
+        {'id':'frefpt', 'group':'feature', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'form': 'featrefpt.ui', 'init': 'openFeatRefPointForm', 'wkbtype':QGis.WKBPoint },
+        {'id':'spoly', 'group':'search', 'table':'feature_polygon','geom':'shape','key':'geom_id', 'wkbtype':QGis.WKBMultiPolygon },
+        {'id':'sline', 'group':'search', 'table':'feature_line','geom':'shape','key':'geom_id', 'wkbtype':QGis.WKBMultiLineString },
+        {'id':'spoint', 'group':'search', 'table':'feature_point','geom':'shape','key':'geom_id', 'wkbtype':QGis.WKBMultiPoint },
+        {'id':'srefpt', 'group':'search', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'init': 'openFeatRefPointForm', 'wkbtype':QGis.WKBPoint },
         ]
 
     idProperty='GazetteerLayerType'
-    zoomMargin=20000
+    zoomMargin=10000
     dbCrsEpsg=4167
     autoZoom = True
     initModule='GazEditForms'
@@ -51,12 +51,12 @@ class Layers( QObject ):
         # Set up the map extent handling
         self.setExtents()
         self._iface.mapCanvas().extentsChanged.connect( self.setExtents )
-        self._iface.mapCanvas().mapRenderer().destinationSrsChanged.connect( self.setExtents )
+        self._iface.mapCanvas().destinationCrsChanged.connect( self.setExtents )
 
         # Ensure layers are defined with current database URI
         self.setupLayerUris()
-        self.createLayers()
 
+        self.createLayers()
         registry = QgsMapLayerRegistry.instance()
         registry.layerWillBeRemoved.connect( self.removeLayer )
         iface.projectRead.connect( self.removeLayers )
@@ -73,7 +73,7 @@ class Layers( QObject ):
         try:
             canvas = self._iface.mapCanvas()
             extent = canvas.extent()
-            transform = QgsCoordinateTransform( canvas.mapRenderer().destinationSrs(), self._dbCrs )
+            transform = QgsCoordinateTransform( canvas.mapSettings().destinationCrs(), self._dbCrs )
             self._transform = transform
             mapview = transform.transformBoundingBox( extent )
             rect = QgsGeometry.fromRect( mapview )
@@ -104,6 +104,8 @@ class Layers( QObject ):
             keycol=ldef['key']
             where = 'feat_id=-1'
             uri.setDataSource( schema, table, geomcol, where, keycol )
+            uri.setSrid(str(Layers.dbCrsEpsg))
+            uri.setWkbType(ldef['wkbtype'])
 
             self._layers[id] = {
                 'id': id,
@@ -140,7 +142,7 @@ class Layers( QObject ):
         for maplayer in registry.mapLayers().values():
             if maplayer.type() != QgsMapLayer.VectorLayer:
                 continue
-            lyrid = str(maplayer.customProperty(Layers.idProperty).toString())
+            lyrid = str(maplayer.customProperty(Layers.idProperty))
             if lyrid not in self._layers:
                 continue
             glayer = self._layers[lyrid]
@@ -158,6 +160,7 @@ class Layers( QObject ):
     
         # Now add missing layers
 
+        ok=True
         for glayer in self.layerDefs():
             layer = glayer['layer']
             ldef = glayer['def']
@@ -165,6 +168,13 @@ class Layers( QObject ):
                 group = ldef['group']
                 name = 'Gazetteer ' + group + ' ' + glayer['id'][1:]
                 layer=QgsVectorLayer( glayer['uri'],name,'postgres' )
+                if not layer.isValid():
+                    QMessageBox.information(self._iface.mainWindow(),
+                                    "Layer "+name,
+                                    "Cannot create layer - definition not valid"
+                                    )
+                    ok=False
+                    continue
                 layer.setSubsetString('feat_id=-1')
                 layer.setCustomProperty(Layers.idProperty,glayer['id'])
                 glayer['layer'] = layer
@@ -180,6 +190,7 @@ class Layers( QObject ):
             if 'form' in ldef:
                 layer.setReadOnly(False)
                 layer.setEditForm( os.path.join(self._formdir,ldef['form']) )
+                layer.setEditorLayout(QgsVectorLayer.UiFileLayout)
             else:
                 layer.setReadOnly()
             if 'init' in ldef:
@@ -188,34 +199,26 @@ class Layers( QObject ):
         # If updated, then add layers to group...
 
         if updated:
-            self.moveLayersIntoGroup('feature','Gazetteer feature')
             self.moveLayersIntoGroup('search','Gazetteer search results')
+            self.moveLayersIntoGroup('feature','Gazetteer feature')
+            
 
         # Find the group 
-        self._layersOk = True
+        self._layersOk = ok
 
     def moveLayersIntoGroup( self, group, title ):
         legend = self._iface.legendInterface()
-        ids = [layer.id() for layer in self.layers(group)]
-        for layer in self.layers(group):
-            groupid = None
-            grouplayers = []
-            for gid, grel in enumerate(legend.groupLayerRelationship()):
-                if not legend.groupExists( gid ):
-                    continue
-                glayerids = grel[1]
-                if grel[0] == title:
-                    groupid = gid
-                    grouplayers = grel[0]
-                    break
-
-            if  groupid == None:
-                groupid = legend.addGroup(title)
-            elif QGis.QGIS_VERSION_INT >= 10900:
-                groupid -= 1
-    
-            if layer.id() not in grouplayers:
-                legend.moveLayer(layer,groupid)
+        # check if layer title already exists
+        groups=legend.groups()
+        if title not in groups:
+            #add group and store id
+            groupid = legend.addGroup(title)
+        else:
+            # get groupid of already existing group
+            groupid=groups.index(title)
+        #add layer to group
+        for lyr in self.layers(group):
+            legend.moveLayer(lyr,groupid)
 
     # Return layer defs in defined order
     def layerDefs( self ):
@@ -260,7 +263,7 @@ class Layers( QObject ):
             if addNew and ldef['id'] == 'frefpt':
                 continue
             layer = glayer['layer']
-            if layer.id() == currentLayer.id():
+            if currentLayer is not None and layer.id() == currentLayer.id():
                 editlayer = layer
                 break
             count = layer.featureCount()
@@ -296,7 +299,6 @@ class Layers( QObject ):
                     if not layer.commitChanges():
                         return False
                     layer.updateExtents()
-                    layer.setCacheImage(None)
                     layer.triggerRepaint()
         self.endEdit.emit()
         return True
@@ -337,11 +339,9 @@ class Layers( QObject ):
     def updateFeatureLocation( self, feat_id ):
         if feat_id == self._featid:
             for layer in self.featureLayers():
-                layer.setCacheImage(None)
                 layer.triggerRepaint()
         if feat_id in self._searchIds:
             for layer in self.layers('search'):
-                layer.setCacheImage(None)
                 layer.triggerRepaint()
 
     def showSearchResults( self, idstr ):
@@ -372,16 +372,23 @@ class Layers( QObject ):
         feat_id = None
         name = None
         for layer in layers:
-            pr = layer.dataProvider()
-            attlist = [pr.fieldNameIndex('feat_id'),pr.fieldNameIndex('name')]
-            layer.select(attlist,extent,False,True)
-            if layer.nextFeature(feat):
-                attmap = feat.attributeMap()
-                feat_id, ok = attmap[attlist[0]].toInt()
-                if not ok: 
+            request=QgsFeatureRequest()
+            request.setFilterRect(extent)
+            attlist=['feat_id','name']
+            request.setSubsetOfAttributes(attlist)
+            request.setFlags(QgsFeatureRequest.NoGeometry )
+            request.setFlags(QgsFeatureRequest.ExactIntersect)
+            # SJ: old vectorLayer API 
+            # layer.select(attlist,extent,False,True) 
+            
+            # if layer.nextFeature(feat):
+            if layer.getFeatures(request).nextFeature(feat):
+                try:
+                    feat_id = int(feat[attlist[0]])
+                except:   
                     feat_id = None
                     continue
-                name = attmap[attlist[1]].toString()
+                name = feat[attlist[1]]
                 break
         return feat_id, name
 
@@ -449,20 +456,18 @@ class Layers( QObject ):
                 continue
             geomlist = geometries[gtype[0]]
             layer = self._layers[gtype[2]]['layer']
-            pr = layer.dataProvider()
-            feat_id_att = pr.fieldNameIndex('feat_id')
+            fields=layer.pendingFields()
             editable = layer.isEditable()
             if not editable:
                 layer.startEditing()
             for g in geomlist:
-                f = QgsFeature()
+                f = QgsFeature(fields)
                 f.setGeometry(g)
-                f.addAttribute(feat_id_att, feat_id)
+                f['feat_id']=feat_id
                 layer.addFeature(f)
             if not editable:
                 layer.commitChanges()
                 layer.updateExtents()
-                layer.setCacheImage(None)
                 layer.triggerRepaint()
 
     def deleteSelectedGeometries( self ):
@@ -509,5 +514,4 @@ class Layers( QObject ):
             if not editable:
                 layer.commitChanges()
                 layer.updateExtents()
-                layer.setCacheImage(None)
                 layer.triggerRepaint()

@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.48.2 r9819"
    sodipodi:docname="icons.svg"
-   inkscape:export-filename="~/projects/gazetteer/src/plugin/admin.png"
+   inkscape:export-filename="admin.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    style="display:inline">
@@ -293,7 +293,7 @@
        id="g3023"
        style="fill:#008000;stroke:#008000;stroke-width:2.5999999;stroke-miterlimit:4;stroke-dasharray:none"
        transform="translate(1,-1)"
-       inkscape:export-filename="~/projects/gazetteer/src/plugin/addselected.png"
+       inkscape:export-filename="addselected.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path
@@ -427,7 +427,7 @@
     <g
        id="g3023-7"
        style="fill:#008000;stroke:#008000;stroke-width:2.5999999;stroke-miterlimit:4;stroke-dasharray:none;display:inline"
-       inkscape:export-filename="~/projects/gazetteer/src/plugin/addselected.png"
+       inkscape:export-filename="addselected.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
   </g>
@@ -440,7 +440,7 @@
     <g
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
-       inkscape:export-filename="~/projects/gazetteer/src/plugin/addselected.png"
+       inkscape:export-filename="addselected.png"
        style="fill:#008000;stroke:#008000;stroke-width:2.5999999;stroke-miterlimit:4;stroke-dasharray:none;display:inline"
        id="g3990">
       <path

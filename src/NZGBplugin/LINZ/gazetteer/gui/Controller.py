@@ -23,7 +23,7 @@ class Controller( QObject ):
     viewNameId = pyqtSignal( int )
     nameEdited = pyqtSignal( int )
     featureLocationEdited = pyqtSignal( int )
-    searchResultsUpdated = pyqtSignal( QString )
+    searchResultsUpdated = pyqtSignal( str )
     
     _controller = None
     
@@ -152,4 +152,4 @@ class Controller( QObject ):
         self._searchResults = results
         ids = set([r['feat_id'] for r in results])
         idstring = ','.join(str(id) for id in ids)
-        self.searchResultsUpdated.emit(QString(idstring))
+        self.searchResultsUpdated.emit(idstring)

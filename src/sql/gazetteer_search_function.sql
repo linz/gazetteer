@@ -55,13 +55,13 @@ SELECT
    name.name,
    name.status,
    feature.feat_type,
-   ts_rank(to_tsvector('gazetteer.gaz_tsc',lower(gaz_plainText(name))),q.query) as rank
+   ts_rank(to_tsvector('gazetteer.gaz_tsc',gaz_plainText2(name)),q.query) as rank
 FROM
    name 
    JOIN feature ON name.feat_id = feature.feat_id,
    q
 WHERE
-   to_tsvector('gazetteer.gaz_tsc',lower(gaz_plainText(name))) @@ q.query AND
+   to_tsvector('gazetteer.gaz_tsc',gaz_plainText2(name)) @@ q.query AND
    ($2 IS NULL OR feature.feat_type=$2) AND
    (($3 IS NULL AND name.status <> 'UDEL') OR name.status=$3)
 LIMIT
@@ -112,8 +112,8 @@ BEGIN
         ELSE
             v_sql = v_sql || 'q(query) AS (SELECT to_tsquery(''gazetteer.gaz_tsc'',' || quote_literal(p_name_query) || ')), ';
             v_src = v_src || ', q';
-            v_where = v_where || 'to_tsvector(''gazetteer.gaz_tsc'',lower(gaz_plainText(name))) @@ q.query AND ';
-            v_rank = 'ts_rank(to_tsvector(''gazetteer.gaz_tsc'',lower(gaz_plainText(name))),q.query)';
+            v_where = v_where || 'to_tsvector(''gazetteer.gaz_tsc'',gaz_plainText2(name)) @@ q.query AND ';
+            v_rank = 'ts_rank(to_tsvector(''gazetteer.gaz_tsc'',gaz_plainText2(name)),q.query)';
         END IF;
     END IF;
  

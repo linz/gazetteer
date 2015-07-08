@@ -1,5 +1,6 @@
 import re
 import os
+import sys
 import getpass
 
 import sqlalchemy
@@ -92,23 +93,28 @@ def getConnection():
 
 def instance():
     global _instance, _user
+    admins=None
     if not _instance:
         try:
             _instance = Database()
             if not userIsValid():
-                admins = gazetteerAdmins()
                 _instance = None
-                raise RuntimeError(
-                    'Current user '+str(_user)+
-                    ' is not authorized to access the gazetteer database\n' +
-                    'Contact a gazetteer admin:\n    ' +
-                    '\n    '.join(admins)
-                );
+                admins = gazetteerAdmins()
         except:
+            msg=str(sys.exc_info()[1])
             raise RuntimeError(
                     'Current user '+str(_user)+
-                    ' is not authorized to access the gazetteer database\n'
+                    ' is not authorized to access the gazetteer database.\n'
+                    + msg
                 );
+
+    if not _instance:
+            raise RuntimeError(
+                'Current user '+str(_user)+
+                ' is not authorized to access the gazetteer database\n' +
+                'Contact a gazetteer admin:\n    ' +
+                '\n    '.join(admins)
+            );
 
     return _instance
 
@@ -166,6 +172,7 @@ def execute( sql, **kwargs ):
         raise
 
 def build_tsquery( text ):
+    text=scalar('select gazetteer.gaz_plainText2(:text)',text=text)
     return ' & '.join(map( lambda x: re.sub(r'\*$',':*',x),text.split()))
 
 def user():

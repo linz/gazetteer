@@ -6,6 +6,25 @@ set search_path=gazetteer_web, gazetteer, public;
 set search_path=gazetteer_web, gazetteer, public;
 SET client_min_messages=WARNING;
 
+-- HTML encode a string
+
+CREATE OR REPLACE FUNCTION gazetteer.gweb_html_encode( string TEXT )
+RETURNS TEXT
+AS
+$body$
+    SELECT 
+       replace(
+       replace(
+       replace(
+       replace(
+            $1,
+            '&','&amp;'),
+            '"','&quot;'),
+            '<','&lt;'),
+            '>','&gt;')
+$body$
+LANGUAGE sql IMMUTABLE;
+
 -- ----------------------------------------------------------------------------
 -- Populate gaz_code
 
@@ -210,9 +229,9 @@ select
    'N',
    'Y',
    'Y',
-   'N',
+   'Y',
    'DESC',
-   'Feature type: ' || s.value
+   '<p class="hanging_indent"><span class="annot_prefix">Feature Type:</span> ' || gweb_html_encode(s.value) || '</p>'
 from
    feature f 
    join system_code s ON s.code_group='FTYP' and s.code=f.feat_type
@@ -227,9 +246,9 @@ select
    'N',
    'Y',
    'Y',
-   'N',
+   'Y',
    'DESC',
-   description
+   '<p class="hanging_indent">' || gweb_html_encode(description) || '</p>'
 from
    feature 
 where
@@ -273,13 +292,15 @@ select
    'N',
    'Y',
    'Y',
-   'N',
+   'Y',
    'OFFS',
-   CASE
+   '<p class="hanging_indent">' ||
+   (CASE
       WHEN id IN (SELECT name_id FROM tmp_gweb_name_is_official) THEN 'This is an official name'
       WHEN feat_id IN (SELECT feat_id FROM tmp_gweb_name_is_official) THEN 'This is not an official name of this feature'
       ELSE 'This name is not official - this feature does not have an official name'
-      END
+      END) ||
+   '</p>'
 from
    gaz_name n;
 
@@ -291,10 +312,10 @@ select
    'N',
    'Y',
    'Y',
-   'N',
+   'Y',
    'OFFS',
-   'Status: ' || gc.value ||
-   CASE WHEN ne.event_type IS NULL THEN '' ELSE ' (' || ne.event_reference || ')' END
+   '<p class="hanging_indent"><span class="annot_prefix">Status:</span> ' || gweb_html_encode(gc.value) ||
+   CASE WHEN ne.event_type IS NULL THEN '' ELSE ' (' || gweb_html_encode(ne.event_reference) || ')' END || '</p>'
 from
    gaz_name n
    join name nm ON nm.name_id = n.id
@@ -315,9 +336,9 @@ select
    'N',
    'Y',
    'Y',
-   'N',
+   'Y',
    'ORGN',
-   'History/Origin/Meaning: ' || d.annotation
+   '<p class="hanging_indent"><span class="annot_prefix">History/Origin/Meaning:</span> ' || gweb_html_encode(d.annotation) || '</p>'
 from
    gaz_name n
    join name_annotation d on d.name_id = n.id and d.annotation_type='HORM';
@@ -330,9 +351,9 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'ORGN',
-   'Reference information: ' || d.annotation
+   '<p class="hanging_indent"><span class="annot_prefix">Reference Information:</span> ' || gweb_html_encode(d.annotation) || '</p>'
 from
    gaz_name n
    join name_annotation d on d.name_id = n.id and d.annotation_type='FLRF';
@@ -346,9 +367,9 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'ORGN',
-   'Other notes: ' || d.annotation
+   '<p class="hanging_indent"><span class="annot_prefix">Other Notes:</span> ' || gweb_html_encode(d.annotation) || '</p>'
 from
    gaz_name n
    join name_annotation d on d.name_id = n.id and d.annotation_type='NNOT';
@@ -361,15 +382,15 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'ORGN',
-   'Māori name: ' ||
+   '<p class="hanging_indent"><span class="annot_prefix">Māori Name:</span> ' ||
    (CASE 
       WHEN d.annotation ilike 'yes' THEN 'Yes'
       WHEN d.annotation ilike 'no' THEN 'No'
       WHEN d.annotation ilike 'tbi' THEN 'To be investigated'
       ELSE 'Unknown'
-      END)
+      END) || '</p>'
 from
    gaz_name n
    join name_annotation d on d.name_id = n.id and d.annotation_type='MRIN';
@@ -384,9 +405,9 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'LOCN',
-   'Land district: ' || d.annotation
+   '<p class="hanging_indent"><span class="annot_prefix">Land District:</span> ' || gweb_html_encode(d.annotation) || '</p>'
 from
    gaz_name n
    join feature_annotation d on d.feat_id = n.feat_id and d.annotation_type='LDIS';
@@ -401,9 +422,9 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'LOCN',
-   'DOC Conservancy: ' || d.annotation
+   '<p class="hanging_indent"><span class="annot_prefix">DOC Conservancy:</span> ' || gweb_html_encode(d.annotation) || '</p>'
 from
    gaz_name n
    join name_annotation d on d.name_id = n.id and d.annotation_type='DOCC';
@@ -418,11 +439,11 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'LOCN',
-   'This feature is on ' ||
+   '<p class="hanging_indent">This feature is on ' ||
    CASE WHEN d.annotation ~* 'islands$' THEN 'the ' ELSE '' END ||
-   d.annotation
+   gweb_html_encode(d.annotation) || '</p>'
 from
    gaz_name n
    join feature_annotation d on d.feat_id = n.feat_id and d.annotation_type='ISLD'
@@ -439,9 +460,9 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'LOCN',
-   'This is an undersea feature.'
+   '<p class="hanging_indent">This is an undersea feature.</p>'
 from
    gaz_name n
    join feature f on f.feat_id = n.feat_id 
@@ -457,9 +478,9 @@ select
    'N',
    'N',
    'Y',
-   'N',
+   'Y',
    'LOCN',
-   'This feature is in Antarctica.'
+   '<p class="hanging_indent">This feature is in Antarctica.</p>'
 from
    gaz_name n
    join feature f on f.feat_id = n.feat_id 
@@ -510,7 +531,7 @@ select
    'Y',
    'Y',
    'LOCN',
-   '<p>Approximate location: '
+   '<p class="hanging_indent"><span class="annot_prefix">Approximate Location:</span> '
    ||
    CASE WHEN lat >= 0 THEN
       ROUND(lat,3)::varchar || 'N' 
@@ -541,7 +562,7 @@ select
    'Y',
    'Y',
    'ORGN',
-   'Feature notes: ' || d.annotation
+   '<p class="hanging_indent"><span class="annot_prefix">Feature Notes:</span> ' || gweb_html_encode(d.annotation) || '</p>'
 from
    feature_annotation d 
 where
@@ -558,7 +579,7 @@ select
    'N',
    'Y',
    'LOCN',
-   '<p>View location in <a target="_blank" href="http://maps.google.co.nz/maps?q=loc:' ||
+   '<p class="hanging_indent">View location in <a target="_blank" href="http://maps.google.co.nz/maps?q=loc:' ||
      ll.lat::varchar || ',' || ll.lon::varchar ||
      '&z=5&t=m">Google maps</a>)</p>'
 from
@@ -970,6 +991,7 @@ SET search_path FROM CURRENT;
 -- SELECT gweb_update_web_database()
 -- SELECT COUNT(*) FROM gazetteer_web.gaz_name
 
+ALTER FUNCTION gazetteer.gweb_html_encode( TEXT ) OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_code() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_feature() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_name() OWNER TO gazetteer_dba;
@@ -977,6 +999,7 @@ ALTER FUNCTION gazetteer.gweb_update_gaz_annotation() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_simplify_shapes( zmin INT, zmax INT ) OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_web_database() OWNER TO gazetteer_dba;
 
+GRANT EXECUTE ON FUNCTION gazetteer.gweb_html_encode( TEXT ) TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_code() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_feature() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_name() TO gazetteer_dba;

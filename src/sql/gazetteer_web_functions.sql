@@ -61,21 +61,34 @@ ALTER FUNCTION gaz_plaintext(text) OWNER TO gaz_owner;
 GRANT EXECUTE ON FUNCTION gaz_plaintext(text) TO gaz_web_reader;
 GRANT EXECUTE ON FUNCTION gaz_plaintext(text) TO gazetteer_user;
 
-CREATE OR REPLACE FUNCTION gaz_plaintextwords(string text, keep_trailing boolean)
-  RETURNS text[] AS
-$BODY$
-      SELECT regexp_split_to_array(
-       regexp_replace(
+CREATE OR REPLACE FUNCTION gaz_plainText2( string TEXT )
+RETURNS TEXT
+AS
+$body$
+     SELECT 
        regexp_replace(
        regexp_replace(
        regexp_replace(
        lower(gaz_plaintext($1)),
          E'[\\'']','','g'),  -- Characters to delete
          E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g'), -- Alternative separators 
-         E'^\\s+',''), -- Leading spaces
-         CASE WHEN $2 THEN '$' ELSE E'\\s+$' END,''), -- Trailing spaces
-         E'\\s+')
+         E'^\\s+','') -- Leading spaces
+$body$
+LANGUAGE sql IMMUTABLE
+SET search_path FROM CURRENT;
 
+ALTER FUNCTION gaz_plaintext2(text) OWNER TO gaz_owner;
+GRANT EXECUTE ON FUNCTION gaz_plaintext2(text) TO gaz_web_reader;
+GRANT EXECUTE ON FUNCTION gaz_plaintext2(text) TO gazetteer_user;
+
+CREATE OR REPLACE FUNCTION gaz_plaintextwords(string text, keep_trailing boolean)
+  RETURNS text[] AS
+$BODY$
+      SELECT regexp_split_to_array(
+        regexp_replace(
+           gaz_plaintext2($1),
+           CASE WHEN $2 THEN '$' ELSE E'\\s+$' END,''), -- Trailing spaces
+         E'\\s+')
 $BODY$
   LANGUAGE sql IMMUTABLE STRICT;
 ALTER FUNCTION gaz_plaintextwords(text, boolean) OWNER TO gaz_owner;

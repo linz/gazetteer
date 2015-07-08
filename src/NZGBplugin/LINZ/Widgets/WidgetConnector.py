@@ -34,24 +34,6 @@ class WidgetLinker( QObject ):
         return False
 
     @staticmethod
-    def pythonValue( qval ):
-        if type(qval) == QVariant:
-            if not qval.isValid() or qval.isNull():
-                return None
-            typename = qval.typeName()
-            if typename == 'int':
-                value, valid = qval.toInt()
-                if valid:
-                    return value
-            elif typename == 'double':
-                value, valid = qval.toDouble()
-                if valid:
-                    return value
-            return unicode(qval.toString())
-        elif type(qval) == QString:
-            return unicode(string)
-
-    @staticmethod
     def getLinker( widget ):
         for c in WidgetLinker.__subclasses__():
             if 'types' in dir(c):
@@ -71,7 +53,7 @@ class ComboLinker( WidgetLinker ):
     def getValue( self ):
         index = self._widget.currentIndex()
         if index >= 0:
-            result = WidgetLinker.pythonValue(self._widget.itemData( index ))
+            result = self._widget.itemData( index )
             return result
         else:
             return None
@@ -96,7 +78,7 @@ class LabelLinker( WidgetLinker ):
 class LineEditLinker( WidgetLinker ):
 
     types = [QLineEdit]
-
+    
     def __init__( self, widget ):
         WidgetLinker.__init__(self, widget)
         widget.textChanged.connect(lambda x: self.emitChanged())
@@ -261,8 +243,8 @@ class WidgetConnector( QObject ):
         self._object = None
         self._mapping = []
 
-        for widget in self._form.findChildren(QWidget):
-            attribute = unicode(widget.property('dataAttribute').toString())
+        for widget in self._form.findChildren(QWidget):          
+            attribute = widget.property('dataAttribute')
             if not attribute and self._widget_prefix:
                 name = unicode(widget.objectName())
                 if not name.startswith(self._widget_prefix):

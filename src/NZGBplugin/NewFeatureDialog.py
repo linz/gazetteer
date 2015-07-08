@@ -31,13 +31,13 @@ class NewFeatureDialog( QDialog, Ui_NewFeatureDialog ):
         fcls = None
         index = self.uFeatTypeClass.currentIndex()
         if index >= 0:
-            fcls = str(self.uFeatTypeClass.itemData(index).toString())
+            fcls = str(self.uFeatTypeClass.itemData(index))
         FormUtils.populateCodeCombo( self.uFeatType, 'FTYP', category=fcls )
 
     def featureType( self ):
         index = self.uFeatType.currentIndex()
         if index >= 0:
-            return str(self.uFeatType.itemData(index).toString())
+            return str(self.uFeatType.itemData(index))
         return None
 
     def featureName( self ):
