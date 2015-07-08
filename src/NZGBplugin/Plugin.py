@@ -16,7 +16,7 @@ class Plugin:
     Version="1.8.1"
     QgisMinimumVersion="2.4"
     Author="ccrook@linz.govt.nz <Chris Crook>"
-    PluginUrl="http://*server*/QgisPluginRepository/GazetteerEditor.zip"
+    PluginUrl="http://<server>/QgisPluginRepository/GazetteerEditor.zip"
     Description="Gazetteer database editor"
 
     _menuName="Gazetteer editor"

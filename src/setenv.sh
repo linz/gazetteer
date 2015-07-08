@@ -7,4 +7,4 @@ if [ -z "$env" ]; then
 	echo "Available environments dev, uat, prod"
 	env="show" 
 fi
-python plugin/LINZ/gazetteer/gui/DatabaseConfiguration.py $env
+python NZGBplugin/LINZ/gazetteer/gui/DatabaseConfiguration.py $env

@@ -14,6 +14,10 @@ creating, searching, amending names.  The user interface is built using
 QGIS for the spatial representation and the Qt4 webkit tools for displaying
 and amending attribute data.
 
+The QGIS database and application are also used to publish data onto the
+web.  The web application is not included in this repository.  However the
+database schema to which it publishes is.
+
 More details of the technology implementation are available in the
 developer notes at /src/NZGBplugin/help/devnotes.html.  User help is
 in the file /src/NZGBplugin/help/index.html.

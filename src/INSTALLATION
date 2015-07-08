@@ -1,0 +1,14 @@
+These are pointers rather tahn complete notes on installation.  
+
+The installation requires that the sqlalchemy and geoalchemy modules are installed into 
+python.  
+
+The install.sh and similar scripts in the src/sql folder assist installing the 
+PostGresql database.
+
+Several files need updating to include database strings etc.  These include:
+
+src/NZGBplugin/Plugin.py <server> is url of the web server from which the plugin is delivered
+src/gazetteer/gazetteer_roles.sql  '*******' is a password by the "web application" 
+   (not part of this repository)
+src/setenv.sh Install the credentials for dev, uat, and prod databases
