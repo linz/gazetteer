@@ -1,0 +1,9 @@
+[general]
+name=NZGBplugin
+icon=icon.png
+email=ccrook@linz.govt.nz
+author=Chris Crook
+qgisMinimumVersion=2.4
+description=For maintaining the NZGB gazetteer.
+version=version 1.8.1
+experimental=False
