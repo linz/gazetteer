@@ -308,7 +308,7 @@ select
    '<p class="hanging_indent">' ||
    (CASE
       WHEN id IN (SELECT name_id FROM tmp_gweb_name_is_official) THEN 'This is an official name'
-      WHEN feat_id IN (SELECT feat_id FROM tmp_gweb_name_is_official) THEN 'This is not an official name of this feature'
+      WHEN feat_id IN (SELECT feat_id FROM tmp_gweb_name_is_official) THEN 'This is not an official name'
       ELSE 'This name is not official - this feature does not have an official name'
       END) ||
    '</p>'
