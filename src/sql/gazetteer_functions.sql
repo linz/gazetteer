@@ -273,13 +273,15 @@ SELECT
     ST_SetSRID(
        Box2D(
         ST_Collect(ARRAY[
-            (SELECT ST_SetSRID(ST_Extent( shape),4167) FROM feature_geometry WHERE feat_id=$1),
-            (SELECT ST_SetSRID(ref_point,4167) FROM feature WHERE feat_id=$1)
+            (SELECT ST_SetSRID(ref_point,4167) FROM feature WHERE feat_id=$1),
+            (SELECT ST_SetSRID(ST_Extent( shape),4167) FROM feature_geometry WHERE feat_id=$1)
         ])
         )
     ,4167)
 )
 SELECT
+    -- Want to expand buffer by border in metres. If in region of NZ then convert to NZTM 
+    -- and buffer
     CASE WHEN ST_Contains(ST_SetSRID(ST_MakeBox2D(ST_Point(140,-60),ST_Point(210,-20)),4167),geom)
     THEN
     ST_Transform(
@@ -287,10 +289,11 @@ SELECT
             ST_Transform(geom,2193)
        ,$2),
     4167)
+    -- Otherwise buffer in degrees (divide metres by 100000 as very approximate conversion!)
     ELSE 
       ST_Intersection(
        ST_SetSRID(ST_MakeBox2D(ST_Point(-10,-90),ST_Point(270,90)),4167),
-       ST_Expand(geom,$2/100000.0) -- 100000 is approx metres to degrees
+       ST_Expand(geom,$2/100000.0) 
        )
     END
     FROM
