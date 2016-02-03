@@ -33,6 +33,15 @@ from LINZ.Util import pyratemp, dms
 class NameWebView( QWebView ):
 
     Debug = False
+    _months=('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
+
+    @staticmethod
+    def _strftime( date ):
+        '''
+        Date formatting function as strftime doesn't handle year < 1900
+        '''
+        mon=NameWebView._months[date.month-1]
+        return "{0:02d}-{1}-{2:04d}".format(date.day,mon,date.year)
 
     ''' 
     Custom signals emitted by the NameWebView 
@@ -44,9 +53,8 @@ class NameWebView( QWebView ):
     @staticmethod
     def jsonHandler(obj):
         if type(obj) in (datetime.date, datetime.datetime):
-            return obj.strftime("%d-%b-%Y")
-            raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
-
+            return NameWebView._strftime(obj)
+ 
     class Association( object ):
 
         def __init__( self, text, name, association ):
@@ -131,7 +139,7 @@ class NameWebView( QWebView ):
             Converts a date time to a dd-MMM-yyyy format
             '''
             if type(dt) in (datetime.date, datetime.datetime):
-                return dt.strftime('%d-%b-%Y')
+                return NameWebView._strftime(dt)
             else:
                 return str(dt)
 
