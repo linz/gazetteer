@@ -12,34 +12,23 @@
 SET search_path=gazetteer, public;
 SET search_path=gazetteer, public;
 
-CREATE OR REPLACE FUNCTION gaz_searchName(
-    p_name_query VARCHAR,
-    p_feat_type VARCHAR,
-    p_name_status VARCHAR,
-    p_limit INT
-    )
-RETURNS TABLE (
-    name_id INT,
-    feat_id INT,
-    name VARCHAR,
-    name_status CHAR(4),
-    feat_type CHAR(4),
-    rank REAL
-    )
-
-AS
-$body$
-WITH q(query) AS (SELECT to_tsquery('gazetteer.gaz_tsc',$1))
+CREATE OR REPLACE FUNCTION gazetteer.gaz_searchname(
+	IN p_name_query character varying, 
+	IN p_feat_type character varying, 
+	IN p_name_status character varying, 
+	IN p_limit integer
+	)
+  RETURNS TABLE(name_id integer, feat_id integer, name character varying, ta character varying, name_status character, feat_type character, rank real) AS
+$BODY$
+WITH 
+q(query) AS (SELECT to_tsquery('gazetteer.gaz_tsc',$1)),
+n as
+(
 SELECT 
    name.name_id,
-   feature.feat_id,
-   name.name,
-   name.status,
-   feature.feat_type,
-   1.0
+   1.0 as rank
 FROM
    name 
-   JOIN feature ON name.feat_id = feature.feat_id
 WHERE
    name.name_id=(
        CASE 
@@ -49,23 +38,14 @@ WHERE
 UNION
 SELECT 
    name.name_id,
-   feature.feat_id,
-   name.name,
-   name.status,
-   feature.feat_type,
-   1.0
+   1.0 as rank
 FROM
    name 
-   JOIN feature ON name.feat_id = feature.feat_id
 WHERE
    name.feat_id=(CASE WHEN trim($1) ~ E'^fid=\\d{1,7}$' THEN substring(trim($1) from 5)::INT ELSE NULL END)
 UNION
 SELECT 
    name.name_id,
-   feature.feat_id,
-   name.name,
-   name.status,
-   feature.feat_type,
    ts_rank(to_tsvector('gazetteer.gaz_tsc',gaz_plainText2(name)),q.query) as rank
 FROM
    name 
@@ -76,39 +56,47 @@ WHERE
    ($2 IS NULL OR feature.feat_type=$2) AND
    (($3 IS NULL AND name.status <> 'UDEL') OR name.status=$3)
 LIMIT
-   COALESCE($4,1000000)
+   COALESCE($4,1000000) 
+)
+  SELECT
+     n.name_id,
+     feature.feat_id,
+     name.name,
+     CASE WHEN ta.ta_name IS NOT NULL THEN ta.ta_name
+	ELSE 'Area Outside Territorial Authority'
+     END,
+     name.status,
+     feature.feat_type,
+     n.rank
+from 
+   n
+   join name on n.name_id = name.name_id
+   join feature on feature.feat_id=name.feat_id
+   LEFT JOIN territorial_authority_low_res ta ON ST_Intersects(feature.ref_point, ta.shape)
 
-$body$
+$BODY$
+
 LANGUAGE sql STABLE
 SET search_path FROM CURRENT;
     
 
-CREATE OR REPLACE FUNCTION gaz_searchName2(
-    p_name_query VARCHAR,
-    p_feat_type VARCHAR,
-    p_name_status VARCHAR,
-    p_extents VARCHAR,
-    p_not_published BOOLEAN,
-    p_limit INT
-    )
-RETURNS TABLE (
-    name_id INT,
-    feat_id INT,
-    name VARCHAR,
-    name_status CHAR(4),
-    feat_type CHAR(4),
-    rank REAL
-    )
-
-AS
-$body$
+CREATE OR REPLACE FUNCTION gazetteer.gaz_searchname2(
+	IN p_name_query character varying, 
+	IN p_feat_type character varying, 
+	IN p_name_status character varying, 
+	IN p_extents character varying, 
+	IN p_not_published boolean, 
+	IN p_limit integer
+	)
+  RETURNS TABLE(name_id integer, feat_id integer, name character varying, ta character varying, name_status character, feat_type character, rank real) AS
+$BODY$
 DECLARE
     v_sql TEXT;
     v_where TEXT;
     v_rank TEXT;
     v_src TEXT;
 BEGIN
-    v_src = 'name JOIN feature on name.feat_id = feature.feat_id';
+    v_src = 'name JOIN feature on name.feat_id = feature.feat_id LEFT JOIN territorial_authority_low_res TA ON ST_Intersects(feature.ref_point, TA.shape)';
     v_sql = '';
     v_where = '';
     v_rank = '1.0::REAL';
@@ -207,6 +195,7 @@ BEGIN
                name.name_id,
                feature.feat_id,
                name.name,
+               TA.ta_name,
                name.status,
                feature.feat_type,
                $sql$ || v_rank || ' AS rank  FROM ' || v_src;
@@ -218,7 +207,7 @@ BEGIN
     RAISE NOTICE 'SQL: %', v_sql;
     RETURN QUERY EXECUTE v_sql;
 END
-$body$
+$BODY$
 LANGUAGE plpgsql STABLE
 SET search_path FROM CURRENT;
     
