@@ -46,7 +46,7 @@ class NameSearchWidget( QWidget, Ui_NameSearchWidget):
         self._keyState=Qt.NoModifier
         self._controller = Controller.instance()
         self._applyMapExtents()
-        self._adaptor = DictionaryAdaptor( 'name','name_status','feat_type')
+        self._adaptor = DictionaryAdaptor( 'name','ta','name_status','feat_type')
         self.uSearchResults.setTabKeyNavigation(False)
         self._populateDropDownLists()
         self.uSearchText.installEventFilter( self )
@@ -155,7 +155,7 @@ class NameSearchWidget( QWidget, Ui_NameSearchWidget):
             self._controller.setSearchResults(results)
             if not clear:
                 status = str(len(results))+' match' + (
-                    'es' if len(results) == 1 else '') + ' found'
+                    'es' if len(results) > 1 else '') + ' found'
                 if len(results) > 0:
                     status += '. Click name to open, Shift+Click to open in new window'
                 self.uSearchStatus.setText( status )
@@ -201,6 +201,7 @@ class NameSearchWidget( QWidget, Ui_NameSearchWidget):
                 r=dict()
                 r['name_id'] = row.name_id
                 r['name'] = row.name
+                r['ta'] = row.ta
                 r['name_status'] = SystemCode.lookup('NSTS',row.name_status)
                 r['feat_type'] = ftypes.get(row.feat_type)
                 results.append(r)
@@ -209,8 +210,8 @@ class NameSearchWidget( QWidget, Ui_NameSearchWidget):
             results=[]
         listCtl.setList(results,
             adaptor=self._adaptor,
-            columns=['name','name_status','feat_type'],
-            headers=['Name','Status','Feature Type'])
+            columns=['name','ta','name_status','feat_type'],
+            headers=['Name','TA','Status','Feature Type'])
         listCtl.clearSelection()
 
     def eventFilter( self, widget, event):
