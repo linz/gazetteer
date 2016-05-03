@@ -224,7 +224,7 @@ class Name(base):
             name = Database.build_tsquery(name)
         nresults = maxresults if maxresults else None
         results = Database.querysql('''
-            select name_id, feat_id, name, name_status, feat_type, rank 
+            select name_id, feat_id, name, ta, name_status, feat_type, rank 
             from gazetteer.gaz_searchname(:name,:ftype,:status,:nmax) 
             order by rank desc, name''',
             name=name,ftype=ftype,status=status,nmax=nresults).fetchall()
@@ -239,7 +239,7 @@ class Name(base):
             name = Database.build_tsquery(name)
         nresults = maxresults+1 if maxresults else None
         results = Database.querysql('''
-            select name_id, feat_id, name, name_status, feat_type, rank 
+            select name_id, feat_id, name, ta, name_status, feat_type, rank 
             from gazetteer.gaz_searchname2(:name,:ftype,:status,:wkt,:npub,:nmax)
             order by rank desc, name''',
                        name=name,
