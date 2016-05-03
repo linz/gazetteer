@@ -53,28 +53,26 @@ LANGUAGE plpgsql SET search_path FROM CURRENT;
 
 GRANT EXECUTE ON FUNCTION gapp_clear_favourite( INTEGER ) TO gazetteer_user;
 
-CREATE OR REPLACE FUNCTION gapp_get_favourites()
-RETURNS TABLE (
-    name_id INT,
-    name VARCHAR,
-    name_status CHAR(4),
-    feat_type CHAR(4)
-    )
-AS
-$body$
+CREATE OR REPLACE FUNCTION gazetteer.gapp_get_favourites()
+  RETURNS TABLE(name_id integer, name character varying, ta character varying, name_status character, feat_type character) AS
+$BODY$
 SELECT   
    name.name_id,
    name.name,
+   CASE WHEN TA.ta_name IS NOT NULL THEN TA.ta_name
+	ELSE 'Area Outside Territorial Authority'
+   END,
    name.status,
    feature.feat_type
 FROM
    name 
    JOIN feature ON name.feat_id = feature.feat_id
+   LEFT JOIN territorial_authority_low_res TA ON ST_Intersects(feature.ref_point, TA.shape)
    JOIN app_favourites fav ON fav.name_id = name.name_id
 WHERE
    fav.userid = current_user AND
    name.status != 'UDEL';
-$body$
+$BODY$
 LANGUAGE sql STABLE SET search_path FROM CURRENT;
 
 GRANT EXECUTE ON FUNCTION gapp_get_favourites() TO gazetteer_user;
@@ -128,16 +126,9 @@ LANGUAGE plpgsql SET search_path FROM CURRENT;
 GRANT EXECUTE ON FUNCTION gapp_record_edited( INTEGER ) TO gazetteer_user;
 
 --drop function gapp_get_recent_names( boolean, boolean, int );
-CREATE OR REPLACE FUNCTION gapp_get_recent_names( p_all_users BOOLEAN, p_edit_only BOOLEAN, p_max INT )
-RETURNS TABLE (
-    name_id INT,
-    name VARCHAR,
-    name_status CHAR(4),
-    feat_type CHAR(4),
-    use_date timestamp
-    )
-AS
-$body$
+CREATE OR REPLACE FUNCTION gazetteer.gapp_get_recent_names(IN p_all_users boolean, IN p_edit_only boolean, IN p_max integer)
+  RETURNS TABLE(name_id integer, name character varying, ta character varying, name_status character, feat_type character, use_date timestamp without time zone) AS
+$BODY$
 WITH rn( name_id, use_date ) AS
 (
 SELECT 
@@ -159,18 +150,22 @@ LIMIT
 SELECT   
    name.name_id,
    name.name,
+   CASE WHEN TA.ta_name IS NOT NULL THEN TA.ta_name
+	ELSE 'Area Outside Territorial Authority'
+   END,
    name.status,
    feature.feat_type,
    rn.use_date
 FROM
    name 
    JOIN feature ON name.feat_id = feature.feat_id
+   LEFT JOIN territorial_authority_low_res TA ON ST_Intersects(feature.ref_point, TA.shape)
    JOIN rn ON rn.name_id = name.name_id
 WHERE
    $2 OR name.status <> 'UDEL'
 ORDER BY
     use_date DESC;
-$body$
+$BODY$
 LANGUAGE sql STABLE SET search_path FROM CURRENT;
 
 GRANT EXECUTE ON FUNCTION  gapp_get_recent_names( BOOLEAN, BOOLEAN, INT ) TO gazetteer_user;
