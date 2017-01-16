@@ -61,7 +61,7 @@ conservancy #DOCC
 doc_cons_unit_no #DOCR
 doc_gaz_ref %DOCG
 treaty_legislation %TSLG
-geom_type #UFGT
+-- geom_type #UFGT
 accuracy #UFAC
 gebco #UFGP
 region #UFRG
@@ -90,8 +90,31 @@ f.status as feat_status_code,
 f.feat_type as feat_type_code,
 (select max(event_date) from name_event where authority='NZGB' and name_id=n.name_id) as last_nzgb_date,
 (select event_type from name_event where authority='NZGB' and name_id=n.name_id order by event_date desc limit 1) as last_nzgb_event,
-st_setsrid(f.ref_point,4326) as ref_point
-
+st_setsrid(f.ref_point,4326) as ref_point, 
+        CASE
+            WHEN (( SELECT count(*) AS count
+               FROM gazetteer.feature_geometry
+              WHERE feature_geometry.feat_id = n.feat_id)) = 0 THEN 'POINT'::text
+            WHEN (( SELECT count(*) AS count
+               FROM gazetteer.feature_geometry
+              WHERE feature_geometry.feat_id = n.feat_id)) > 0 AND (( SELECT feature_geometry.geom_type
+               FROM gazetteer.feature_geometry
+              WHERE feature_geometry.feat_id = n.feat_id
+             LIMIT 1)) = 'P'::bpchar THEN 'POLYGON'::text
+            WHEN (( SELECT count(*) AS count
+               FROM gazetteer.feature_geometry
+              WHERE feature_geometry.feat_id = n.feat_id)) > 0 AND (( SELECT feature_geometry.geom_type
+               FROM gazetteer.feature_geometry
+              WHERE feature_geometry.feat_id = n.feat_id
+             LIMIT 1)) = 'L'::bpchar THEN 'LINE'::text
+            WHEN (( SELECT count(*) AS count
+               FROM gazetteer.feature_geometry
+              WHERE feature_geometry.feat_id = n.feat_id)) > 0 AND (( SELECT feature_geometry.geom_type
+               FROM gazetteer.feature_geometry
+              WHERE feature_geometry.feat_id = n.feat_id
+             LIMIT 1)) = 'X'::bpchar THEN 'POINT'::text
+            ELSE NULL::text
+        END AS geom_type
 from 
    name n
    join feature f on f.feat_id = n.feat_id
@@ -212,7 +235,6 @@ XCOL|C210|CPAN|doc_cons_unit_no|
 XCOL|C220|CPAN|doc_gaz_ref|
 XCOL|C230|CPAN|treaty_legislation|
 XCOL|C240|REPT|for_scufn|
-XCOL|C245|USEA|geom_type|
 XCOL|C250|USEA|accuracy|
 XCOL|C260|USEA|gebco|
 XCOL|C270|USEA|region|
