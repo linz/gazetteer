@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  name: Gather facts from other servers
+  tasks: [ ]
+
+- hosts: "{{ HOST_NAME }}"
+  roles:
+    - {
+        role: gazetteer,
+        tags: ['gazetteer']
+    }
+
+# vim: set ts=2 sts=2 sw=2 et:

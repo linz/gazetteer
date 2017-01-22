@@ -1,0 +1,147 @@
+---
+
+################################################################################
+#
+# Copyright 2013 Crown copyright (c)
+# Land Information New Zealand and the New Zealand Government.
+# All rights reserved
+#
+# This program is released under the terms of the new BSD license. See the
+# LICENSE file for more information.
+#
+################################################################################
+
+- name: Install packages
+  apt:
+    pkg: "{{ item }}"
+    force: yes
+    install_recommends: no
+    state: latest
+  with_items:
+    - python-gdal
+  environment: "{{ apt_proxy }}"
+  become: yes
+
+
+# FIXME: replace with proper installation from Debian package
+- name: Create temporary Gazetteer installation directory
+  file:
+    path: /tmp/gazetteer-{{ ansible_date_time.epoch }}
+    state: directory
+
+- name: Copy Gazetteer source code to temporary installation directory
+  copy:
+    src: ../src/sql/
+    dest: /tmp/gazetteer-{{ ansible_date_time.epoch }}/
+
+
+### SECRET VARIABLES
+- name: Load encrypted variables file
+  include_vars: linz.yml
+
+
+### GAZETTEER
+- name: Create Gazetteer database
+  postgresql_db:
+    name: gazetteer
+    encoding: 'UTF-8'
+    template: template_postgis
+    state: present
+  become: yes
+  become_user: postgres
+
+
+- name: Install Gazetteer
+  command: >
+    psql
+    -v ON_ERROR_STOP=yes
+    -d gazetteer
+    -f /tmp/gazetteer-{{ ansible_date_time.epoch }}/{{ item }}
+  with_items:
+    - gazetteer_roles.sql
+
+    - gazetteer_schema.sql
+    - gazetteer_app_schema.sql
+    - gazetteer_sysdata_init.sql
+    - gazetteer_history.sql
+    - gazetteer_sysdata.sql
+    - gazetteer_export_schema.sql
+
+    - gazetteer_functions.sql
+    - gazetteer_geometry_views.sql
+    - gazetteer_text_search.sql
+    - gazetteer_search_function.sql
+    - gazetteer_add_user.sql
+    - gazetteer_app_funcs.sql
+    - gazetteer_app_sysdata.sql
+    - gazetteer_triggers.sql
+  become: yes
+  become_user: postgres
+
+
+- name: Generate Gazetteer export SQL script
+  command: >
+    python build_gazetteer_export.py
+  args:
+    chdir: /tmp/gazetteer-{{ ansible_date_time.epoch }}
+
+- name: Install Gazetteer exports
+  command: >
+    psql
+    -v ON_ERROR_STOP=yes
+    -d gazetteer
+    -f /tmp/gazetteer-{{ ansible_date_time.epoch }}/{{ item }}
+  with_items:
+    - gazetteer_export.sql
+    - gazetteer_export_func.sql
+  become: yes
+  become_user: postgres
+
+
+- name: Install Gazetteer Web
+  command: >
+    psql
+    -v ON_ERROR_STOP=yes
+    -d gazetteer
+    -f /tmp/gazetteer-{{ ansible_date_time.epoch }}/{{ item }}
+  with_items:
+    - gazetteer_web_schema.sql
+    - gazetteer_web_functions.sql
+    - gazetteer_reload_web.sql
+  become: yes
+  become_user: postgres
+
+
+- name: Install Gazetteer Web config (SQL)
+  command: >
+    psql
+    -v ON_ERROR_STOP=yes
+    -d gazetteer
+    -f /tmp/gazetteer-{{ ansible_date_time.epoch }}/{{ item }}
+  with_items:
+    - gaz_add_config.sql
+  become: yes
+  become_user: postgres
+
+
+- name: Generate Gazetteer Web config (PY)
+  command: >
+    python install_web_config.py
+  args:
+    chdir: /tmp/gazetteer-{{ ansible_date_time.epoch }}
+  become: yes
+  become_user: postgres
+
+
+- name: Grant Gazetteer roles
+  command: >
+    psql
+    -v ON_ERROR_STOP=yes
+    -d gazetteer
+    -f /tmp/gazetteer-{{ ansible_date_time.epoch }}/{{ item }}
+  with_items:
+    - gazetteer_grant.sql
+  become: yes
+  become_user: postgres
+
+# vim: set ts=2 sts=2 sw=2 et:
