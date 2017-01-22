@@ -16,11 +16,11 @@ import psycopg2
 from osgeo import ogr
 
 db_def=dict(
-    host='localhost',
+    host='',
     database='gazetteer',
     user=getpass.getuser(),
     password='',
-    )
+)
 
 args = {'-h':'host', '-d':'database', '-U':'user', '-P':'password' }
 
