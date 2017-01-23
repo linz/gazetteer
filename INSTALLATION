@@ -1,4 +1,4 @@
-These are pointers rather tahn complete notes on installation.  
+These are pointers rather than complete notes on installation.  
 
 The installation requires that the sqlalchemy and geoalchemy modules are installed into 
 python.  
