@@ -45,8 +45,9 @@ AS
 $code$
 truncate gaz_code;
 
+-- Added FCLS to code group types for updated web app
 insert into gaz_code (code_group, code, value)
-select code_group, code, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH');
+select code_group, code, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH','FCLS');
 
 insert into gaz_code (code_group, code, value)
 select code_group, code, value from system_code where code='CODE' and code in ('FTYP','FSTS','NSTS','NEVT','AUTH');
@@ -58,7 +59,6 @@ values ('ARFT','FEAT','Feature annotation');
 insert into gaz_code (code_group, code, value )
 values ('ARFT','NAME','Name annotation');
 
--- Far from final list ... this is for testing only at present
 insert into gaz_code (code_group, code, value )
 values ('CODE','ANTP','Annotation type');
 insert into gaz_code (code_group, code, value )
@@ -97,8 +97,6 @@ SELECT 1;
 $code$
 LANGUAGE sql
 SET search_path FROM CURRENT;
-
--- select gweb_update_gaz_code()
 
 -- ----------------------------------------------------------------------------
 -- Populate gaz_feature
