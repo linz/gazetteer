@@ -37,6 +37,26 @@ $body$
 LANGUAGE sql IMMUTABLE;
 
 -- ----------------------------------------------------------------------------
+-- Populate gaz_event
+
+CREATE OR REPLACE FUNCTION gazetteer.gweb_update_gaz_event()
+RETURNS INTEGER
+AS
+$code$
+truncate gaz_event;
+
+insert into gaz_event (event_id, name_id, event_date, event_type, event_reference)
+select event_id, name_id, event_date, event_type, gaz_plaintext(event_reference) from  name_event;
+
+ANALYZE gaz_event;
+
+SELECT 1;
+
+$code$
+LANGUAGE sql
+SET search_path FROM CURRENT;
+
+-- ----------------------------------------------------------------------------
 -- Populate gaz_code
 
 CREATE OR REPLACE FUNCTION gazetteer.gweb_update_gaz_code()
@@ -975,6 +995,7 @@ DECLARE
     l_update VARCHAR(256);
 BEGIN
     PERFORM gweb_update_gaz_code();
+    PERFORM gweb_update_gaz_event();
     PERFORM gweb_update_gaz_feature();
     PERFORM gweb_update_gaz_name();
     PERFORM gweb_update_gaz_annotation();
@@ -1002,6 +1023,7 @@ SET search_path FROM CURRENT;
 
 ALTER FUNCTION gazetteer.gweb_html_encode( TEXT ) OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_code() OWNER TO gazetteer_dba;
+ALTER FUNCTION gazetteer.gweb_update_gaz_event() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_feature() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_name() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_annotation() OWNER TO gazetteer_dba;
@@ -1010,6 +1032,7 @@ ALTER FUNCTION gazetteer.gweb_update_web_database() OWNER TO gazetteer_dba;
 
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_html_encode( TEXT ) TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_code() TO gazetteer_dba;
+GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_event() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_feature() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_name() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_annotation() TO gazetteer_dba;
