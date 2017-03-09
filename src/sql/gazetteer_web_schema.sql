@@ -203,8 +203,7 @@ value       is a text value for the configuration
 description is a description of the item (not used by application)
 $comment$;
 
-create table gaz_event as
-CREATE TABLE gazetteer_web.gaz_event
+create table gaz_event
 (
   event_id integer not null primary key,
   name_id integer,
