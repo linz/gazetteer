@@ -318,7 +318,6 @@ BEGIN
         GRANT ALL ON gazetteer_export.line_export TO gazetteer_dba;	
 
 	--Names for LDS with polygon geometries
-	DROP TABLE IF EXISTS gazetteer_export.polygon_export;
 	CREATE TABLE gazetteer_export.polygon_export AS
 	SELECT 
 		NEX.name_id,
@@ -359,7 +358,7 @@ BEGIN
 		NEX.desc_code,
 		NEX.rev_gaz_ref,
 		NEX.rev_treaty_legislation,
-		ST_Force_2D(ST_Union(array_agg(POLY.shape))) AS shape
+		ST_Force_2D(ST_Union(array_agg(ST_Buffer(POLY.shape,0)))) AS shape
 	FROM gazetteer.name_export NEX
 	JOIN gazetteer.feature_polygon POLY ON NEX.feat_id = POLY.feat_id 
 	GROUP BY 
@@ -417,7 +416,7 @@ BEGIN
 		feat_type, 
 		ref_point
 	FROM
-		gazetteer.name_export_for_lol;
+		gazetteer.name_export;
 
 	ALTER TABLE gazetteer_export.name_export_for_lol ADD PRIMARY KEY (name_id);
         ALTER TABLE gazetteer_export.name_export_for_lol  OWNER TO gazetteer_dba;
