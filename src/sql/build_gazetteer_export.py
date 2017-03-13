@@ -38,7 +38,7 @@ select
   (select value from system_code where code_group='FTYP' and code=f.feat_type) as feat_type,
   f.feat_id as feat_id,
 nzgb_ref %NZGZ
-district @LDIS
+land_district @LDIS
   CASE WHEN nztm.extent && f.ref_point THEN 'NZTM' ELSE NULL END as crd_projection,
   CASE WHEN nztm.extent && f.ref_point THEN round(ST_Y(ST_Transform(f.ref_point,2193))::numeric,1) ELSE NULL END as crd_north,
   CASE WHEN nztm.extent && f.ref_point THEN round(ST_X(ST_Transform(f.ref_point,2193))::numeric,1) ELSE NULL END as crd_east,
