@@ -66,11 +66,11 @@ $code$
 truncate gaz_code;
 
 -- Added FCLS to code group types for updated web app
-insert into gaz_code (code_group, code, value)
-select code_group, code, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH','FCLS');
+insert into gaz_code (code_group, code, category, value)
+select code_group, code, category, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH','FCLS');
 
-insert into gaz_code (code_group, code, value)
-select code_group, code, value from system_code where code='CODE' and code in ('FTYP','FSTS','NSTS','NEVT','AUTH');
+insert into gaz_code (code_group, code, category, value)
+select code_group, code, category, value from system_code where code='CODE' and code in ('FTYP','FSTS','NSTS','NEVT','AUTH');
 
 insert into gaz_code (code_group, code, value )
 values ('CODE','ARFT','Annotation reference type');

@@ -168,6 +168,7 @@ create table gaz_code
 (
     code_group char(4) not null,
     code char(4) not null,
+    category char(4),
     value varchar(255),
     primary key (code_group, code)
 );
