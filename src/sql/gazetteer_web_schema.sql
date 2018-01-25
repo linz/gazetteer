@@ -213,6 +213,13 @@ create table gaz_event
   event_reference text
 );
 
+CREATE TABLE gaz_all_shapes
+(
+  feat_id integer NOT NULL,
+  geom_type character(1) NOT NULL,
+  shape geometry
+);
+
 grant select on  gaz_feature to gaz_web_reader;
 grant select on  gaz_name to gaz_web_reader;
 grant select on  gaz_word to gaz_web_reader;
@@ -221,6 +228,7 @@ grant select on  gaz_annotation to gaz_web_reader;
 grant select on  gaz_code to gaz_web_reader;
 grant select on  gaz_web_config to gaz_web_reader;
 grant select on  gaz_event to gaz_web_reader;
+grant select on  gaz_all_shapes to gaz_web_reader;
 
 grant all on  gaz_feature to gaz_web_admin;
 grant all on  gaz_name to gaz_web_admin;
@@ -229,5 +237,6 @@ grant all on  gaz_shape to gaz_web_admin;
 grant all on  gaz_annotation to gaz_web_admin;
 grant all on  gaz_code to gaz_web_admin;
 grant all on  gaz_event to gaz_web_admin;
+grant all on  gaz_all_shapes to gaz_web_admin;
 
 grant all on  gaz_web_config to gaz_web_developer;
