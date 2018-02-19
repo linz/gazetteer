@@ -1037,7 +1037,7 @@ from
    feature f
    join gaz_feature gf on gf.id = f.feat_id
 where f.feat_id not in (select feat_id from tmp_all_shapes1 where geom_type='X')
-group by f.feat_id, 2;
+group by f.feat_id, 2, f.ref_point;
 
 insert into gaz_all_shapes (feat_id, geom_type, shape )
 select
