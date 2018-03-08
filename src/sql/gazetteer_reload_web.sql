@@ -1024,7 +1024,7 @@ from
    join feature f on g.feat_id = f.feat_id
 group by g.feat_id, g.geom_type;
 
-create index tmp_fid on tmp_all_shapes1( feat_id );
+create index tmp_all_shapes1_fid on tmp_all_shapes1( feat_id );
 analyze tmp_all_shapes1;
 
 --get ref points for all except features that already have points defined as their geometry. If they're polygons or lines we also want the ref points.
