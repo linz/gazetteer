@@ -1068,6 +1068,7 @@ BEGIN
     PERFORM gweb_update_gaz_name();
     PERFORM gweb_update_gaz_annotation();
     PERFORM gweb_update_gaz_shape();
+    PERFORM gweb_update_gaz_all_shapes();
     DROP TABLE IF EXISTS tmp_name_id;
     l_update = to_char(current_timestamp,'HH:MI DD-Mon-YYYY') || ' by ' || current_user;
     IF NOT EXISTS (SELECT * from system_code WHERE code_group='SYSI' AND code='WEBU') THEN
