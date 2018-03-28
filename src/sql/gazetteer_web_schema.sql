@@ -168,6 +168,7 @@ create table gaz_code
 (
     code_group char(4) not null,
     code char(4) not null,
+    category char(4),
     value varchar(255),
     primary key (code_group, code)
 );
@@ -203,6 +204,22 @@ value       is a text value for the configuration
 description is a description of the item (not used by application)
 $comment$;
 
+create table gaz_event
+(
+  event_id integer not null primary key,
+  name_id integer,
+  event_date date,
+  event_type character(4),
+  event_reference text
+);
+
+CREATE TABLE gaz_all_shapes
+(
+  feat_id integer NOT NULL,
+  geom_type character(1) NOT NULL,
+  shape geometry
+);
+
 grant select on  gaz_feature to gaz_web_reader;
 grant select on  gaz_name to gaz_web_reader;
 grant select on  gaz_word to gaz_web_reader;
@@ -210,6 +227,8 @@ grant select on  gaz_shape to gaz_web_reader;
 grant select on  gaz_annotation to gaz_web_reader;
 grant select on  gaz_code to gaz_web_reader;
 grant select on  gaz_web_config to gaz_web_reader;
+grant select on  gaz_event to gaz_web_reader;
+grant select on  gaz_all_shapes to gaz_web_reader;
 
 grant all on  gaz_feature to gaz_web_admin;
 grant all on  gaz_name to gaz_web_admin;
@@ -217,5 +236,7 @@ grant all on  gaz_word to gaz_web_admin;
 grant all on  gaz_shape to gaz_web_admin;
 grant all on  gaz_annotation to gaz_web_admin;
 grant all on  gaz_code to gaz_web_admin;
+grant all on  gaz_event to gaz_web_admin;
+grant all on  gaz_all_shapes to gaz_web_admin;
 
 grant all on  gaz_web_config to gaz_web_developer;

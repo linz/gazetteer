@@ -37,6 +37,26 @@ $body$
 LANGUAGE sql IMMUTABLE;
 
 -- ----------------------------------------------------------------------------
+-- Populate gaz_event
+
+CREATE OR REPLACE FUNCTION gazetteer.gweb_update_gaz_event()
+RETURNS INTEGER
+AS
+$code$
+truncate gaz_event;
+
+insert into gaz_event (event_id, name_id, event_date, event_type, event_reference)
+select event_id, name_id, event_date, event_type, gaz_plaintext(event_reference) from  name_event;
+
+ANALYZE gaz_event;
+
+SELECT 1;
+
+$code$
+LANGUAGE sql
+SET search_path FROM CURRENT;
+
+-- ----------------------------------------------------------------------------
 -- Populate gaz_code
 
 CREATE OR REPLACE FUNCTION gazetteer.gweb_update_gaz_code()
@@ -45,11 +65,12 @@ AS
 $code$
 truncate gaz_code;
 
-insert into gaz_code (code_group, code, value)
-select code_group, code, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH');
+-- Added FCLS to code group types for updated web app
+insert into gaz_code (code_group, code, category, value)
+select code_group, code, category, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH','FCLS');
 
-insert into gaz_code (code_group, code, value)
-select code_group, code, value from system_code where code='CODE' and code in ('FTYP','FSTS','NSTS','NEVT','AUTH');
+insert into gaz_code (code_group, code, category, value)
+select code_group, code, category, value from system_code where code='CODE' and code in ('FTYP','FSTS','NSTS','NEVT','AUTH');
 
 insert into gaz_code (code_group, code, value )
 values ('CODE','ARFT','Annotation reference type');
@@ -58,7 +79,6 @@ values ('ARFT','FEAT','Feature annotation');
 insert into gaz_code (code_group, code, value )
 values ('ARFT','NAME','Name annotation');
 
--- Far from final list ... this is for testing only at present
 insert into gaz_code (code_group, code, value )
 values ('CODE','ANTP','Annotation type');
 insert into gaz_code (code_group, code, value )
@@ -97,8 +117,6 @@ SELECT 1;
 $code$
 LANGUAGE sql
 SET search_path FROM CURRENT;
-
--- select gweb_update_gaz_code()
 
 -- ----------------------------------------------------------------------------
 -- Populate gaz_feature
@@ -969,6 +987,74 @@ SET search_path FROM CURRENT;
 -- select min(min_zoom) from gaz_shape group by feat_id order by min(min_zoom) desc;
 
 
+
+
+-- ----------------------------------------------------------------------------
+-- Populate gaz_shape
+
+-- Get points, lines and polys from the feature geometry. If there's more than one geometry for a feature than merge them into a multigeom as long as they're the same geom type.
+-- Get ref points for lines and polys, and all points except those that already have points defined in the feature geom.
+
+CREATE OR REPLACE function gazetteer.gweb_update_gaz_all_shapes()
+RETURNS INT
+AS
+$body$
+BEGIN
+
+SET search_path TO gazetteer, gazetteer_web, public;
+
+truncate gaz_all_shapes;
+
+drop table if exists tmp_all_shapes1;
+create temp table tmp_all_shapes1
+(
+   feat_id int not null,
+   geom_type character(1) NOT NULL,
+   geom geometry
+);
+
+--get merged geoms for all defined geometries. i.e features with multiple geometeries of the same type will be merged into multigeoms.
+insert into tmp_all_shapes1 (feat_id, geom_type, geom )
+select 
+	g.feat_id, 
+	g.geom_type, 
+	st_union(ST_Force_2D(g.shape))
+from 
+   feature_geometry g
+   join feature f on g.feat_id = f.feat_id
+group by g.feat_id, g.geom_type;
+
+create index tmp_all_shapes1_fid on tmp_all_shapes1( feat_id );
+analyze tmp_all_shapes1;
+
+--get ref points for all except features that already have points defined as their geometry. If they're polygons or lines we also want the ref points.
+insert into gaz_all_shapes (feat_id, geom_type, shape )
+select 
+	f.feat_id,
+	'X',
+	f.ref_point 
+from 
+   feature f
+   join gaz_feature gf on gf.id = f.feat_id
+where f.feat_id not in (select feat_id from tmp_all_shapes1 where geom_type='X')
+group by f.feat_id, 2, f.ref_point;
+
+insert into gaz_all_shapes (feat_id, geom_type, shape )
+select
+	feat_id, 
+	geom_type, 
+	geom
+from 
+tmp_all_shapes1;
+
+ANALYZE gaz_all_shapes;
+RETURN 1;
+END
+$body$
+LANGUAGE plpgsql
+SET search_path FROM CURRENT;
+
+
 CREATE OR REPLACE FUNCTION gazetteer.gweb_update_web_database()
 RETURNS INT
 AS
@@ -977,10 +1063,12 @@ DECLARE
     l_update VARCHAR(256);
 BEGIN
     PERFORM gweb_update_gaz_code();
+    PERFORM gweb_update_gaz_event();
     PERFORM gweb_update_gaz_feature();
     PERFORM gweb_update_gaz_name();
     PERFORM gweb_update_gaz_annotation();
     PERFORM gweb_update_gaz_shape();
+    PERFORM gweb_update_gaz_all_shapes();
     DROP TABLE IF EXISTS tmp_name_id;
     l_update = to_char(current_timestamp,'HH:MI DD-Mon-YYYY') || ' by ' || current_user;
     IF NOT EXISTS (SELECT * from system_code WHERE code_group='SYSI' AND code='WEBU') THEN
@@ -1004,6 +1092,7 @@ SET search_path FROM CURRENT;
 
 ALTER FUNCTION gazetteer.gweb_html_encode( TEXT ) OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_code() OWNER TO gazetteer_dba;
+ALTER FUNCTION gazetteer.gweb_update_gaz_event() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_feature() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_name() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_annotation() OWNER TO gazetteer_dba;
@@ -1012,6 +1101,7 @@ ALTER FUNCTION gazetteer.gweb_update_web_database() OWNER TO gazetteer_dba;
 
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_html_encode( TEXT ) TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_code() TO gazetteer_dba;
+GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_event() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_feature() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_name() TO gazetteer_dba;
 GRANT EXECUTE ON FUNCTION gazetteer.gweb_update_gaz_annotation() TO gazetteer_dba;
