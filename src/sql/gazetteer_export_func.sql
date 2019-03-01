@@ -416,7 +416,7 @@ BEGIN
 		feat_type, 
 		ref_point
 	FROM
-		gazetteer.name_export;
+		gazetteer.name_export_for_lol;
 
 	ALTER TABLE gazetteer_export.name_export_for_lol ADD PRIMARY KEY (name_id);
         ALTER TABLE gazetteer_export.name_export_for_lol  OWNER TO gazetteer_dba;
