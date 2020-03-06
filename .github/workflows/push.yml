@@ -1,0 +1,23 @@
+---
+name: Build
+on: [push]
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.6', '3.7']
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Python ${{ matrix.python }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Required Python Modules
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+      - name: Commit Lint 
+        run: |
+          gitlint --commits origin/master..
