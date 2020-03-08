@@ -1,3 +1,14 @@
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
+
 ﻿CREATE OR REPLACE VIEW gazetteer.name_export_for_lol AS 
 SELECT 
 	name_id, 
