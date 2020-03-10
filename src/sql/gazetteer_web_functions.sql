@@ -1,13 +1,13 @@
-﻿-- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 set search_path=gazetteer_web, public;
 
