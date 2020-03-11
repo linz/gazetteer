@@ -34,8 +34,8 @@ export PGCLIENTENCODING=UTF8
 
 if [ "$1" = drop ]; then
 	echo "Dropping existing gazetter schema"
-	$psql -c 'drop schema gazetteer_history cascade' || exit 1
-	$psql -c 'drop schema gazetteer cascade' || exit 1
+	$psql -c 'drop schema IF EXISTS gazetteer_history cascade' || exit 1
+	$psql -c 'drop schema IF EXISTS gazetteer cascade' || exit 1
 	echo "Creating the gazetteer schema"
 	echo "Assumes that the gazetteer database and roles have already been created"
 	$psql -f gazetteer_schema.sql  || exit 1
