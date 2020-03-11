@@ -40,3 +40,7 @@ RUN pg_ctlcluster 8.4 main start && \
     su postgres -c 'psql -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql gazetteer' && \
     su postgres -c 'psql -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql gazetteer' && \
     su postgres -c 'cd /sql; ./install.sh drop'
+
+ADD install_web.sh /sql/
+RUN pg_ctlcluster 8.4 main start && \
+    su postgres -c 'cd /sql; ./install_web.sh drop'
