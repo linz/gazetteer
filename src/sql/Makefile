@@ -11,3 +11,12 @@ help:
 .PHONY: help
 docker: ## Build the linz-gazetteer-db docker image
 	docker build -t linz-gazetteer-db:8.4 .
+
+docker-start:
+	docker run -d --name gazetteer-db -p 7432:5432 linz-gazetteer-db:8.4
+
+docker-stop:
+	docker rm -f gazetteer-db
+
+docker-connect:
+	PGPASSWORD=******** psql -h localhost -p 7432 -U gaz_web gazetteer
