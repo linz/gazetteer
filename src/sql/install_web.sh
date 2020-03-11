@@ -37,7 +37,7 @@ if [ "$1" = drop ] ; then
         # Extract the current web configuration information if available
 	datetime=$(date +"%Y%m%d%H%M")
 	configfile="gaz_web_config_dump_$host.$datetime.psql"
-	pg_dump $dparams -t gazetteer_web.gaz_web_config -a $gdb > $configfile
+	pg_dump $dparams -t gazetteer_web.gaz_web_config -a $gdb > $configfile || exit 1
 	echo "Dropping existing gazetter schema"
 	$psql -c 'drop schema if exists gazetteer_web cascade'
 	echo "Creating the gazetteer schema"
