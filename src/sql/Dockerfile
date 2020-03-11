@@ -44,3 +44,13 @@ RUN pg_ctlcluster 8.4 main start && \
 ADD install_web.sh /sql/
 RUN pg_ctlcluster 8.4 main start && \
     su postgres -c 'cd /sql; ./install_web.sh drop'
+
+RUN echo "host all all 172.0.0.0/8 md5" >> /etc/postgresql/8.4/main/pg_hba.conf
+
+#EXPOSE 5432
+#COPY docker_entrypoint.sh /
+ENTRYPOINT su - postgres -c "/usr/lib/postgresql/8.4/bin/postgres \
+  -D /var/lib/postgresql/8.4/ \
+  -c config_file=/etc/postgresql/8.4/main/postgresql.conf \
+  -c listen_addresses='*' \
+  "
