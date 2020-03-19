@@ -58,6 +58,9 @@ $psql -f gazetteer_triggers.sql  || exit 1
 python build_gazetteer_export.py || exit 1
 $psql -f gazetteer_export.sql || exit 1
 $psql -f gazetteer_export_func.sql || exit 1
+
 # Cannot run this till after gazetteer_web schema installed
-# $psql -f gazetteer_reload_web.sql 
-$psql -f gazetteer_grant.sql  || exit 1
+# $psql -f gazetteer_reload_web.sql
+
+# Cannot run this till after gazetteer_web schema installed
+#$psql -f gazetteer_grant.sql  || exit 1
