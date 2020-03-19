@@ -46,9 +46,6 @@ GRANT gazetteer_user TO gazetteer_admin;
 CREATE USER gaz_web IN ROLE gaz_web_reader ENCRYPTED PASSWORD '********';
 CREATE USER gaz_web_dev IN ROLE gaz_web_reader, gaz_web_developer ENCRYPTED PASSWORD '********';
 
-ALTER USER gaz_web SET search_path=gazetteer_web, public;
-ALTER USER gaz_web_dev SET search_path=gazetteer_web, public;
-
 CREATE ROLE gaz_web_logins
   NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;
 
