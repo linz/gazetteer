@@ -1,0 +1,26 @@
+name: DB test
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+            os: [ ubuntu-18.04 ]
+    env:
+      # Make apt non-interactive by default, and not showing progress
+      APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
+      # Avoid warnings on apt-key usage
+      APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        which docker
+        which make
+    - name: Build gazetteer-db docker image
+      run: |
+        make -C src/sql/ docker
