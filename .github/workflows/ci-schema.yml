@@ -42,6 +42,11 @@ jobs:
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
 
+    - name: Setup PostgreSQL user
+      run: |
+        sudo -u postgres createuser -s "$USER"
+        #sudo -u postgres createuser -s root
+
     - name: Install gazetteer db schema
       run: |
         createdb gazetteer
