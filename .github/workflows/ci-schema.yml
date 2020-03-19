@@ -45,7 +45,6 @@ jobs:
     - name: Setup PostgreSQL user
       run: |
         sudo -u postgres createuser -s "$USER"
-        #sudo -u postgres createuser -s root
 
     - name: Install gazetteer db schema
       run: |
