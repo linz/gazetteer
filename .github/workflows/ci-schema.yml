@@ -1,0 +1,56 @@
+name: DB test
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+            os: [ ubuntu-18.04 ]
+            pg: [ '10' ]
+            pgis: [ '2.5' ]
+    env:
+      # Make apt non-interactive by default, and not showing progress
+      APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
+      # Avoid warnings on apt-key usage
+      APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        sudo ${APT} -qq purge \
+            libpq5 \
+            libpq-dev \
+            *php* \
+            postgresql \
+            postgresql-client-common \
+            postgresql-common
+        sudo rm -rf /var/lib/postgresql
+        sudo ${APT} install curl ca-certificates gnupg
+        distro=`lsb_release -cs`
+        # Enable fetching packages from apt.postgresql repository
+        curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        echo "deb http://apt.postgresql.org/pub/repos/apt/ ${distro}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+        # Install postgresql server
+        sudo ${APT} -qq update
+        sudo ${APT} -qq install \
+            postgresql-client-${{ matrix.pg }} \
+            postgresql-${{ matrix.pg }} \
+            postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
+            postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
+
+    - name: Install gazetteer db schema
+      run: |
+        createdb gazetteer
+        cd src/sql
+        psql -f gazetteer_roles.sql gazetteer
+        psql -c 'create extension postgis' gazetteer
+        ./install.sh drop
+
+    - name: Install gazetteer web db schema
+      run: |
+        cd src/sql
+        ./install_web.sh drop
