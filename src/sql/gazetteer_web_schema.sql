@@ -17,6 +17,10 @@ set role postgres;
 
 create schema gazetteer_web;
 
+ALTER USER gaz_web SET search_path=gazetteer_web, public;
+ALTER USER gaz_web_dev SET search_path=gazetteer_web, public;
+
+
 set search_path to gazetteer_web, public;
 
 
