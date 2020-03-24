@@ -12,11 +12,11 @@ help:
 docker: ## Build the linz-gazetteer-db docker image
 	docker build -t linz-gazetteer-db:8.4 .
 
-docker-start:
+docker-start: ## Start the linz-gazetteer-db docker container
 	docker run -d --name gazetteer-db -p 7432:5432 linz-gazetteer-db:8.4
 
-docker-stop:
+docker-stop: ## Stop the linz-gazetteer-db docker container
 	docker rm -f gazetteer-db
 
-docker-connect:
+docker-connect: ## Connect to the dockerized linz-gazetteer-db db using psql
 	PGPASSWORD=******** psql -h localhost -p 7432 -U gaz_web gazetteer
