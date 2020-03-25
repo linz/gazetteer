@@ -25,3 +25,5 @@ services:
     command: tail -F /dev/null
     environment:
       PGHOST: db
+      PGPASSWORD: '********'
+      PGUSER: gaz_web
