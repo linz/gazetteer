@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install geoalchemy
 
-#RUN qgis_setup.sh NZGBplugin
 
-#RUN ln -fs /tests_directory /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins
-
+# Set NZGBplugin as enabled in config
+RUN mkdir -p /root/.config/QGIS
+RUN echo '[PythonPlugins]' >  /root/.config/QGIS/QGIS2.conf
+RUN echo 'NZGBplugin=true' >> /root/.config/QGIS/QGIS2.conf
