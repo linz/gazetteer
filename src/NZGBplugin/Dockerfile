@@ -19,3 +19,7 @@ RUN pip install geoalchemy
 RUN mkdir -p /root/.config/QGIS
 RUN echo '[PythonPlugins]' >  /root/.config/QGIS/QGIS2.conf
 RUN echo 'NZGBplugin=true' >> /root/.config/QGIS/QGIS2.conf
+
+# Do not show startup tips in QGIS..
+RUN echo '[Qgis]' >> /root/.config/QGIS/QGIS2.conf
+RUN echo 'showTips214=false' >> /root/.config/QGIS/QGIS2.conf
