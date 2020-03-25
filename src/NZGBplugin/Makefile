@@ -1,3 +1,5 @@
+DOCKERNAME = linz-gazetteer-qgis:2.14
+
 .PHONY: help
 help:
 	@echo "Available targets:"
@@ -8,13 +10,16 @@ help:
 			'BEGIN {FS = ":.*?## "}; \
 			{ printf "\033[36m%-30s\033[0m%s%s\n", $$1, "\n ", $$2 }'
 
-
 .PHONY: docker
-docker: ## Build the linz-gazetteer-qgis:3.4 docker image
-	docker build -t linz-gazetteer-qgis:3.4 .
+docker: ## Build the linz-gazetteer-qgis:2.14 docker image
+	docker build -t $(DOCKERNAME) .
+
+.PHONY: docker-qgis-shell
+docker-qgis-shell: docker ## Start a shell in the containerized qgis
+	docker run --rm -it --name qgis $(DOCKERNAME) /bin/bash
 
 .PHONY: docker-qgis-start
 docker-qgis-start: ## Start the containerized qgis
 	xhost +
-	docker run --rm -it --name qgis -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$$DISPLAY linz-gazetteer-qgis:3.4 qgis
+	docker run --rm -it --name qgis -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$$DISPLAY $(DOCKERNAME) qgis
 
