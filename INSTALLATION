@@ -2,8 +2,8 @@ These are pointers rather than complete notes on installation.
 
 # Requirements
 
-The installation requires that the sqlalchemy and geoalchemy modules
-are installed into python.
+Use of the QGIS (2.x) plugin requires that the sqlalchemy
+and geoalchemy python modules are installed.
 
 The install.sh and similar scripts in the src/sql folder assist
 installing the PostgreSQL database (8.4 minimum version supported).
