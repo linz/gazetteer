@@ -60,29 +60,23 @@ jobs:
         ./install_web.sh drop
 
 
-  test_docker_db:
+  test_docker:
 
-    name: DB docker
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v1
-    - name: Build gazetteer-db docker image
-      run: |
-        make -C src/sql/ docker
-
-
-  test_plugin:
-
-    name: DB docker
     runs-on: ubuntu-18.04
     env:
       DOCKER_COMPOSE_VERSION: 1.7.1
     steps:
     - uses: actions/checkout@v1
+
+    - name: Build gazetteer-db docker image
+      run: |
+        make -C src/sql/ docker
+
     - name: Start docker containers for plugin test
       run: |
         cd src/NZGBplugin
         docker-compose up -d
+
     - name: Setup Plugin
       run: |
         cd src/NZGBplugin
