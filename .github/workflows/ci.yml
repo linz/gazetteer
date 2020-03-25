@@ -1,15 +1,15 @@
-name: DB test
+name: CI
 
 on: [push, pull_request]
 
 jobs:
 
-  test:
+  test_schema:
 
-    runs-on: ${{ matrix.os }}
+    name: DB schema
+    runs-on: ubuntu-18.04
     strategy:
         matrix:
-            os: [ ubuntu-18.04 ]
             pg: [ '10' ]
             pgis: [ '2.5' ]
     env:
@@ -58,3 +58,33 @@ jobs:
       run: |
         cd src/sql
         ./install_web.sh drop
+
+
+  test_docker_db:
+
+    name: DB docker
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build gazetteer-db docker image
+      run: |
+        make -C src/sql/ docker
+
+
+  test_plugin:
+
+    name: DB docker
+    runs-on: ubuntu-18.04
+    env:
+      DOCKER_COMPOSE_VERSION: 1.7.1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Start docker containers for plugin test
+      run: |
+        cd src/NZGBplugin
+        docker-compose up -d
+    - name: Setup Plugin
+      run: |
+        cd src/NZGBplugin
+        docker-compose exec -T qgis-testing-environment sh -c "qgis_setup.sh NZGBplugin"
+        docker-compose exec -T qgis-testing-environment sh -c "ln -fs /tests_directory /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins"
