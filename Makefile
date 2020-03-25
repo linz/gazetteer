@@ -23,5 +23,5 @@ docker-qgis-shell: docker-up ## Start a shell in the containerized qgis
 .PHONY: docker-qgis-start
 docker-qgis-start: docker-up ## Start the containerized qgis
 	xhost +
-	docker-compose exec qgis qgis_on unix$$DISPLAY
+	docker-compose exec qgis sh -c 'DISPLAY=$$1 qgis' sh "unix$$DISPLAY"
 

@@ -15,12 +15,13 @@ services:
       POSTGRES_PASSWORD: postgres
 
   qgis:
-    image: linz-gazetteer-qgis:3.4
+    image: linz-gazetteer-qgis:2.14
     build: src/NZGBplugin
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ./:/tests_directory
+      #- ./:/tests_directory
     depends_on:
       - db
+    command: tail -F /dev/null
     #environment:
-    #  DISPLAY: ":99"
+      #DISPLAY: "unix:0"
