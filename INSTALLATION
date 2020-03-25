@@ -14,7 +14,7 @@ These include:
   - src/NZGBplugin/Plugin.py <server>
     is url of the web server from which the plugin is delivered
 
-  - src/gazetteer/gazetteer_roles.sql
+  - src/sql/gazetteer_roles.sql
     '*******' is a password by the "web application"
     (not part of this repository)
 
