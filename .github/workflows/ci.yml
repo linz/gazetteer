@@ -68,17 +68,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Build gazetteer-db docker image
+    - name: Build and start docker containers for plugin test
       run: |
-        make -C src/sql/ docker
+        make docker-up
 
-    - name: Start docker containers for plugin test
-      run: |
-        cd src/NZGBplugin
-        docker-compose up -d
-
-    - name: Setup Plugin
-      run: |
-        cd src/NZGBplugin
-        docker-compose exec -T qgis-testing-environment sh -c "qgis_setup.sh NZGBplugin"
-        docker-compose exec -T qgis-testing-environment sh -c "ln -fs /tests_directory /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins"
+    #TODO: test qgis plugins
