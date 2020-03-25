@@ -7,12 +7,12 @@ services:
     ports:
       - "5432"
     # This helps ensure that the data persists even if the Postgres container is deleted.
-    volumes:
-      - ./data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: github_ci_test
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    #volumes:
+      #- ./data:/var/lib/postgresql/data
+    #environment:
+      #POSTGRES_DB: github_ci_test
+      #POSTGRES_USER: postgres
+      #POSTGRES_PASSWORD: postgres
 
   qgis:
     image: linz-gazetteer-qgis:2.14
@@ -23,5 +23,5 @@ services:
     depends_on:
       - db
     command: tail -F /dev/null
-    #environment:
-      #DISPLAY: "unix:0"
+    environment:
+      PGHOST: db
