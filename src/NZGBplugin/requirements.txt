@@ -1,0 +1,2 @@
+geoalchemy
+sqlalchemy<0.9
