@@ -19,6 +19,7 @@ services:
     build: src/NZGBplugin
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./src/NZGBplugin:/root/.qgis2/python/plugins/NZGBplugin
       #- ./:/tests_directory
     depends_on:
       - db
