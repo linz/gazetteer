@@ -15,10 +15,10 @@ from PyQt4.QtGui import *
 
 
 
-# DictionaryListView and DictionaryListModel.  
-# 
+# DictionaryListView and DictionaryListModel.
+#
 # Note: I think I have missed an opportunity to use features already
-# implemented in Qt for handling indexes - should look at tidying up 
+# implemented in Qt for handling indexes - should look at tidying up
 # some time...
 
 class DictionaryListView( QTableView ):
@@ -69,7 +69,7 @@ class DictionaryListView( QTableView ):
             self._model.layoutChanged.disconnect( self._restoreSelectedRow )
         if self._dictionaryList:
             self._dictionaryList.resettingModel.disconnect( self._saveSelectedRow )
-        self._model = model 
+        self._model = model
         self._dictionaryList = self._model if isinstance(self._model,DictionaryListModel) else None
         if self._model:
             self._model.modelReset.connect( self._onModelReset )
@@ -230,8 +230,8 @@ class DictionaryListModel( QAbstractTableModel ):
 
     def _createIndex( self ):
         if self._filter:
-            self._index = [i 
-                           for i in range(len(self._list)) 
+            self._index = [i
+                           for i in range(len(self._list))
                            if self._filter(self._list[i])]
         else:
             self._index = range( len( self._list) )
@@ -263,10 +263,10 @@ class DictionaryListModel( QAbstractTableModel ):
     def count( self ):
         return len( self._index )
 
-    def rowCount( self, parent ): 
+    def rowCount( self, parent ):
         return len(self._index) if not parent.isValid() else 0
 
-    def columnCount( self, parent ): 
+    def columnCount( self, parent ):
         return len(self._columns) if not parent.isValid() else 0
 
     def getItem( self, row ):

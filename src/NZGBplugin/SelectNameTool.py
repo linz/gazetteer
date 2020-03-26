@@ -33,7 +33,7 @@ class SelectNameTool( QgsMapTool ):
     def activate(self):
         QgsMapTool.activate(self)
         self._statusbar.showMessage("Hover to display name, click to select")
-    
+
     def getIdName( self, pt ):
         tol = self.tolerance
         mapbl = self.toMapCoordinates( QPoint(pt.x()-tol,pt.y()+tol))

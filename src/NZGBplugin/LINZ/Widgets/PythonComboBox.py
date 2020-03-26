@@ -14,10 +14,10 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 class PythonComboBox( QComboBox ):
-    
+
     def __init__( self, parent=None ):
         QComboBox.__init__(self,parent)
-        
+
     def populate( self, rows, display='' ):
         '''
         Populate a QComboWidget with a list of items defined by in iterator
@@ -45,12 +45,12 @@ class PythonComboBox( QComboBox ):
                     addItem = self.addItem( unicode(r), r )
             addItem(r)
         self.setCurrentIndex(-1)
-        
+
     def setSelectedItem( self, data ):
         for i in range(self.count()):
             if self.itemData(i) == data:
                 self.setCurrentIndex(i)
-        
+
     def selectedItem( self ):
         index = self.currentIndex()
         if index == -1:

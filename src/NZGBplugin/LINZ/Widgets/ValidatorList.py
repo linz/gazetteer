@@ -15,27 +15,27 @@ from PyQt4.QtGui import *
 
 
 class ValidatorList( QObject ):
-    
+
     class Validator( QObject ):
-        
+
         def __init__( self, parent, widget, validator, message ):
             QObject.__init__(self,parent)
             self.widget = widget
             self.validate = validator
             self.message = message
-    
+
     def __init__( self, parent=None ):
         QObject.__init__(self,parent)
         self._parent = parent
         self._validators = []
-        
-        
+
+
     def parent( self ):
         return _self.parent
-    
+
     def setParent( self, parent ):
         self._parent = parent
-        
+
     def addValidator( self, widget, validator, message ):
         validfunc = None
         if not message and widget:
@@ -57,7 +57,7 @@ class ValidatorList( QObject ):
             self._validators.append(ValidatorList.Validator(self,widget,validfunc,message))
         else:
             raise RuntimeError(str(validator)+" is not a validator for "+widget.objectName())
-            
+
     def validate(self):
         messages = []
         valid = True

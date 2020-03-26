@@ -96,22 +96,22 @@ INSERT INTO gaz_web_config(
                    </ul>
 		',
 	    E'Content of How to Use Panel');
-		
+
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
             code, intval, value, description)
     VALUES ('MZSA',
             7,
             NULL,
-           E'The minimum zoom level that is required for the system to allow a blank search term to be searched for (excluding the default extent/zoom level).');		
-		
+           E'The minimum zoom level that is required for the system to allow a blank search term to be searched for (excluding the default extent/zoom level).');
+
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
             code, intval, value, description)
     VALUES ('MZMG',
             NULL,
 	    E'No matches have been found but you can either enter search text or zoom in on the area of interest to find names.',
-            E'The message that will be displayed when 0 matches have been found and the current zoom level is less than the minimum zoom level (MZSA) and the search textbox is blank');		
+            E'The message that will be displayed when 0 matches have been found and the current zoom level is less than the minimum zoom level (MZSA) and the search textbox is blank');
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -181,7 +181,7 @@ INSERT INTO gaz_web_config(
     VALUES ('SRDS',
             4167,
             NULL,
-           E'The source SRID.');		
+           E'The source SRID.');
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -189,7 +189,7 @@ INSERT INTO gaz_web_config(
     VALUES ('SRDT',
             3785,
             NULL,
-           E'The target SRID.');	
+           E'The target SRID.');
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -197,7 +197,7 @@ INSERT INTO gaz_web_config(
     VALUES ('TTNV',
             NULL,
            E'Click the top ''hand'' button to pan when dragging the mouse over the map.\n\nClick the bottom ''magnifying glass'' to zoom the map by drawing a rectangle on the area to be zoomed.',
-           E'The navtoolbar tooltip title, ie the hand/spatial zoom + sybol at the bottom left corner');	
+           E'The navtoolbar tooltip title, ie the hand/spatial zoom + sybol at the bottom left corner');
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -205,7 +205,7 @@ INSERT INTO gaz_web_config(
     VALUES ('TTPZ',
             NULL,
            E'To pan the map in the north, east, south, west directions, use the corresponding arrows at the top left.\n\nTo zoom the map to the desired scale, click the ''-'', ''+'' or anywhere in between to change the zoom level.',
-           E'The panzoombar tooltip title, ie the top two pan and zoom controls');	
+           E'The panzoombar tooltip title, ie the top two pan and zoom controls');
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -213,7 +213,7 @@ INSERT INTO gaz_web_config(
     VALUES ('TTZM',
             NULL,
            E'Zoom to the maximum extent.',
-           E'The zoomtomaxextent tooltip title, ie the world control');	
+           E'The zoomtomaxextent tooltip title, ie the world control');
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -221,7 +221,7 @@ INSERT INTO gaz_web_config(
     VALUES ('TTHP',
             NULL,
            E'Go to previous map position.',
-           E'The NavigationHistory previous tooltip title');	
+           E'The NavigationHistory previous tooltip title');
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -229,5 +229,5 @@ INSERT INTO gaz_web_config(
     VALUES ('TTHN',
             NULL,
            E'Go to next map position.',
-           E'The NavigationHistory next tooltip title');	
+           E'The NavigationHistory next tooltip title');
 

@@ -26,7 +26,7 @@ class Controller( QObject ):
     Controller manages interactions between components of the gazetteer application
     by providing a set of events
     '''
-    
+
     recentUpdated = pyqtSignal()
     favouritesUpdated = pyqtSignal()
     mapExtentsChanged = pyqtSignal()
@@ -35,15 +35,15 @@ class Controller( QObject ):
     nameEdited = pyqtSignal( int )
     featureLocationEdited = pyqtSignal( int )
     searchResultsUpdated = pyqtSignal( str )
-    
+
     _controller = None
-    
+
     @staticmethod
     def instance():
         if Controller._controller == None:
             Controller._controller = Controller( QApplication.instance() )
         return Controller._controller
-            
+
     def __init__(self, parent=None):
         QObject.__init__( self, parent )
         self._mainWindow = None
@@ -80,7 +80,7 @@ class Controller( QObject ):
         else:
             Database.execute(Database.func.gazetteer.gapp_clear_favourite(name_id))
         self.favouritesUpdated.emit()
-        
+
     def recent( self, allusers=False, editonly=False, maxnames=50 ):
         results = Database.querysql('select * from gazetteer.gapp_get_recent_names(:allusers,:editonly,:nmax) order by use_date desc, name',
                        allusers=True if allusers else False,

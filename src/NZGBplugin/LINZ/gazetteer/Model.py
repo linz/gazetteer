@@ -42,7 +42,7 @@ def objectClass( objtype ):
 
 def objectId( item ):
     '''
-    Create a string id for a database derived object that can be 
+    Create a string id for a database derived object that can be
     used to identify the object in application code
     '''
     if item == None:
@@ -52,8 +52,8 @@ def objectId( item ):
 
     return (item.__class__.__name__ + "_" +
         "_".join([
-            str(item.__getattribute__(c.name)) 
-            for c in item.__table__.columns 
+            str(item.__getattribute__(c.name))
+            for c in item.__table__.columns
             if c.primary_key
             ])
            )
@@ -92,7 +92,7 @@ def setObjectAttr( id, value ):
     objid,attr = id.split('.',1)
     item=idObject(objid)
     item.__setattr__( attr, value )
-    
+
 
 #====================================================================
 # Reflection based ORM classes
@@ -108,7 +108,7 @@ class SystemCode(base):
 
     __codes__ = {}
     __codegroups__ = {}
-    
+
     def canBeDeleted(self):
         result = Database.scalar('select gazetteer.gaz_canDeleteSystemCode(:code_group,:code)',
             code_group=self.code_group,code=self.code)
@@ -122,7 +122,7 @@ class SystemCode(base):
     def codeGroupCategory( code_group ):
         cg = SystemCode.get('CATE',code_group)
         return cg.category if cg else None
-    
+
     @staticmethod
     def codeGroup( code_group, refresh=False ):
         if refresh or code_group not in SystemCode.__codegroups__:
@@ -179,7 +179,7 @@ class Feature(base):
             raise RuntimeError('Cannot query location of modifed feature')
         result=Database.querysql(
             '''
-            select st_x(pt),st_y(pt) from 
+            select st_x(pt),st_y(pt) from
             (select st_transform(ref_point,:srid) as pt from gazetteer.feature
              where feat_id=:id) as ptq
             ''',id=self.feat_id,srid=srid).fetchone()
@@ -207,7 +207,7 @@ class Name(base):
         __table__=Table('name',meta,autoload=True)
     finally:
         warnings.filters = wfilters
-    
+
     events = relationship('Event',backref='name',cascade="all, delete-orphan")
     annotations = relationship('NameAnnotation',backref='name',cascade="all, delete-orphan")
 
@@ -217,35 +217,35 @@ class Name(base):
     @staticmethod
     def get( id ):
         return Database.query(Name).get(id)
-        
+
     @staticmethod
     def search(name=None,ftype=None,status=None,maxresults=None):
         if name:
             name = Database.build_tsquery(name)
         nresults = maxresults if maxresults else None
         results = Database.querysql('''
-            select name_id, feat_id, name, name_status, feat_type, rank 
-            from gazetteer.gaz_searchname(:name,:ftype,:status,:nmax) 
+            select name_id, feat_id, name, name_status, feat_type, rank
+            from gazetteer.gaz_searchname(:name,:ftype,:status,:nmax)
             order by rank desc, name''',
             name=name,ftype=ftype,status=status,nmax=nresults).fetchall()
         if nresults and len(results)==nresults:
             results=[]
             raise ValueError('Query is not specific enough')
         return results
-        
+
     @staticmethod
     def search2(name=None,ftype=None,status=None,notpublished=False,extentWkt=None,maxresults=None):
         if name:
             name = Database.build_tsquery(name)
         nresults = maxresults+1 if maxresults else None
         results = Database.querysql('''
-            select name_id, feat_id, name, name_status, feat_type, rank 
+            select name_id, feat_id, name, name_status, feat_type, rank
             from gazetteer.gaz_searchname2(:name,:ftype,:status,:wkt,:npub,:nmax)
             order by rank desc, name''',
                        name=name,
                        ftype=ftype,
                        status=status,
-                       npub=notpublished, 
+                       npub=notpublished,
                        wkt=extentWkt,
                        nmax=nresults).fetchall()
         if nresults and len(results)==nresults:
@@ -265,7 +265,7 @@ class FeatureAnnotation(base):
 
     def __str__(self):
         return 'FeatureAnnotation<'+str(self.annot_id)+'>'
-        
+
 class NameAnnotation(base):
     __table__=Table('name_annotation',meta,autoload=True)
 
@@ -274,14 +274,14 @@ class NameAnnotation(base):
 
 class NameAssociation(base):
     __table__=Table('name_association',meta,autoload=True)
-    
+
     name_from = relationship(
-        'Name', 
-        primaryjoin='NameAssociation.name_id_from==Name.name_id', 
+        'Name',
+        primaryjoin='NameAssociation.name_id_from==Name.name_id',
         backref='associated_to')
     name_to = relationship(
-        'Name', 
-        primaryjoin='NameAssociation.name_id_to==Name.name_id', 
+        'Name',
+        primaryjoin='NameAssociation.name_id_to==Name.name_id',
         backref=backref('associated_from',
                 primaryjoin="and_(NameAssociation.name_id_to==Name.name_id, "
                                  "func.gazetteer.gaz_nameRelationshipIsTwoWay(NameAssociation.assoc_type))"
@@ -290,16 +290,16 @@ class NameAssociation(base):
 
 class FeatureAssociation(base):
     __table__=Table('feature_association',meta,autoload=True)
-    
+
     feat_from = relationship(
-        'Feature', 
-        primaryjoin='FeatureAssociation.feat_id_from==Feature.feat_id', 
+        'Feature',
+        primaryjoin='FeatureAssociation.feat_id_from==Feature.feat_id',
         backref='associated_to')
     feat_to = relationship(
-        'Feature', 
-        primaryjoin='FeatureAssociation.feat_id_to==Feature.feat_id', 
+        'Feature',
+        primaryjoin='FeatureAssociation.feat_id_to==Feature.feat_id',
         backref=backref('associated_from',
-                primaryjoin="and_(FeatureAssociation.feat_id_to==Feature.feat_id," 
+                primaryjoin="and_(FeatureAssociation.feat_id_to==Feature.feat_id,"
                                  "func.gazetteer.gaz_featureRelationshipIsTwoWay( FeatureAssociation.assoc_type))"
                 )
        )

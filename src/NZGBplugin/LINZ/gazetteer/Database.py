@@ -55,10 +55,10 @@ class Database( object ):
         # event.listen(self._engine, 'connect', set_search_path )
         event.listen(Pool, 'connect', set_search_path )
         self._session = None
-    
+
     def engine(self):
         return self._engine
-    
+
     def session(self):
         if not self._session:
             Session = scoped_session(sessionmaker(bind=self._engine))
@@ -93,7 +93,7 @@ def setConnection( host=None, port=None, database=None, schema=None, user=None, 
 
 def getConnection():
     global _host, _port, _database, _schema, _user, _password
-    return { 
+    return {
         'host': _host,
         'port': _port,
         'database': _database,
@@ -147,10 +147,10 @@ def rollback():
 
 def add( object_ ):
     session().add(object_)
-    
+
 def delete( object_ ):
     session().delete(object_)
-    
+
 def scalar( sql, **kwargs ):
     if type(sql) in (str,unicode):
         sql=text(sql)
@@ -162,7 +162,7 @@ def scalar( sql, **kwargs ):
 
 def query( *args, **kwargs ):
     return session().query(*args,**kwargs)
-    
+
 def querysql( sql, **kwargs ):
     if type(sql) in (str,unicode):
         sql=text(sql)
@@ -171,7 +171,7 @@ def querysql( sql, **kwargs ):
     except:
         rollback()
         raise
-    
+
 def execute( sql, **kwargs ):
     if type(sql) in (str,unicode):
         sql=text(sql)

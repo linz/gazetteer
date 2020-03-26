@@ -43,7 +43,7 @@ class AdminWidget( QWidget, Ui_AdminWidget):
         self._currentUser = self._database.user()
         self._allUsers = {};
         self.uUpdatingLabel.hide()
-        
+
         self.uPublishDatabase.clicked.connect( self.publishData )
         self.uDownloadCSV.hide()
         self.uDownloadCSV.clicked.connect( self.downloadCsvFiles )
@@ -237,6 +237,6 @@ if __name__ == '__main__':
     dlg = AdminDialog()
     dlg.show()
     app.exec_()
-    
-    
+
+
 

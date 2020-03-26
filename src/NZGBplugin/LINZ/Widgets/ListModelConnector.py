@@ -15,7 +15,7 @@ from PyQt4.QtGui import *
 
 
 class ListModelConnector( QAbstractTableModel ):
-    ''' 
+    '''
     Represents a list of objects which are accessed via an Adaptor as in a QAbstractTableModel,
     for incorporating into a QTableView or similar.
 
@@ -53,7 +53,7 @@ class ListModelConnector( QAbstractTableModel ):
     def setList( self, list=[], adaptor=None, columns=None, headers=None, idColumn=None, filter=None ):
         '''
         Attach a new item list to the model.  The columns, headers, and id column
-        will be based on the first item in the list if they are not defined 
+        will be based on the first item in the list if they are not defined
         explicitely
         '''
         self.resettingModel.emit()
@@ -95,7 +95,7 @@ class ListModelConnector( QAbstractTableModel ):
     def setFilter( self, filter=None ):
         '''
         Define a filter function restricting the list of items to display.  The
-        function takes an item as a parameter, and returns a True value if the 
+        function takes an item as a parameter, and returns a True value if the
         item is to be displayed in the view.
         '''
         self.resettingModel.emit()
@@ -122,7 +122,7 @@ class ListModelConnector( QAbstractTableModel ):
     def _setColumns( self, columns, headers ):
         '''
         Reset the columns and column headers.  If values are provided use them.
-        Otherwise use already set values, or if none, infer values from the 
+        Otherwise use already set values, or if none, infer values from the
         first item in the list.
         '''
         if columns:
@@ -153,11 +153,11 @@ class ListModelConnector( QAbstractTableModel ):
 
     def _createIndex( self ):
         '''
-        Create the index mapping list index to view rows 
+        Create the index mapping list index to view rows
         '''
         if self._filter:
-            self._index = [i 
-                           for i in range(len(self._list)) 
+            self._index = [i
+                           for i in range(len(self._list))
                            if self._filter(self._list[i])]
         else:
             self._index = range( len( self._list) )
@@ -191,13 +191,13 @@ class ListModelConnector( QAbstractTableModel ):
         '''
         return len( self._index )
 
-    def rowCount( self, parent ): 
+    def rowCount( self, parent ):
         '''
         Overloaded function returning the row count
         '''
         return len(self._index) if not parent.isValid() else 0
 
-    def columnCount( self, parent ): 
+    def columnCount( self, parent ):
         '''
         Overloaded function returning the column count
         '''
@@ -354,7 +354,7 @@ class ListModelConnector( QAbstractTableModel ):
 
 class ListModelTableView( QTableView ):
     '''
-    ListModelTableView provides some extra signals, default settings, and 
+    ListModelTableView provides some extra signals, default settings, and
     intelligence to the QTableView to support interacting with a ListModelConnector
     '''
 
@@ -399,7 +399,7 @@ class ListModelTableView( QTableView ):
         else:
             model=ListModelConnector(list=list,adaptor=adaptor,columns=columns,headers=headers,idColumn=idColumn,filter=None)
             self.setModel( model )
-            
+
     def list( self ):
         try:
             return self.model().list()
@@ -414,7 +414,7 @@ class ListModelTableView( QTableView ):
             self._model.layoutChanged.disconnect( self._restoreSelectedRow )
         if self._modelList:
             self._modelList.resettingModel.disconnect( self._saveSelectedRow )
-        self._model = model 
+        self._model = model
         self._modelList = self._model if isinstance(self._model,ListModelConnector) else None
         if self._model:
             self._model.modelReset.connect( self._onModelReset )
@@ -475,7 +475,7 @@ class ListModelTableView( QTableView ):
 
     def selectedItem( self ):
         return self.itemAt(self.selectedRow())
-        
+
     def itemAt( self, row ):
         if not self._modelList:
             return None

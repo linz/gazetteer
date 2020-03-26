@@ -29,7 +29,7 @@ class SqlAlchemyAdaptor( Adaptor ):
     def __init__( self, modelClass ):
         Adaptor.__init__( self )
         SqlAlchemyAdaptor._adaptors[modelClass] = self
-        
+
         table = modelClass.__table__
         self.setTypeName( modelClass.__name__)
         primary=[]

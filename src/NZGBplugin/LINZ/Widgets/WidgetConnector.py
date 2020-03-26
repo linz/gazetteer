@@ -85,11 +85,11 @@ class LabelLinker( WidgetLinker ):
 
     def setValue( self, value ):
         self._widget.setText( unicode(value) if value else u'' )
-        
+
 class LineEditLinker( WidgetLinker ):
 
     types = [QLineEdit]
-    
+
     def __init__( self, widget ):
         WidgetLinker.__init__(self, widget)
         widget.textChanged.connect(lambda x: self.emitChanged())
@@ -103,7 +103,7 @@ class LineEditLinker( WidgetLinker ):
 class PlainTextLinker( WidgetLinker ):
 
     types = [QPlainTextEdit, QTextEdit]
-    
+
     def __init__( self, widget ):
         WidgetLinker.__init__(self, widget)
         widget.textChanged.connect(lambda: self.emitChanged())
@@ -143,7 +143,7 @@ class TableViewLinker( WidgetLinker ):
 class Linkage( QObject ):
 
     '''
-    Class for linking a specific attribute of an object with a 
+    Class for linking a specific attribute of an object with a
     particular widget.
     '''
 
@@ -194,15 +194,15 @@ class Linkage( QObject ):
                 self.dataChanged.emit()
 
 class WidgetConnector( QObject ):
-    ''' 
+    '''
     Mixin class for a widget to provide automatic connection with an
-    ORM base class from SqlAlchemy.  
+    ORM base class from SqlAlchemy.
 
     Interrogates the object to determine the field names, then attempts
-    to link each field with a child widget of the form with the same 
+    to link each field with a child widget of the form with the same
     name.
 
-    The LoadEntity function and SaveEntity functions provide the main 
+    The LoadEntity function and SaveEntity functions provide the main
     connection between the entity and the object.  The IsDirty function
     determines whether an entity has changed.
     '''
@@ -228,11 +228,11 @@ class WidgetConnector( QObject ):
         readonly attributes (as specified by the adaptor) to be written
         (For example to write primary key values in new objects)
         '''
-        
+
         if self._object:
             for link in self._mapping:
                 link.save( self._object, overwrite )
-                
+
     def connectedObject( self ):
         return self._object
 
@@ -254,7 +254,7 @@ class WidgetConnector( QObject ):
         self._object = None
         self._mapping = []
 
-        for widget in self._form.findChildren(QWidget):          
+        for widget in self._form.findChildren(QWidget):
             attribute = widget.property('dataAttribute')
             if not attribute and self._widget_prefix:
                 name = unicode(widget.objectName())

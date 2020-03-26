@@ -34,9 +34,9 @@ from Ui_NameSearchWidget import Ui_NameSearchWidget
 from Controller import Controller
 
 class NameSearchWidget( QWidget, Ui_NameSearchWidget):
-    
+
     nameSelected = pyqtSignal( int, bool, name='nameSelected')
-    
+
     def __init__( self, parent=None, userOnly=True):
         QWidget.__init__( self, parent)
         self.setupUi( self )
@@ -141,7 +141,7 @@ class NameSearchWidget( QWidget, Ui_NameSearchWidget):
             results = []
             if not clear:
                 if self._advanced:
-                    results = Name.search2( 
+                    results = Name.search2(
                         name=text,
                         ftype=feat_type,
                         status=name_status,
@@ -231,7 +231,7 @@ class NameSearchWidget( QWidget, Ui_NameSearchWidget):
                     if selected:
                         self._selectNameId( selected['name_id'] )
         return False
-    
+
     def _selectResult( self, sender, index ):
         item = sender.itemAt( index.row())
         self._selectNameId( item['name_id'] )
@@ -261,5 +261,5 @@ if __name__ == '__main__':
     dlg.setLayout(layout)
     dlg.show()
     app.exec_()
-    
-    
+
+

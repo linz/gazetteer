@@ -33,7 +33,7 @@ from LINZ.Widgets.ValidatorList import ValidatorList
 from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
 
 class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
-    
+
     def __init__( self, parent=None, userOnly=True):
         QWidget.__init__( self, parent)
         self._controller = Controller.instance()
@@ -45,7 +45,7 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
         adaptor = SqlAlchemyAdaptor( SystemCode )
         model = ListModelConnector( adaptor=adaptor, columns=['code','category','value','description'], idColumn='code')
         self.uCodesTable.setModel( model )
-        
+
         self.uCodeEditor.setAdaptor( adaptor, 'code_', 'system code')
         self.uCodeEditor.addValidator('code', UCaseRegExpValidator(r'\w{4}'), 'The code must be a four character string' )
         self.uCodeEditor.addValidator('code', self.checkCodeIsUnique, 'Invalid code: The code entered is already defined')
@@ -53,33 +53,33 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
         self.uCodeEditor.loaded.connect( self.codeLoaded )
         self.uCodeEditor.saved.connect( self.codeSaved )
         self.uCodeEditor.cancelled.connect( self.codeCancelled )
-        
+
         self.uCodeGroupSelector.currentIndexChanged[int].connect(lambda x: self.selectCodeGroup())
         self.uCodesTable.rowSelected.connect(self.codeSelected)
         self.uDeleteCodeButton.clicked.connect(self.deleteCode)
         self.uNewCodeButton.clicked.connect(self.newCode)
         self.uCodeGroupSelector.setCurrentIndex(0)
-    
+
     def populateSystemCodes( self, userOnly ):
         query = self._database.query(SystemCode).filter(SystemCode.code_group == 'CODE')
         if userOnly:
             query = query.filter(SystemCode.category=='USER')
         codeGroups = query.order_by(SystemCode.code).all()
         self.uCodeGroupSelector.populate( codeGroups, display=lambda x: x.code + ': ' + x.value)
-        
+
     def selectedCodeGroup( self ):
         return self.uCodeGroupSelector.selectedItem()
-    
+
     def setSelectedCodeGroup( self, group ):
         self.uCodeGroupSelector.setSelectedItem(self._group)
-        
+
     def reselectCodeGroup( self ):
         try:
             self._loadCodeOnSelect = False
             self.setSelectedCodeGroup( self._group )
         finally:
             self._loadCodeOnSelect = True
-        
+
     def selectCodeGroup( self ):
         # Populate the categories drop down in the details field
         group = self.selectedCodeGroup()
@@ -101,7 +101,7 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
         QtUtils.populateCombo(self.code_category,categories)
         self.code_category.setEnabled( len(categories) > 0 )
         self.populateCodeList()
-        
+
     def populateCodeList( self, code=None ):
         code_group = self.selectedCodeGroup()
         self.uNewCodeButton.setEnabled( code_group != None)
@@ -113,22 +113,22 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
             self.uCodesTable.setList(codes)
             if code:
                 self.uCodesTable.selectId(code.code)
-     
+
     def codeSelected( self, row ):
         if self._loadCodeOnSelect:
             self.loadCode()
         self.uDeleteCodeButton.setEnabled( self.selectedCode() != None )
-        
+
     def selectedCode( self ):
         return self.uCodesTable.selectedItem()
-        
+
     def loadCode( self, overwrite=False ):
         code=self.selectedCode()
         self.uCodeEditor.load(code, overwrite=overwrite)
-        
+
     def codeLoaded( self, code ):
         self.code_code.setEnabled( self.uCodeEditor.isNew())
-        
+
     def codeSaved( self, code ):
         try:
             self._database.add(code)
@@ -136,17 +136,17 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
             self.populateCodeList(code)
         except Exception as e:
             QMessageBox.warning(self,"Error saving code",e.message)
-        
+
     def codeCancelled( self ):
         self.loadCode( overwrite=True )
-        
+
     def newCode( self ):
         if not self.uCodeEditor.querySave():
             return
         code = SystemCode()
         code.code_group = self.selectedCodeGroup().code
         self.uCodeEditor.load(code,isNew=True, overwrite=True)
-        
+
     def deleteCode( self ):
         code = self.selectedCode()
         try:
@@ -157,7 +157,7 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
             self.populateCodeList()
         except Exception as e:
             QMessageBox.warning(self,"Error deleting code",e.message)
-        
+
     def checkCodeIsUnique( self ):
         if not self.uCodeEditor.isNew():
             return True
@@ -175,5 +175,5 @@ if __name__ == '__main__':
     dlg.setLayout(layout)
     dlg.show()
     app.exec_()
-    
-    
+
+
