@@ -7,10 +7,15 @@ RUN sed -i 's/\(.*qgis.org\)/#\1/' /etc/apt/sources.list
 # Note: upgrade of libssl-dev is needed to build geoalchemy
 RUN apt-get update && apt-get install -y \
   libssl-dev \
-  python-pip \
-  python-sqlalchemy
+  python-pip
 
-RUN pip install geoalchemy
+# NOTE: sqlalchemy 0.9+ breaks compatibility
+#       of geoalchemy, see
+#       https://github.com/geoalchemy/geoalchemy/pull/35
+#       They _need_ to be installed by the same pip call
+#       otherwise `geoalchemy` install will request
+#       to install sqlalchemy>=0.6.1 (not limiting to newer)
+RUN pip install geoalchemy sqlalchemy'<0.9'
 
 
 ## Set NZGBplugin as enabled in config
