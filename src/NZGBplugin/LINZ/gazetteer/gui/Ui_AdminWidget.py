@@ -14,11 +14,13 @@
 # Form implementation generated from reading ui file 'Ui_AdminWidget.ui'
 #
 # Created: Fri Sep 19 12:48:00 2014
-#      by: PyQt4 UI code generator 4.10.4
+#      by: PyQt5 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from __future__ import absolute_import
+from builtins import object
+from PyQt5 import QtCore, QtGui
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -164,4 +166,4 @@ class Ui_AdminWidget(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("AdminWidget", "System Codes", None))
 
 from LINZ.Widgets.ListModelConnector import ListModelTableView
-from SystemCodeEditorWidget import SystemCodeEditorWidget
+from .SystemCodeEditorWidget import SystemCodeEditorWidget

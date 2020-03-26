@@ -10,8 +10,10 @@
 ################################################################################
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from builtins import str
+from builtins import range
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 
 class ListModelConnector( QAbstractTableModel ):
@@ -160,7 +162,7 @@ class ListModelConnector( QAbstractTableModel ):
                            for i in range(len(self._list)) 
                            if self._filter(self._list[i])]
         else:
-            self._index = range( len( self._list) )
+            self._index = list(range( len( self._list)))
         self._sortIndex()
         self._lookup = None
 
@@ -276,7 +278,7 @@ class ListModelConnector( QAbstractTableModel ):
             attr = self._getItemAttribute(object,attr)
             if attr == None:
                 return ''
-            return unicode(attr)
+            return str(attr)
         elif role == Qt.BackgroundRole and not self._editable[col] and self._readonlyBrush:
             return self._readonlyBrush
         #return QVariant()
@@ -292,7 +294,7 @@ class ListModelConnector( QAbstractTableModel ):
         if not self._editable[col]:
             return False
         object, attr = self.itemFromIndex( index )
-        self._adaptor.setValue(item,attr,unicode(value))
+        self._adaptor.setValue(item,attr,str(value))
         self.dataChanged.emit(index,index)
         return True
 
@@ -324,7 +326,7 @@ class ListModelConnector( QAbstractTableModel ):
         if self._sortColumn == None:
             return
         key = self._columns[self._sortColumn]
-        keyfunc = lambda x: unicode(self._getItemAttribute(self._list[x],key))
+        keyfunc = lambda x: str(self._getItemAttribute(self._list[x],key))
         self._index.sort( None, keyfunc, self._sortReverse )
         self._lookup = None
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,6 +10,7 @@
 #
 ################################################################################
 
+from builtins import str
 import sys
 import warnings
 import sqlalchemy
@@ -23,7 +25,7 @@ from sqlalchemy import Column, Integer, String, Unicode, DateTime
 from sqlalchemy.schema import Table, MetaData, PrimaryKeyConstraint
 from sqlalchemy.sql.expression import Function
 
-import Database
+from . import Database
 
 meta = MetaData( bind=Database.engine(), schema='gazetteer' )
 base=declarative_base(metadata=meta)

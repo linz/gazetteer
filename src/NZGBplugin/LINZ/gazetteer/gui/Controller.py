@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -10,16 +11,17 @@
 ################################################################################
 
 
+from builtins import str
 import re
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
-import DatabaseConfiguration
+from . import DatabaseConfiguration
 
 from LINZ.gazetteer import Database
 from LINZ.gazetteer.Model import *
-from NameWebView import NameWebDock
+from .NameWebView import NameWebDock
 
 class Controller( QObject ):
     '''

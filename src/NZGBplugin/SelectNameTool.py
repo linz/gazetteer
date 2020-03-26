@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -10,8 +11,8 @@
 ################################################################################
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 from qgis.core import *
 from qgis.gui import *
@@ -27,7 +28,7 @@ class SelectNameTool( QgsMapTool ):
         self._iface = iface
         self._layers = layers
         self._statusbar = self._iface.mainWindow().statusBar()
-        from LINZ.gazetteer.gui.Controller import Controller
+        from .LINZ.gazetteer.gui.Controller import Controller
         self._controller = Controller.instance()
 
     def activate(self):

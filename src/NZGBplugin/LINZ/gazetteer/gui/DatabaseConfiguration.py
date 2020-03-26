@@ -11,10 +11,12 @@
 ################################################################################
 
 
+from __future__ import print_function
+from __future__ import absolute_import
 import getpass
-from PyQt4.QtCore import *
+from PyQt5.QtCore import *
 
-import Config
+from . import Config
 
 def getConfiguration():
     get = Config.get
@@ -57,7 +59,8 @@ else:
     sys.path.append(dirname(dirname(dirname(dirname(abspath(__file__))))))
     from LINZ.gazetteer import Database
     if len(sys.argv) < 2:
-        print syntax
+        # fix_print_with_import
+        print(syntax)
         sys.argv.append('show')
 
     keys = 'host port database schema user password'.split()
@@ -78,40 +81,50 @@ else:
             check = True
             continue
         if '=' not in arg:
-            print "Invalid argument:",arg
+            # fix_print_with_import
+            print("Invalid argument:",arg)
             argsok = False
             break
         key, value = arg.split('=',1)
         if key not in keys:
-            print "Invalid argument:",arg
+            # fix_print_with_import
+            print("Invalid argument:",arg)
             argsok = False
             break
         options[key] = value
 
     if not argsok:
-        print syntax
+        # fix_print_with_import
+        print(syntax)
         sys.exit()
 
     if reset:
         for key in keys:
             Config.remove("Database/"+key)
-        print "Default database configuration restored"
+        # fix_print_with_import
+        print("Default database configuration restored")
 
-    for key, value in options.items():
+    for key, value in list(options.items()):
         if not value:
             Config.remove("Database/"+key)
         else:
             Config.set("Database/"+key,value)
 
-    print "Configuration set"
+    # fix_print_with_import
+    print("Configuration set")
     configureDatabase()
     dbconfig = Database.getConnection()
     for k in keys:
-        print "%s: %s" % (k,dbconfig[k])
+        # fix_print_with_import
+        print("%s: %s" % (k,dbconfig[k]))
 
     if check:
         valid = Database.userIsValid()
         dba = Database.userIsDba()
-        print "Current user is gazetteer user: ",valid
-        print "Current user is gazetteer dba: ",dba
+        # fix_print_with_import
+        # fix_print_with_import
+print("Current user is gazetteer user: ",valid)
+        # fix_print_with_import
+        # fix_print_with_import
+print("Current user is gazetteer dba: ",dba)
 

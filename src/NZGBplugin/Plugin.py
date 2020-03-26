@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,18 +10,20 @@
 #
 ################################################################################
 
+from builtins import str
+from builtins import object
 import sys
 import os.path
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
 from qgis.gui import QgsMapToolEmitPoint
 
-import Resources
-from SelectNameTool import SelectNameTool
+from . import Resources
+from .SelectNameTool import SelectNameTool
         
-class Plugin:
+class Plugin(object):
 
     Name = "GazetteerEditor"
     LongName="GazetteerEditor plugin for QGIS"
@@ -160,7 +163,7 @@ class Plugin:
 
         if not self._editor:
             sys.path.insert(0,os.path.dirname(__file__))
-            from LINZ.gazetteer.gui.Controller import Controller
+            from .LINZ.gazetteer.gui.Controller import Controller
             self._controller = Controller.instance()
             # Check if user is valid - will raise exception if not
             dbinstance = self._controller.database().instance()
@@ -179,8 +182,8 @@ class Plugin:
                 if result != QMessageBox.Yes:
                     return
 
-            from LINZ.gazetteer.gui.Editor import Editor
-            import Layers
+            from .LINZ.gazetteer.gui.Editor import Editor
+            from . import Layers
             self._editor = Editor(self._iface.mainWindow())
             self._newfeat.setEnabled( True )
             self._layers = Layers.Layers( self._iface )
@@ -230,7 +233,7 @@ class Plugin:
                         "You are not authorised to run gazetteer administration functions"
                        );
             return
-        from LINZ.gazetteer.gui.AdminWidget import AdminDialog
+        from .LINZ.gazetteer.gui.AdminWidget import AdminDialog
         dlg = AdminDialog( self._iface.mainWindow() )
         dlg.exec_()
 
@@ -281,7 +284,7 @@ class Plugin:
                 "Gazetter location error",
                 "The location selected for the new feature is not at a valid latitude and longitude")
             return
-        from NewFeatureDialog import NewFeatureDialog
+        from .NewFeatureDialog import NewFeatureDialog
         NewFeatureDialog.createNewFeature( point.x(), point.y(), self._controller )
 
     def _showInfo(self):

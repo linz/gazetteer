@@ -12,7 +12,8 @@
 
 # Configuration settings for NZGB plugin
 
-from PyQt4.QtCore import *
+from builtins import str
+from PyQt5.QtCore import *
 
 organisationName='Land Information New Zealand'
 applicationName='Gazetteer Administration'

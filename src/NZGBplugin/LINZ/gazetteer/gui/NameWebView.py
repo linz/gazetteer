@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,6 +11,8 @@
 #
 ################################################################################
 
+from builtins import str
+from builtins import object
 from __future__ import with_statement
 
 import sys
@@ -20,11 +24,11 @@ try:
 except ImportError:
     import simplejson as json
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtWebKit import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWebKit import *
 
-import DatabaseConfiguration
+from . import DatabaseConfiguration
 
 from LINZ.gazetteer import Model
 from LINZ.gazetteer import Database
@@ -86,7 +90,7 @@ class NameWebView( QWebView ):
                     self._stat = os.path.getmtime(self._file)
                     self._template = pyratemp.Template(filename=self._file)
                 except:
-                    msg = unicode(sys.exc_info()[1])
+                    msg = str(sys.exc_info()[1])
                     def tfun( **kwords ):
                         return ("<html><head><title>Error</title></head><body><h1>Error</h1><p>"+
                                 pyratemp.escape(msg,pyratemp.HTML)+
@@ -231,16 +235,18 @@ class NameWebView( QWebView ):
             QWebPage.__init__( self, parent )
 
         def javaScriptAlert( self, frame, msg ):
-            print "Alert:",msg
+            # fix_print_with_import
+            print("Alert:",msg)
 
         def javaScriptConsoleMessage( self, message, lineno, srcid ):
-            print "Message: ",message," (",srcid,":",lineno,")"
+            # fix_print_with_import
+            print("Message: ",message," (",srcid,":",lineno,")")
 
     def __init__( self, controller=None, parent=None ):
         QWebView.__init__(self,parent)
         self._controller = controller
         if not self._controller:
-            from Controller import Controller
+            from .Controller import Controller
             self._controller = Controller.instance()
         self._basedir=os.path.dirname(os.path.abspath(__file__))
         self._templatedir = os.path.join(self._basedir,'html')
@@ -338,8 +344,8 @@ class NameWebView( QWebView ):
         # print unicode(editjson).encode('utf8')
         locationUpdated=False
         try:
-            editdata=json.loads(unicode(editjson))
-            for id, value in editdata['update'].items():
+            editdata=json.loads(str(editjson))
+            for id, value in list(editdata['update'].items()):
                 if value == '':
                     value = None
                 if id.endswith('.setLocation'):
@@ -364,7 +370,7 @@ class NameWebView( QWebView ):
                         obj = Model.newObject( objtype )
                     except:
                         raise ValueError('Invalid object type '+str(objtype)+' for new object')
-                    for attr, value in item.items():
+                    for attr, value in list(item.items()):
                         if attr != '_item_type':
                             if value == '':
                                 value = None
@@ -375,7 +381,7 @@ class NameWebView( QWebView ):
             Database.commit()
         except:
             Database.rollback()
-            msg = unicode(sys.exc_info()[1])
+            msg = str(sys.exc_info()[1])
             QMessageBox.warning(self,'Update failed','Cannot save changes: '+msg)
             return
 
@@ -532,7 +538,7 @@ class NameWebView( QWebView ):
                 names.append({ 'name_id': name.name_id, 'name': name.name })
         return json.dumps(names)
 
-    viewedNames = pyqtProperty( unicode, fget=getViewedNames )
+    viewedNames = pyqtProperty( str, fget=getViewedNames )
 
     def getNameAnnotationValidators( self ):
         validators={}
@@ -540,7 +546,7 @@ class NameWebView( QWebView ):
             validators[c.code] = { 're': c.value, 'message': c.description }
         return json.dumps(validators)
 
-    nameAnnotationValidators = pyqtProperty( unicode, fget=getNameAnnotationValidators )
+    nameAnnotationValidators = pyqtProperty( str, fget=getNameAnnotationValidators )
 
     def getFeatAnnotationValidators( self ):
         validators={}
@@ -548,7 +554,7 @@ class NameWebView( QWebView ):
             validators[c.code] = { 're': c.value, 'message': c.description }
         return json.dumps(validators)
 
-    featAnnotationValidators = pyqtProperty( unicode, fget=getFeatAnnotationValidators )
+    featAnnotationValidators = pyqtProperty( str, fget=getFeatAnnotationValidators )
 
     def getEventReferenceValidators( self ):
         validators={}
@@ -556,41 +562,41 @@ class NameWebView( QWebView ):
             validators[c.code] = { 're': c.value, 'message': c.description }
         return json.dumps(validators)
 
-    eventReferenceValidators = pyqtProperty( unicode, fget=getEventReferenceValidators )
+    eventReferenceValidators = pyqtProperty( str, fget=getEventReferenceValidators )
 
     def getEventTypes( self ):
         mapping = Model.SystemCode.codeMapping('AUTH')
-        mlist = [{'code':c,'value':v} for c,v in mapping.items()]
+        mlist = [{'code':c,'value':v} for c,v in list(mapping.items())]
         mlist.sort( key=lambda x:x['value'] )
         return json.dumps(mlist)
 
-    eventTypes = pyqtProperty( unicode, fget=getEventTypes )
+    eventTypes = pyqtProperty( str, fget=getEventTypes )
 
     def getEventTypeAuthorities( self ):
         authorities={}
         mapping = Model.SystemCode.codeMapping('APEA')
-        for c, v in mapping.items():
+        for c, v in list(mapping.items()):
             authorities[c]=v
         return json.dumps(authorities)
 
-    eventTypeAuthorities = pyqtProperty( unicode, fget=getEventTypeAuthorities )
+    eventTypeAuthorities = pyqtProperty( str, fget=getEventTypeAuthorities )
 
     def getStatuses( self ):
         mapping = Model.SystemCode.codeMapping('NSTS')
-        mlist = [{'code':c,'value':v} for c,v in mapping.items()]
+        mlist = [{'code':c,'value':v} for c,v in list(mapping.items())]
         mlist.sort( key=lambda x:x['value'] )
         return json.dumps(mlist)
 
-    statuses = pyqtProperty( unicode, fget=getStatuses )
+    statuses = pyqtProperty( str, fget=getStatuses )
 
     def getProcessStatuses( self ):
         processes = {}
         mapping = Model.SystemCode.codeMapping('NPST')
-        for c, v in mapping.items():
+        for c, v in list(mapping.items()):
             processes[c] = v.split()
         return json.dumps(processes)
 
-    processStatuses = pyqtProperty( unicode, fget=getProcessStatuses )
+    processStatuses = pyqtProperty( str, fget=getProcessStatuses )
 
     def getFeatureTypes( self ):
         types=[]
@@ -599,7 +605,7 @@ class NameWebView( QWebView ):
         types.sort(key=lambda x: x['value'].lower())
         return json.dumps(types)
 
-    featureTypes = pyqtProperty( unicode, fget=getFeatureTypes )
+    featureTypes = pyqtProperty( str, fget=getFeatureTypes )
 
     def getCoordValidators( self ):
         validators = []
@@ -607,7 +613,7 @@ class NameWebView( QWebView ):
         validators.extend(self.nztm_patterns)
         return json.dumps(validators)
 
-    coordValidators=pyqtProperty( unicode, fget=getCoordValidators )
+    coordValidators=pyqtProperty( str, fget=getCoordValidators )
 
     @pyqtSlot()
     def reload( self ):

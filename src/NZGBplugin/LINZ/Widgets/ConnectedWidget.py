@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,11 +10,11 @@
 #
 ################################################################################
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
-from ValidatorList import ValidatorList
-from WidgetConnector import WidgetConnector
+from .ValidatorList import ValidatorList
+from .WidgetConnector import WidgetConnector
 
 class ConnectedWidget( QWidget ):
     '''
@@ -94,7 +95,7 @@ class ConnectedWidget( QWidget ):
         message is an optional message that will be displayed if
         validation fails
         '''
-        if isinstance( widget, basestring):
+        if isinstance( widget, str):
             widget = self.findChild( QWidget, self._prefix + widget )
         if not widget:
             widget = self
@@ -193,7 +194,7 @@ class ConnectedWidget( QWidget ):
             self._connector.save( self._isnew )
             self.saved.emit( self._object )
             return True
-        except Exception, e:
+        except Exception as e:
             QMessageBox.warning(self,"Error saving "+self._typename,e.message)
             return False
         

@@ -155,6 +155,12 @@ See documentation for a list of features, template-syntax etc.
 :License:   MIT/X11-like, see __license__
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import zip
+from builtins import range
+from builtins import object
 __version__ = "0.2.0"
 __author__   = "Roland Koebler <rk at simple-is-better dot org>"
 __license__  = """Copyright (c) Roland Koebler, 2007-2010
@@ -179,7 +185,7 @@ IN THE SOFTWARE."""
 
 #=========================================
 
-import __builtin__, os
+import builtins, os
 import re
 
 #=========================================
@@ -224,7 +230,7 @@ def dictkeyclean(d):
     """Convert all keys of the dict `d` to strings.
     """
     new_d = {}
-    for k, v in d.iteritems():
+    for k, v in d.items():
         new_d[str(k)] = v
     return new_d
 
@@ -247,7 +253,7 @@ def dummy_raise(exception, value):
 #=========================================
 # escaping
 
-(NONE, HTML, LATEX) = range(0, 3)
+(NONE, HTML, LATEX) = list(range(0, 3))
 ESCAPE_SUPPORTED = {"NONE":None, "HTML":HTML, "LATEX":LATEX} #for error-/parameter-checking
 
 def escape(s, format=HTML):
@@ -295,7 +301,7 @@ def escape(s, format=HTML):
         s = s.replace("}",  u"\\}")
     else:
         raise ValueError('Invalid format (only None, HTML and LATEX are supported).')
-    return unicode(s)
+    return str(s)
 
 #=========================================
 
@@ -338,7 +344,7 @@ class TemplateRenderError(TemplateException):
 #-----------------------------------------
 # Loader
 
-class LoaderString:
+class LoaderString(object):
     """Load template from a string/unicode.
 
     Note that 'include' is not possible in such templates.
@@ -349,13 +355,13 @@ class LoaderString:
     def load(self, string):
         """Return template-string as unicode.
         """
-        if isinstance(string, unicode):
+        if isinstance(string, str):
             u = string
         else:
-            u = unicode(string, self.encoding)
+            u = str(string, self.encoding)
         return u
 
-class LoaderFile:
+class LoaderFile(object):
     """Load template from a file.
     
     When loading a template from a file, it's possible to including other
@@ -397,7 +403,7 @@ class LoaderFile:
         string = f.read()
         f.close()
 
-        u = unicode(string, self.encoding)
+        u = str(string, self.encoding)
 
         return u
 
@@ -504,11 +510,11 @@ class Parser(object):
         else:
             try:    # test if testexpr() works
                 testexpr("i==1")
-            except Exception,err:
+            except Exception as err:
                 raise ValueError("Invalid 'testexpr' (%s)." %(err))
             self._testexprfunc = testexpr
 
-        if escape not in ESCAPE_SUPPORTED.values():
+        if escape not in list(ESCAPE_SUPPORTED.values()):
             raise ValueError("Unsupported 'escape' (%s)." %(escape))
         self.escape = escape
         self._includestack = []
@@ -536,7 +542,7 @@ class Parser(object):
         """Test a template-expression to detect errors."""
         try:
             self._testexprfunc(expr)
-        except SyntaxError,err:
+        except SyntaxError as err:
             raise TemplateSyntaxError(err, self._errpos(fpos))
 
     def _parse_sub(self, parsetree, text, fpos=0):
@@ -707,7 +713,7 @@ class Parser(object):
                     block_type = 'include'
                     try:
                         u = self._load(content.strip())
-                    except Exception,err:
+                    except Exception as err:
                         raise TemplateIncludeError(err, self._errpos(pos__))
                     self._includestack.append((content.strip(), u))  # current filename/template for error-msg.
                     p = self._parse(u)
@@ -744,7 +750,7 @@ assert len(eval("dir()", {'__builtins__':{'dir':dir}})) == 1, \
 assert compile("0 .__class__", "<string>", "eval").co_names == ('__class__',), \
     "FATAL: 'compile' does not work as expected."
 
-class EvalPseudoSandbox:
+class EvalPseudoSandbox(object):
     """An eval-pseudo-sandbox.
 
     The pseudo-sandbox restricts the available functions/objects, so the
@@ -773,42 +779,42 @@ class EvalPseudoSandbox:
     """
 
     safe_builtins = {
-        "True"      : __builtin__.True,
-        "False"     : __builtin__.False,
-        "None"      : __builtin__.None,
+        "True"      : builtins.True,
+        "False"     : builtins.False,
+        "None"      : builtins.None,
 
-        "abs"       : __builtin__.abs,
-        "chr"       : __builtin__.chr,
-        "cmp"       : __builtin__.cmp,
-        "divmod"    : __builtin__.divmod,
-        "hash"      : __builtin__.hash,
-        "hex"       : __builtin__.hex,
-        "len"       : __builtin__.len,
-        "max"       : __builtin__.max,
-        "min"       : __builtin__.min,
-        "oct"       : __builtin__.oct,
-        "ord"       : __builtin__.ord,
-        "pow"       : __builtin__.pow,
-        "range"     : __builtin__.range,
-        "round"     : __builtin__.round,
-        "sorted"    : __builtin__.sorted,
-        "sum"       : __builtin__.sum,
-        "unichr"    : __builtin__.unichr,
-        "zip"       : __builtin__.zip,
+        "abs"       : builtins.abs,
+        "chr"       : builtins.chr,
+        "cmp"       : builtins.cmp,
+        "divmod"    : builtins.divmod,
+        "hash"      : builtins.hash,
+        "hex"       : builtins.hex,
+        "len"       : builtins.len,
+        "max"       : builtins.max,
+        "min"       : builtins.min,
+        "oct"       : builtins.oct,
+        "ord"       : builtins.ord,
+        "pow"       : builtins.pow,
+        "range"     : builtins.range,
+        "round"     : builtins.round,
+        "sorted"    : builtins.sorted,
+        "sum"       : builtins.sum,
+        "unichr"    : builtins.chr,
+        "zip"       : builtins.zip,
 
-        "bool"      : __builtin__.bool,
-        "complex"   : __builtin__.complex,
-        "dict"      : __builtin__.dict,
-        "enumerate" : __builtin__.enumerate,
-        "float"     : __builtin__.float,
-        "int"       : __builtin__.int,
-        "list"      : __builtin__.list,
-        "long"      : __builtin__.long,
-        "reversed"  : __builtin__.reversed,
-        "str"       : __builtin__.str,
-        "tuple"     : __builtin__.tuple,
-        "unicode"   : __builtin__.unicode,
-        "xrange"    : __builtin__.xrange,
+        "bool"      : builtins.bool,
+        "complex"   : builtins.complex,
+        "dict"      : builtins.dict,
+        "enumerate" : builtins.enumerate,
+        "float"     : builtins.float,
+        "int"       : builtins.int,
+        "list"      : builtins.list,
+        "long"      : builtins.long,
+        "reversed"  : builtins.reversed,
+        "str"       : builtins.str,
+        "tuple"     : builtins.tuple,
+        "unicode"   : builtins.str,
+        "xrange"    : builtins.xrange,
     }
 
     def __init__(self):
@@ -949,7 +955,7 @@ class EvalPseudoSandbox:
 #-----------------------------------------
 # basic template / subtemplate
 
-class TemplateBase:
+class TemplateBase(object):
     """Basic template-class.
     
     Used both for the template itself and for 'macro's ("subtemplates") in
@@ -1004,7 +1010,7 @@ class TemplateBase:
 #-----------------------------------------
 # Renderer
 
-class _dontescape(unicode):
+class _dontescape(str):
     """Unicode-string which should not be escaped.
 
     If ``isinstance(object,_dontescape)``, then don't escape the object in
@@ -1041,7 +1047,7 @@ class Renderer(object):
         try:
             return self.evalfunc(expr, data)
         #TODO: any other errors to catch here?
-        except (TypeError,NameError,IndexError,KeyError,AttributeError, SyntaxError), err:
+        except (TypeError,NameError,IndexError,KeyError,AttributeError, SyntaxError) as err:
             raise TemplateRenderError("Cannot eval expression '%s'. (%s: %s)" %(expr, err.__class__.__name__, err))
 
     def render(self, parsetree, data):
@@ -1064,14 +1070,14 @@ class Renderer(object):
             if   "str"   == elem[0]:
                 output.append(elem[1])
             elif "sub"   == elem[0]:
-                output.append(unicode(_eval(elem[1], data)))
+                output.append(str(_eval(elem[1], data)))
             elif "esc"   == elem[0]:
                 obj = _eval(elem[2], data)
                 #prevent double-escape
                 if isinstance(obj, _dontescape) or isinstance(obj, TemplateBase):
-                    output.append(unicode(obj))
+                    output.append(str(obj))
                 else:
-                    output.append(self.escapefunc(unicode(obj), elem[1]))
+                    output.append(self.escapefunc(str(obj), elem[1]))
             elif "for"   == elem[0]:
                 do_else = True
                 (names, iterable) = elem[1:3]
@@ -1084,7 +1090,7 @@ class Renderer(object):
                     if len(names) == 1:
                         data[names[0]] = i
                     else:
-                        data.update(zip(names, i))   #"for a,b,.. in list"
+                        data.update(list(zip(names, i)))   #"for a,b,.. in list"
                     output.extend(self.render(elem[3], data))
             elif "if"    == elem[0]:
                 do_else = True

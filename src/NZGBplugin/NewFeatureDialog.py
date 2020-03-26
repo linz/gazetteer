@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -10,14 +11,15 @@
 ################################################################################
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from builtins import str
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from qgis.core import *
 
-from LINZ.gazetteer.gui.Controller import Controller
-from LINZ.gazetteer.gui import FormUtils
+from .LINZ.gazetteer.gui.Controller import Controller
+from .LINZ.gazetteer.gui import FormUtils
 
-from Ui_NewFeatureDialog import Ui_NewFeatureDialog
+from .Ui_NewFeatureDialog import Ui_NewFeatureDialog
 
 class NewFeatureDialog( QDialog, Ui_NewFeatureDialog ):
 
@@ -52,7 +54,7 @@ class NewFeatureDialog( QDialog, Ui_NewFeatureDialog ):
         return None
 
     def featureName( self ):
-        return unicode(self.uFeatName.text()).strip()
+        return str(self.uFeatName.text()).strip()
 
     def setLocation( self, lon, lat ):
         self.uLongitude.setText(str(lon))

@@ -10,8 +10,9 @@
 ################################################################################
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from builtins import str
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 
 class ValidatorList( QObject ):
@@ -45,7 +46,7 @@ class ValidatorList( QObject ):
         if callable(validator):
             validfunc = validator
         else:
-            if isinstance( validator, basestring ):
+            if isinstance( validator, str ):
                 validator = QRegExp(validator)
             if isinstance( validator, QRegExp ):
                 validator = QRegExpValidator(QRegExp(validator),self._parent)

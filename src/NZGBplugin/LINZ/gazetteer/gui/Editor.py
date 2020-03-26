@@ -11,8 +11,9 @@
 ################################################################################
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from __future__ import absolute_import
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 class Editor( QMainWindow ):
 
@@ -21,10 +22,10 @@ class Editor( QMainWindow ):
         # Import delayed to facilitate using as standalone module,
         # Makes setting path before import cleaner.
 
-        import DatabaseConfiguration
-        from Controller import Controller
-        from NameSearchWidget import NameSearchDock
-        from NameWebView import NameWebDock
+        from . import DatabaseConfiguration
+        from .Controller import Controller
+        from .NameSearchWidget import NameSearchDock
+        from .NameWebView import NameWebDock
 
         QMainWindow.__init__( self, parent )
         self._nameDockType = NameWebDock
@@ -47,7 +48,7 @@ class Editor( QMainWindow ):
     def showAdminWidget( self ):
         dock = self._syscodeWindow
         if not dock:
-            from AdminWidget import AdminWidget
+            from .AdminWidget import AdminWidget
             dock = QDockWidget( "System administration", self )
             sce = AdminWidget( dock )
             dock.setWidget( sce )
@@ -58,7 +59,7 @@ class Editor( QMainWindow ):
         dock.raise_()
 
     def showHelp( self, helpfile ):
-        from PyQt4.QtWebKit import QWebView
+        from PyQt5.QtWebKit import QWebView
         dock = self._helpWindow
         if not dock:
             dock = QDockWidget( "Help", self )
@@ -85,13 +86,13 @@ if __name__ == "__main__":
     from os.path import dirname, abspath
     lib = dirname(dirname(dirname(dirname(abspath(__file__)))))
     sys.path.append(lib)
-    import DatabaseConfiguration
+    from . import DatabaseConfiguration
 
     opts,args = getopt.getopt(sys.argv[1:],"d")
     showSysCodes = False
     for o, a in opts:
         if o == '-d':
-            import NameWebView
+            from . import NameWebView
             NameWebView.NameWebView.Debug=True
     app = QApplication([])
     main = Editor()

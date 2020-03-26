@@ -10,8 +10,10 @@
 ################################################################################
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from builtins import str
+from builtins import range
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 
 
@@ -234,7 +236,7 @@ class DictionaryListModel( QAbstractTableModel ):
                            for i in range(len(self._list)) 
                            if self._filter(self._list[i])]
         else:
-            self._index = range( len( self._list) )
+            self._index = list(range( len( self._list)))
         self._sortIndex()
         self._lookup = None
 
@@ -252,7 +254,7 @@ class DictionaryListModel( QAbstractTableModel ):
 
     def _setupColumns( self ):
         if self._list and not self._columns:
-            columns = [k for k in list[0].keys() if not k.startswith("_")]
+            columns = [k for k in list(list[0].keys()) if not k.startswith("_")]
             self._columns = sorted(columns)
         if not self._headers or len(self._headers) != len(self._columns):
             self._headers = self._columns

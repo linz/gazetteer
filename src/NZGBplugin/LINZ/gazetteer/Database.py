@@ -9,6 +9,8 @@
 #
 ################################################################################
 
+from builtins import str
+from builtins import object
 import re
 import os
 import sys
@@ -152,7 +154,7 @@ def delete( object_ ):
     session().delete(object_)
     
 def scalar( sql, **kwargs ):
-    if type(sql) in (str,unicode):
+    if type(sql) in (str,str):
         sql=text(sql)
     try:
         return session().scalar(sql,kwargs)
@@ -164,7 +166,7 @@ def query( *args, **kwargs ):
     return session().query(*args,**kwargs)
     
 def querysql( sql, **kwargs ):
-    if type(sql) in (str,unicode):
+    if type(sql) in (str,str):
         sql=text(sql)
     try:
         return session().execute(sql,kwargs)
@@ -173,7 +175,7 @@ def querysql( sql, **kwargs ):
         raise
     
 def execute( sql, **kwargs ):
-    if type(sql) in (str,unicode):
+    if type(sql) in (str,str):
         sql=text(sql)
     try:
         session().execute( sql, kwargs )
@@ -184,7 +186,7 @@ def execute( sql, **kwargs ):
 
 def build_tsquery( text ):
     text=scalar('select gazetteer.gaz_plainText2(:text)',text=text)
-    return ' & '.join(map( lambda x: re.sub(r'\*$',':*',x),text.split()))
+    return ' & '.join([re.sub(r'\*$',':*',x) for x in text.split()])
 
 def user():
     return scalar('select current_user')

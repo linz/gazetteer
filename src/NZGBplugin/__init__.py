@@ -12,7 +12,8 @@
 ################################################################################
 
 
-from Plugin import Plugin
+from __future__ import absolute_import
+from .Plugin import Plugin
 
 def name():
     return Plugin.LongName

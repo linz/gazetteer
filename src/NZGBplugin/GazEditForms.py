@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,12 +10,13 @@
 #
 ################################################################################
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from builtins import str
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from qgis.core import *
 
-from LINZ.gazetteer import Model
-from LINZ.gazetteer.gui import FormUtils
+from .LINZ.gazetteer import Model
+from .LINZ.gazetteer.gui import FormUtils
 
 # def getFeatureAttributes( layerId, featureId ):
 #     attribs = {}
@@ -61,7 +63,7 @@ def openFeatRefPointForm(dlg, layerId, featureId):
         if not newFeature:
             dlg.reject()
             return
-        featname = unicode(name.text()).strip()
+        featname = str(name.text()).strip()
         if name.text() == '':
             QMessageBox.information(dlg, 'Name missing', 'You must enter a name for the new feature')
         else:

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -10,14 +11,15 @@
 ################################################################################
 
 
+from builtins import str
 import os.path
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 from qgis.core import *
 
-from LINZ.gazetteer.gui.Controller import Controller
+from .LINZ.gazetteer.gui.Controller import Controller
 
 class Layers( QObject ):
 
@@ -150,7 +152,7 @@ class Layers( QObject ):
 
         # Check for existing layers matching data source
         registry = QgsMapLayerRegistry.instance()
-        for maplayer in registry.mapLayers().values():
+        for maplayer in list(registry.mapLayers().values()):
             if maplayer.type() != QgsMapLayer.VectorLayer:
                 continue
             lyrid = str(maplayer.customProperty(Layers.idProperty))

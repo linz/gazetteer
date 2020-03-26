@@ -9,10 +9,11 @@
 #
 ################################################################################
 
+from builtins import str
 import sys
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 def handleException():
     type, value, traceback = sys.exc_info()

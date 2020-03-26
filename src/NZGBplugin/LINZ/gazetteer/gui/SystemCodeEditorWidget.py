@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,6 +10,7 @@
 #
 ################################################################################
 
+from builtins import str
 if __name__ == '__main__':
     import sys
     from os.path import dirname, abspath
@@ -16,14 +18,14 @@ if __name__ == '__main__':
     sys.path.append(lib)
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
-from Ui_SystemCodeEditorWidget import Ui_SystemCodeEditorWidget
+from .Ui_SystemCodeEditorWidget import Ui_SystemCodeEditorWidget
 
 # Import controller before model components to ensure database is configured..
 
-from Controller import Controller
+from .Controller import Controller
 from LINZ.gazetteer.Model import SystemCode
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.ListModelConnector import ListModelConnector
@@ -96,7 +98,7 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
             category = SystemCode.codeGroupCategory(group.code)
             if category:
                 mapping = SystemCode.codeMapping( category, refresh=True )
-                categories = [(k, mapping[k]) for k in mapping.keys()]
+                categories = [(k, mapping[k]) for k in list(mapping.keys())]
                 categories.sort(key=lambda x: x[1])
         QtUtils.populateCombo(self.code_category,categories)
         self.code_category.setEnabled( len(categories) > 0 )
@@ -161,7 +163,7 @@ class SystemCodeEditorWidget( QWidget, Ui_SystemCodeEditorWidget):
     def checkCodeIsUnique( self ):
         if not self.uCodeEditor.isNew():
             return True
-        code = unicode(self.code_code.text())
+        code = str(self.code_code.text())
         for c in self.uCodesTable.list():
             if c.code == code:
                 return False

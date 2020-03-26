@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -10,11 +11,12 @@
 ################################################################################
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from builtins import str
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 import sys
 
-from Adaptor import Adaptor
+from .Adaptor import Adaptor
 
 
 class WidgetLinker( QObject ):
@@ -84,7 +86,7 @@ class LabelLinker( WidgetLinker ):
         return self._widget.text()
 
     def setValue( self, value ):
-        self._widget.setText( unicode(value) if value else u'' )
+        self._widget.setText( str(value) if value else u'' )
         
 class LineEditLinker( WidgetLinker ):
 
@@ -98,7 +100,7 @@ class LineEditLinker( WidgetLinker ):
         return self._widget.text()
 
     def setValue( self, value ):
-        self._widget.setText( unicode(value) if value else u'' )
+        self._widget.setText( str(value) if value else u'' )
 
 class PlainTextLinker( WidgetLinker ):
 
@@ -109,10 +111,10 @@ class PlainTextLinker( WidgetLinker ):
         widget.textChanged.connect(lambda: self.emitChanged())
 
     def getValue( self ):
-        return unicode(self._widget.toPlainText())
+        return str(self._widget.toPlainText())
 
     def setValue( self, value ):
-        self._widget.setPlainText( unicode(value) if value else '' )
+        self._widget.setPlainText( str(value) if value else '' )
 
 class TableViewLinker( WidgetLinker ):
 
@@ -128,7 +130,7 @@ class TableViewLinker( WidgetLinker ):
         return None
 
     def setValue( self, value ):
-        from ListModelConnector import ListModelConnector
+        from .ListModelConnector import ListModelConnector
         if not isinstance(value,list):
             raise RuntimeError("Cannot set "+self._widget.objectName()+" to a non list value")
         model = self._widget.model()
@@ -257,7 +259,7 @@ class WidgetConnector( QObject ):
         for widget in self._form.findChildren(QWidget):          
             attribute = widget.property('dataAttribute')
             if not attribute and self._widget_prefix:
-                name = unicode(widget.objectName())
+                name = str(widget.objectName())
                 if not name.startswith(self._widget_prefix):
                     continue
                 attribute = name[len(self._widget_prefix):]
@@ -265,7 +267,7 @@ class WidgetConnector( QObject ):
                 continue
             try:
                 # Confirm that the attribute belongs to this adaptor
-                self._adaptor.getAttrDef(unicode(attribute))
+                self._adaptor.getAttrDef(str(attribute))
                 linker = Linkage( adaptor, attribute, widget )
                 self._mapping.append(linker)
                 linker.dataChanged.connect( self.onDataChanged )

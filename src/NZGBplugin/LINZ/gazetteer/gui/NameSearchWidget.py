@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -10,10 +12,11 @@
 ################################################################################
 
 
+from builtins import str
 import sys
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.ListModelConnector import ListModelConnector
@@ -23,15 +26,15 @@ from LINZ.Widgets.ValidatorList import ValidatorList
 from LINZ.Widgets.WidgetConnector import WidgetConnector
 from LINZ.Widgets.ErrorHandler import handleException
 
-import DatabaseConfiguration
+from . import DatabaseConfiguration
 from LINZ.gazetteer.Model import Name
-import FormUtils
+from . import FormUtils
 from LINZ.gazetteer.Model import SystemCode
 
-import FormUtils
-from Ui_NameSearchWidget import Ui_NameSearchWidget
+from . import FormUtils
+from .Ui_NameSearchWidget import Ui_NameSearchWidget
 
-from Controller import Controller
+from .Controller import Controller
 
 class NameSearchWidget( QWidget, Ui_NameSearchWidget):
     
@@ -102,7 +105,7 @@ class NameSearchWidget( QWidget, Ui_NameSearchWidget):
     def _doSearch( self, clear=False ):
         text = ''
         if not clear:
-            text = unicode(self.uSearchText.text())
+            text = str(self.uSearchText.text())
         feat_type=None
         name_status=None
         not_pub=False
@@ -256,7 +259,8 @@ if __name__ == '__main__':
     widget = NameSearchWidget()
     layout.addWidget(widget)
     def printit(x):
-        print x
+        # fix_print_with_import
+        print(x)
     widget.nameSelected.connect(lambda x, i: printit(x))
     dlg.setLayout(layout)
     dlg.show()
