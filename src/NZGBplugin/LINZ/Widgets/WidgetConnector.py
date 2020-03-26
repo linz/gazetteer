@@ -14,6 +14,7 @@ from __future__ import absolute_import
 from builtins import str
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 import sys
 
 from .Adaptor import Adaptor

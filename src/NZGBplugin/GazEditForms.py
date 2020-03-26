@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -81,13 +82,13 @@ def openFeatGeomForm(dlg, lyr, feature):
     feat_id.hide()
     layerId=lyr.id()
     featureId=feature.id()
-    layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
+    layer = QgsProject.instance().mapLayer(layerId)
     ss = layer.subsetString()
     if ss and ss.startswith('feat_id='):
         # SJ: QString method changed
         feat_id.setText(ss[8:])
-    layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
-    type = layer.geometryType()
+    layer = QgsProject.instance().mapLayer(layerId)
+    type = layer.QgsVectorLayer()
     if type == QGis.Point:
         stype = 'point'
     elif type == QGis.Line:

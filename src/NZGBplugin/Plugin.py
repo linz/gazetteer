@@ -94,7 +94,7 @@ class Plugin(object):
             "Move feature geometries", self._iface.mainWindow())
         self._editshift.setWhatsThis("Shift the geometries of the current feature")
         self._editshift.setEnabled( False )
-        self._editshift.triggered.connect( lambda: self._editGeometries(False, iface.actionMoveFeature()))
+        self._editshift.triggered.connect( lambda: self._editGeometries(False, iface.actionVertexTool()))
 
         self._editnodes = QAction(QIcon(":/plugins/GazetteerEditor/editnodes.png"), 
             "Move feature geometry nodes", self._iface.mainWindow())

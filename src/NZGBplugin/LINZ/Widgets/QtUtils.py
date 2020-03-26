@@ -12,6 +12,7 @@
 
 from past.builtins import cmp
 from builtins import str
+
 def populateCombo( widget, rows, display='' ):
     '''
     Populate a QComboWidget with a list of items defined by in iterator

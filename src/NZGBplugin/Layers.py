@@ -16,6 +16,7 @@ import os.path
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 from qgis.core import *
 
@@ -28,14 +29,14 @@ class Layers( QObject ):
     nameSelected = pyqtSignal( str, name='nameSelected' )
 
     _layerDefs =  [
-        {'id':'fpoly', 'group':'feature', 'table':'feature_polygon','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QGis.WKBMultiPolygon },
-        {'id':'fline', 'group':'feature', 'table':'feature_line','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QGis.WKBMultiLineString },
-        {'id':'fpoint', 'group':'feature', 'table':'feature_point','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QGis.WKBMultiPoint },
-        {'id':'frefpt', 'group':'feature', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'form': 'featrefpt.ui', 'init': 'openFeatRefPointForm', 'wkbtype':QGis.WKBPoint },
-        {'id':'spoly', 'group':'search', 'table':'feature_polygon','geom':'shape','key':'geom_id', 'wkbtype':QGis.WKBMultiPolygon },
-        {'id':'sline', 'group':'search', 'table':'feature_line','geom':'shape','key':'geom_id', 'wkbtype':QGis.WKBMultiLineString },
-        {'id':'spoint', 'group':'search', 'table':'feature_point','geom':'shape','key':'geom_id', 'wkbtype':QGis.WKBMultiPoint },
-        {'id':'srefpt', 'group':'search', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'init': 'openFeatRefPointForm', 'wkbtype':QGis.WKBPoint },
+        {'id':'fpoly', 'group':'feature', 'table':'feature_polygon','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QgsWkbTypes.MultiPolygon },
+        {'id':'fline', 'group':'feature', 'table':'feature_line','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QgsWkbTypes.MultiLineString },
+        {'id':'fpoint', 'group':'feature', 'table':'feature_point','geom':'shape','key':'geom_id', 'form': 'featgeom.ui', 'init': 'openFeatGeomForm', 'wkbtype':QgsWkbTypes.MultiPoint },
+        {'id':'frefpt', 'group':'feature', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'form': 'featrefpt.ui', 'init': 'openFeatRefPointForm', 'wkbtype':QgsWkbTypes.Point },
+        {'id':'spoly', 'group':'search', 'table':'feature_polygon','geom':'shape','key':'geom_id', 'wkbtype':QgsWkbTypes.MultiPolygon },
+        {'id':'sline', 'group':'search', 'table':'feature_line','geom':'shape','key':'geom_id', 'wkbtype':QgsWkbTypes.MultiLineString },
+        {'id':'spoint', 'group':'search', 'table':'feature_point','geom':'shape','key':'geom_id', 'wkbtype':QgsWkbTypes.MultiPoint },
+        {'id':'srefpt', 'group':'search', 'table':'feature_ref_point','geom':'ref_point','key':'feat_id', 'init': 'openFeatRefPointForm', 'wkbtype':QgsWkbTypes.Point },
         ]
 
     idProperty='GazetteerLayerType'
@@ -70,7 +71,7 @@ class Layers( QObject ):
         self.setupLayerUris()
 
         self.createLayers()
-        registry = QgsMapLayerRegistry.instance()
+        registry = QgsProject.instance()
         registry.layerWillBeRemoved.connect( self.removeLayer )
         iface.projectRead.connect( self.removeLayers )
         iface.newProjectCreated.connect( self.removeLayers )
@@ -86,11 +87,11 @@ class Layers( QObject ):
         try:
             canvas = self._iface.mapCanvas()
             extent = canvas.extent()
-            transform = QgsCoordinateTransform( canvas.mapSettings().destinationCrs(), self._dbCrs )
+            transform = QgsCoordinateTransform( canvas.mapSettings().destinationCrs(), self._dbCrs, QgsProject.instance() )
             self._transform = transform
             mapview = transform.transformBoundingBox( extent )
             rect = QgsGeometry.fromRect( mapview )
-            wkt = str(rect.exportToWkt())
+            wkt = str(rect.asWkt())
             self._controller.setMapExtentsNZGD2000( wkt )
         except:
             raise
@@ -99,7 +100,7 @@ class Layers( QObject ):
 
     def setupLayerUris( self ):
         conn = self._controller.databaseConfiguration()
-        uri = QgsDataSourceURI()
+        uri = QgsDataSourceUri()
         uri.setConnection( 
             conn['host'],
             conn['port'],
@@ -151,7 +152,7 @@ class Layers( QObject ):
             glayer['layer'] = None
 
         # Check for existing layers matching data source
-        registry = QgsMapLayerRegistry.instance()
+        registry = QgsProject.instance()
         for maplayer in list(registry.mapLayers().values()):
             if maplayer.type() != QgsMapLayer.VectorLayer:
                 continue
@@ -162,7 +163,7 @@ class Layers( QObject ):
             # Check that the data source for the layer is correct
             # If not then remove the layer - it will be replaced with correct
             # data source.
-            uri = QgsDataSourceURI(maplayer.dataProvider().dataSourceUri())
+            uri = QgsDataSourceUri(maplayer.dataProvider().dataSourceUri())
             uri.setSql('feat_id=-1')
             if uri.uri() == glayer['uri']:
                 glayer['layer']=maplayer
@@ -198,7 +199,7 @@ class Layers( QObject ):
                         layer.loadNamedStyle( qml )
                     except:
                         pass
-                QgsMapLayerRegistry.instance().addMapLayer( layer )
+                QgsProject.instance().addMapLayer( layer )
                 updated = True
             if 'form' in ldef:
                 layer.setReadOnly(False)

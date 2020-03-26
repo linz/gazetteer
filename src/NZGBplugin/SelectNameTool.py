@@ -13,6 +13,7 @@ from __future__ import absolute_import
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 from qgis.core import *
 from qgis.gui import *
