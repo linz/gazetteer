@@ -28,7 +28,7 @@ class NewFeatureDialog( QDialog, Ui_NewFeatureDialog ):
         if dlg.exec_() == QDialog.Accepted:
             pointwkt = dlg.getLocationWkt()
             controller.createNewFeature( dlg.featureName(), dlg.featureType(), pointwkt )
-    
+
     def __init__( self, parent=None):
         QDialog.__init__( self, parent )
         self._featname = ''

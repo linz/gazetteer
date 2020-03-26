@@ -6,7 +6,7 @@ allows the Geographic board to manage official and unofficial names.  It
 keeps a record of decisions about names, events that have affected their
 status, and identifies the physical locations associated with those names.
 
-The gazetteer data is held in a PostgreSQL database using PostGIS for 
+The gazetteer data is held in a PostgreSQL database using PostGIS for
 spatial feature definition.
 
 The user application is a QGIS plugin (application) providing tools for

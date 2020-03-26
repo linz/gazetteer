@@ -1,4 +1,4 @@
-Fixes: #  
+Fixes: #
 _Add new line for each issue that was fixed_
 
 ### Change Description:
@@ -21,6 +21,6 @@ _Add new line for each issue that was fixed_
 - [ ] All tests are passing in development environment
 - [ ] Reviewers assigned
 
-#### Pull Request Management: 
+#### Pull Request Management:
 - [ ] Linked to sub-task
 - [ ] Linked to the epic

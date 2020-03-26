@@ -17,7 +17,7 @@ from Model import SystemCode
 
 class UnicodeWriter:
     """
-    A CSV writer which will write rows to CSV file that avoid current 
+    A CSV writer which will write rows to CSV file that avoid current
     unicode issues with csv.writer
     """
 
@@ -28,7 +28,7 @@ class UnicodeWriter:
     def encodefield( self, field ):
         if field == None:
             return ''
-        field = unicode(field)  
+        field = unicode(field)
         return ( '"'+field.replace('"','""')+'"'
                  if '"' in field or '\n' in field or ',' in field
                  else field)
@@ -51,14 +51,14 @@ class Export( object ):
 
     def getTableCols( self, table ):
         sql = '''
-        select 
+        select
            lower(attname)
-        from 
+        from
            pg_attribute
-        where 
+        where
            attrelid='{table}'::regclass
            and attnum > 0
-        order by 
+        order by
            attnum
         '''.replace('{table}',table)
         columns = [r[0] for r in Database.querysql(sql)]
@@ -78,9 +78,9 @@ class Export( object ):
             for row in Database.querysql(sql):
                 csvfile.writerow(row)
 
-            
-    
-    
-    
-            
-       
+
+
+
+
+
+

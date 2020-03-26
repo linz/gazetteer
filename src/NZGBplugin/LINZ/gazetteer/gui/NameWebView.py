@@ -43,8 +43,8 @@ class NameWebView( QWebView ):
         mon=NameWebView._months[date.month-1]
         return "{0:02d}-{1}-{2:04d}".format(date.day,mon,date.year)
 
-    ''' 
-    Custom signals emitted by the NameWebView 
+    '''
+    Custom signals emitted by the NameWebView
     '''
     nameChanged = pyqtSignal(int,str,name="nameChanged")
     '''
@@ -54,7 +54,7 @@ class NameWebView( QWebView ):
     def jsonHandler(obj):
         if type(obj) in (datetime.date, datetime.datetime):
             return NameWebView._strftime(obj)
- 
+
     class Association( object ):
 
         def __init__( self, text, name, association ):
@@ -64,9 +64,9 @@ class NameWebView( QWebView ):
 
     class Template( QObject ):
         '''
-        Template class is used to build pages from templates using the 
+        Template class is used to build pages from templates using the
         pyratemp modul.  Handles loading templates files, expanding the
-        template to generate the page HTML, and provides some functions 
+        template to generate the page HTML, and provides some functions
         used by the templates.
         '''
 
@@ -104,11 +104,11 @@ class NameWebView( QWebView ):
         def selectOptions( mlist ):
             '''
             Generates a set of <option> entries for a given
-            a list of (value,text) tuples. Assumes that the 
+            a list of (value,text) tuples. Assumes that the
             values do not need to be escaped.
             '''
             return ''.join(
-                ['<option value="'+x[0]+'">'+NameWebView.Template.escape(x[1])+'</option>' 
+                ['<option value="'+x[0]+'">'+NameWebView.Template.escape(x[1])+'</option>'
                  for x in mlist
                 ])
 
@@ -162,7 +162,7 @@ class NameWebView( QWebView ):
         def id( self, item, attr=None ):
             '''
             Returns the id of an item, and optionally an attribute of
-            an item.  This is used the Model module to uniquely 
+            an item.  This is used the Model module to uniquely
             identify the entity.
 
             Attribute values are saved in the _editdata dictionary so that
@@ -190,9 +190,9 @@ class NameWebView( QWebView ):
 
         def sortAnnotations( self, code, annotations ):
             '''
-            Used to define the order of displaying annotations.  Based on the 
+            Used to define the order of displaying annotations.  Based on the
             order defined in the APSD code NAOR (name annotations) or FAOR
-            (feature annotations), then 
+            (feature annotations), then
             '''
 
             order = Model.SystemCode.lookup('APSD',code) or '';
@@ -279,7 +279,7 @@ class NameWebView( QWebView ):
         else:
             event.accept()
 
-        
+
     def template( self, name ):
         '''
         Retrieves a web page template from the cache
@@ -287,7 +287,7 @@ class NameWebView( QWebView ):
         if name not in self._templates:
             self._templates[name] = NameWebView.Template( name, self._templatedir )
         return self._templates[name]
-        
+
     def getData(self):
         '''
         Retrieves the data loaded by the template.
@@ -324,7 +324,7 @@ class NameWebView( QWebView ):
     @pyqtSlot(str)
     def applyUpdates( self, editjson ):
         '''
-        Applies a set of updates encoded in a JSON string. 
+        Applies a set of updates encoded in a JSON string.
         There are three elements in the string:
             update
                 A set of object attribute ids with new values
@@ -332,7 +332,7 @@ class NameWebView( QWebView ):
                 A set of object ids to delete
             new
                 A set of attribute values, with a special attribute
-                _item_type define the class of object to create 
+                _item_type define the class of object to create
                 Note special handling of Association
         '''
         # print unicode(editjson).encode('utf8')
@@ -371,7 +371,7 @@ class NameWebView( QWebView ):
                             obj.__setattr__( attr, value )
                 if obj:
                     Database.add( obj )
-    
+
             Database.commit()
         except:
             Database.rollback()
@@ -435,9 +435,9 @@ class NameWebView( QWebView ):
 
     def getNameAssociations( self, name ):
         '''
-        Compiles the feature and name associations into a single list.  
-        The list is a hash of NameWebView.Association objects, with 
-        string defining the text of the association, a name object that 
+        Compiles the feature and name associations into a single list.
+        The list is a hash of NameWebView.Association objects, with
+        string defining the text of the association, a name object that
         it is associated with, and an association object (either Feature or
         Name)
         '''
@@ -475,12 +475,12 @@ class NameWebView( QWebView ):
         return associations
 
     def getAssociationTypeOptions( self ):
-        ''' 
-        Generate a list of codes representing the various types of 
+        '''
+        Generate a list of codes representing the various types of
         associations possible.  Each option encodes whether it is a
         name or feature association, whether it is a reverse option,
         and the association type code as (eg FEAT_R_SBRB).  These are
-        used in the applyUpdates function to generate the appropriate 
+        used in the applyUpdates function to generate the appropriate
         member values for constructing new lookup codes.
         '''
         options=[]
@@ -503,7 +503,7 @@ class NameWebView( QWebView ):
             else:
                 options.append(('NAST_F_'+atype.code,'This name '+text))
         return NameWebView.Template.selectOptions(options)
-                
+
     def createAssociation( self, item ):
         assoc_type = item['assoc_type']
         parts = assoc_type.split('_')
@@ -628,7 +628,7 @@ class NameWebView( QWebView ):
 
 #============================================================
 
-class NameWebDock( QDockWidget ):        
+class NameWebDock( QDockWidget ):
 
     nameChanged = pyqtSignal(int,str,name="nameChanged")
     closed = pyqtSignal(name="closed")

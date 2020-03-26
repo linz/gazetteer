@@ -61,13 +61,13 @@ INSERT INTO gaz_web_config(
                                <td class="headerText" width="100%">About</td>
                                <td class="headerText" style="text-align:right; text-align-last: right; text-decoration: underline;" onclick="document.getElementById(\'tid\').scrollTop = document.getElementById(\'Glossary\').offsetTop-40">Glossary</td></tr>
                        </table>
-                   
+
 
                    <h4>Search by Name</h4>
 		           Enter a name in the AutoComplete assisted textbox to the left,
                    and press Enter.
                    Any relevant results will be shown in the <em>Matches Found</em>
-                   panel that will become visible. 
+                   panel that will become visible.
 
                    <h4>Search by Location</h4>
 		           Drag the map to the approximate location of choice, and zoom to see more detail.
@@ -81,7 +81,7 @@ INSERT INTO gaz_web_config(
                    <p><em>Geographic Feature</em> A physical or cultural object to which a name can be given. The jurisdiction of the NZGB is restricted to:</p>
                    <ul>
                    <li>natural features(such as a mountain, peak, valley, glen, forest, lagoon, swamp, creek, stream, river, ford, lake, glacier or ice feature, bay, island
-                   or harbour [including man-made features of the same type])</li>    
+                   or harbour [including man-made features of the same type])</li>
                    <li>railways or railway stations, but not railway features(such as marshalling yards, transfer sites or track point locations)</li>
                    <li>places</li>
                    <li>undersea features.</li>
@@ -93,7 +93,7 @@ INSERT INTO gaz_web_config(
                    <li>The Deed of Settlement listing a treaty name to be enacted</li>
                    <li>A CPA is held</li>
                    <li>An official name is discontinued (if not by determination of the NZGB)</li>
-                   </ul>                      
+                   </ul>
 		',
 	    E'Content of How to Use Panel');
 		
@@ -104,14 +104,14 @@ INSERT INTO gaz_web_config(
             7,
             NULL,
            E'The minimum zoom level that is required for the system to allow a blank search term to be searched for (excluding the default extent/zoom level).');		
-		   
+		
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
             code, intval, value, description)
     VALUES ('MZMG',
             NULL,
 	    E'No matches have been found but you can either enter search text or zoom in on the area of interest to find names.',
-            E'The message that will be displayed when 0 matches have been found and the current zoom level is less than the minimum zoom level (MZSA) and the search textbox is blank');		   
+            E'The message that will be displayed when 0 matches have been found and the current zoom level is less than the minimum zoom level (MZSA) and the search textbox is blank');		
 
 ----------------------------------------------------------
 INSERT INTO gaz_web_config(
@@ -132,17 +132,17 @@ INSERT INTO gaz_web_config(
     mapProjection: "EPSG:3857",
     displayProjection: "EPSG:4326",
     backgroundColor: "#D0E6F4",
-    basemapUrl: "http://topobasemap.koordinates.co.nz/v2/gazetteer_basemap/${z}/${x}/${y}.png", 
+    basemapUrl: "http://topobasemap.koordinates.co.nz/v2/gazetteer_basemap/${z}/${x}/${y}.png",
     labelWfsUrl: "http://wfs.data.linz.govt.nz/3e78150f9b2645228602e113fbc2a586/v/x1154/wfs",
     labelWfsFeatureNS: "http://data.linz.govt.nz/ns/v",
     labelWfsFeatureType: "x1154",
-    
+
     mapCentre: [173,-41],
     mapRestrictedExtent: [[165.5,-48],[179.5,-33.5]],
     mapMinZoom: 5,
     mapMaxZoom: 14,
 
-    basemapOptions: 
+    basemapOptions:
     {
         // attribution: "Tiles &copy; LINZ",
         sphericalMercator: true,
@@ -163,7 +163,7 @@ INSERT INTO gaz_web_config(
         labelOutlineWidth: 1
     },
 
-    labelStyleLookup: 
+    labelStyleLookup:
     {
         TWN1: {fontSize: "12px"},
         TWN2: {fontSize: "14px"},

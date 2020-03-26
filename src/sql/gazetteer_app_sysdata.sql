@@ -39,7 +39,7 @@ INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('APEV','TSLG',NULL,E'^Section\\s+\\d+\\s+\\S.*\\sAct\\s+(19|20)\\d\\d$','Treaty settlement references must be formatted as "Section 21 ... Act 2012"'),
 ('APEV','TSLR',NULL,E'^Section\\s+\\d+\\s+\\S.*\\sAct\\s+(19|20)\\d\\d$','Treaty settlement references must be formatted as "Section 21 ... Act 2012"');
 
--- Name annotation validation regular expressions for the annotation based 
+-- Name annotation validation regular expressions for the annotation based
 -- on the annotation type.
 -- Value is the regular expression
 -- Description is the error message if not validated
@@ -52,7 +52,7 @@ INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('APNV','SCAR',NULL,E'^Y$','Must be Y to include in report, otherwise delete the record'),
 ('APNV','SCUF',NULL,E'^Y$','Must be Y to include in report, otherwise delete the record');
 
--- Feature annotation validation regular expressions for the annotation based 
+-- Feature annotation validation regular expressions for the annotation based
 -- on the annotation type.
 -- Value is the regular expression
 -- Description is the error message if not validated

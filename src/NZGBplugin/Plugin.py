@@ -19,7 +19,7 @@ from qgis.gui import QgsMapToolEmitPoint
 
 import Resources
 from SelectNameTool import SelectNameTool
-        
+
 class Plugin:
 
     Name = "GazetteerEditor"
@@ -44,42 +44,42 @@ class Plugin:
 
     def initGui(self):
 
-        self._runaction = QAction(QIcon(":/plugins/GazetteerEditor/icon.png"), 
+        self._runaction = QAction(QIcon(":/plugins/GazetteerEditor/icon.png"),
             "Open the gazetteer editor", self._iface.mainWindow())
         self._runaction.setWhatsThis("Open the gazetteer editor window")
         self._runaction.triggered.connect( self._run )
 
-        # self._helpaction = QAction(QIcon(":/plugins/GazetteerEditor/help.png"), 
+        # self._helpaction = QAction(QIcon(":/plugins/GazetteerEditor/help.png"),
         #     "Help on gazetter application", self._iface.mainWindow())
         # self._helpaction.setWhatsThis("Help on using the gazetteer application")
         # self._helpaction.setEnabled( True )
         # self._helpaction.triggered.connect( self._showHelp )
 
-        self._infoaction = QAction(QIcon(":/plugins/GazetteerEditor/help.png"), 
+        self._infoaction = QAction(QIcon(":/plugins/GazetteerEditor/help.png"),
             "About gazetteer application", self._iface.mainWindow())
         self._infoaction.setWhatsThis("Information on gazetteer application settings")
         self._infoaction.setEnabled( True )
         self._infoaction.triggered.connect( self._showInfo )
 
-        self._adminaction = QAction(QIcon(":/plugins/GazetteerEditor/admin.png"), 
+        self._adminaction = QAction(QIcon(":/plugins/GazetteerEditor/admin.png"),
             "Administration functions", self._iface.mainWindow())
         self._adminaction.setWhatsThis("Update the web database, administer users, etc")
         self._adminaction.setEnabled( True )
         self._adminaction.triggered.connect( self._runAdmin )
 
-        self._ptraction = QAction(QIcon(":/plugins/GazetteerEditor/searchpointer.png"), 
+        self._ptraction = QAction(QIcon(":/plugins/GazetteerEditor/searchpointer.png"),
             "Identify/select search result", self._iface.mainWindow())
         self._ptraction.setWhatsThis("Identify/select gazetteer search results on the map")
         self._ptraction.setEnabled( False )
         self._ptraction.triggered.connect( self._activateSelectTool )
 
-        self._addselaction = QAction(QIcon(":/plugins/GazetteerEditor/addselected.png"), 
+        self._addselaction = QAction(QIcon(":/plugins/GazetteerEditor/addselected.png"),
             "Add selected geometries to feature", self._iface.mainWindow())
         self._addselaction.setWhatsThis("Add selected geometries to current feature")
         self._addselaction.setEnabled( False )
         self._addselaction.triggered.connect( self._addSelectedGeometries )
 
-        self._delselaction = QAction(QIcon(":/plugins/GazetteerEditor/delselected.png"), 
+        self._delselaction = QAction(QIcon(":/plugins/GazetteerEditor/delselected.png"),
             "Remove selected geometries from feature", self._iface.mainWindow())
         self._delselaction.setWhatsThis("Remove selected geometries from current feature")
         self._delselaction.setEnabled( False )
@@ -87,37 +87,37 @@ class Plugin:
 
         iface = self._iface
 
-        self._editshift = QAction(QIcon(":/plugins/GazetteerEditor/editshift.png"), 
+        self._editshift = QAction(QIcon(":/plugins/GazetteerEditor/editshift.png"),
             "Move feature geometries", self._iface.mainWindow())
         self._editshift.setWhatsThis("Shift the geometries of the current feature")
         self._editshift.setEnabled( False )
         self._editshift.triggered.connect( lambda: self._editGeometries(False, iface.actionMoveFeature()))
 
-        self._editnodes = QAction(QIcon(":/plugins/GazetteerEditor/editnodes.png"), 
+        self._editnodes = QAction(QIcon(":/plugins/GazetteerEditor/editnodes.png"),
             "Move feature geometry nodes", self._iface.mainWindow())
         self._editnodes.setWhatsThis("Edit the nodes of the geometries of the current feature")
         self._editnodes.setEnabled( False )
         self._editnodes.triggered.connect( lambda: self._editGeometries(False, iface.actionNodeTool() ))
 
-        self._editnew = QAction(QIcon(":/plugins/GazetteerEditor/editnew.png"), 
+        self._editnew = QAction(QIcon(":/plugins/GazetteerEditor/editnew.png"),
             "New feature geometries", self._iface.mainWindow())
         self._editnew.setWhatsThis("Create new geometries for the feature")
         self._editnew.setEnabled( False )
         self._editnew.triggered.connect( lambda: self._editGeometries(True, iface.actionAddFeature() ))
 
-        self._editsave = QAction(QIcon(":/plugins/GazetteerEditor/editsave.png"), 
+        self._editsave = QAction(QIcon(":/plugins/GazetteerEditor/editsave.png"),
             "Save feature geometry edits", self._iface.mainWindow())
         self._editsave.setWhatsThis("Save changes to the feature geometries")
         self._editsave.setEnabled( False )
         self._editsave.triggered.connect( lambda: self._layers.endFeatureEdits( False ))
 
-        self._editcancel = QAction(QIcon(":/plugins/GazetteerEditor/editcancel.png"), 
+        self._editcancel = QAction(QIcon(":/plugins/GazetteerEditor/editcancel.png"),
             "Discard feature geometry edits", self._iface.mainWindow())
         self._editcancel.setWhatsThis("Discard changes to the feature geometries")
         self._editcancel.setEnabled( False )
         self._editcancel.triggered.connect( lambda: self._layers.endFeatureEdits( True ))
 
-        self._newfeat = QAction(QIcon(":/plugins/GazetteerEditor/newfeat.png"), 
+        self._newfeat = QAction(QIcon(":/plugins/GazetteerEditor/newfeat.png"),
             "Create a new feature", self._iface.mainWindow())
         self._newfeat.setWhatsThis("Create a new feature at a selected location")
         self._newfeat.setEnabled( False )
@@ -145,7 +145,7 @@ class Plugin:
         # self._iface.addPluginToMenu(self._menuName, self._helpaction)
         self._iface.addPluginToMenu(self._menuName, self._infoaction)
 
-    def unload(self):      
+    def unload(self):
         self._toolbar = self._iface.mainWindow().removeToolBar( self._toolbar )
         self._iface.removePluginMenu(self._menuName, self._adminaction)
         self._iface.removePluginMenu(self._menuName,self._runaction)
@@ -274,7 +274,7 @@ class Plugin:
 
     def _newFeaturePointSelected( self, point, button ):
         point = self._layers.transformMapPoint( point )
-        if point.x() < 0: 
+        if point.x() < 0:
             point.setX( point.x()+360 )
         if point.x() > 360 or point.y() < -90 or point.y() > 90:
             QMessageBox.warning(self._iface.mainWindow(),

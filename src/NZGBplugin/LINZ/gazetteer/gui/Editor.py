@@ -99,5 +99,5 @@ if __name__ == "__main__":
         main.showSystemCodeEditor()
     main.show()
     app.exec_()
-    
-    
+
+

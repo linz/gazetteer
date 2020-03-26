@@ -78,9 +78,9 @@ class Layers( QObject ):
         self._controller.featureLocationEdited.connect( self.updateFeatureLocation )
 
     def setExtents( self ):
-        # Could be more sophisticated here.  What happens with dateline.  Should we 
+        # Could be more sophisticated here.  What happens with dateline.  Should we
         # create a set of points around the boundary and transform that to ensure extents
-        # are included.  
+        # are included.
         try:
             canvas = self._iface.mapCanvas()
             extent = canvas.extent()
@@ -98,7 +98,7 @@ class Layers( QObject ):
     def setupLayerUris( self ):
         conn = self._controller.databaseConfiguration()
         uri = QgsDataSourceURI()
-        uri.setConnection( 
+        uri.setConnection(
             conn['host'],
             conn['port'],
             conn['database'],
@@ -168,7 +168,7 @@ class Layers( QObject ):
             else:
                 registry.removeMapLayer(maplayer.id())
                 updated = True
-    
+
         # Now add missing layers
 
         ok=True
@@ -212,9 +212,9 @@ class Layers( QObject ):
         if updated:
             self.moveLayersIntoGroup('search','Gazetteer search results')
             self.moveLayersIntoGroup('feature','Gazetteer feature')
-            
 
-        # Find the group 
+
+        # Find the group
         self._layersOk = ok
 
     def moveLayersIntoGroup( self, group, title ):
@@ -326,19 +326,19 @@ class Layers( QObject ):
         if self._featid != feat_id:
             if not self.endFeatureEdits():
                 return
-    
+
             # Need to check for editing
             self._name = None
             self._featid = feat_id
             where = 'feat_id='+str(feat_id)
-    
+
             for layer in self.featureLayers():
                 if layer.subsetString() == where:
                     continue
                 layer.setSubsetString(where)
                 layer.updateExtents()
                 layer.triggerRepaint()
-    
+
             if self.autoZoom:
                 self.zoomToFeature()
 
@@ -389,14 +389,14 @@ class Layers( QObject ):
             request.setSubsetOfAttributes(attlist)
             request.setFlags(QgsFeatureRequest.NoGeometry )
             request.setFlags(QgsFeatureRequest.ExactIntersect)
-            # SJ: old vectorLayer API 
-            # layer.select(attlist,extent,False,True) 
-            
+            # SJ: old vectorLayer API
+            # layer.select(attlist,extent,False,True)
+
             # if layer.nextFeature(feat):
             if layer.getFeatures(request).nextFeature(feat):
                 try:
                     feat_id = int(feat[attlist[0]])
-                except:   
+                except:
                     feat_id = None
                     continue
                 name = feat[attlist[1]]

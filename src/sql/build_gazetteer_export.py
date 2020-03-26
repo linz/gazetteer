@@ -21,16 +21,16 @@ set search_path=gazetteer,public;
 
 DROP VIEW IF EXISTS name_export CASCADE;
 CREATE VIEW name_export AS
-with nztm(extent) as 
+with nztm(extent) as
 (
    select ST_SetSRID(
-      ST_MakeBox2d( 
+      ST_MakeBox2d(
          ST_Point(160.0,-50.0),
          ST_Point(180.0,-30.0)
          ), 4167
          )
 )
-select 
+select
   n.name_id as name_id,
   n.name as name,
   case when sts.category = 'OFFC' then 'Official ' else 'Unofficial ' end ||
@@ -43,7 +43,7 @@ land_district @LDIS
   CASE WHEN nztm.extent && f.ref_point THEN round(ST_Y(ST_Transform(f.ref_point,2193))::numeric,1) ELSE NULL END as crd_north,
   CASE WHEN nztm.extent && f.ref_point THEN round(ST_X(ST_Transform(f.ref_point,2193))::numeric,1) ELSE NULL END as crd_east,
   CASE WHEN (select value from system_code where code_group='FTYP' and code=f.feat_type) = 'USEA' THEN 'WGS84'
-       WHEN ST_Y(f.ref_point) < -60 THEN 'RSRGD2000' 
+       WHEN ST_Y(f.ref_point) < -60 THEN 'RSRGD2000'
        ELSE 'NZGD2000'
        END AS crd_datum,
        round(ST_Y(f.ref_point)::numeric,6) AS crd_latitude,
@@ -52,11 +52,11 @@ info_ref #FLRF
 info_origin #HORM
 info_note #NNOT
 feat_note @FNOT
-  f.description as info_description, 
+  f.description as info_description,
 -- info_note (could take from note annotation - original notes mainly populated origin)
 maori_name #MRIN
 cpa_legislation #CPAL
--- cpa_section 
+-- cpa_section
 conservancy #DOCC
 doc_cons_unit_no #DOCR
 doc_gaz_ref %DOCG
@@ -90,7 +90,7 @@ f.status as feat_status_code,
 f.feat_type as feat_type_code,
 (select max(event_date) from name_event where authority='NZGB' and name_id=n.name_id) as last_nzgb_date,
 (select event_type from name_event where authority='NZGB' and name_id=n.name_id order by event_date desc limit 1) as last_nzgb_event,
-st_setsrid(f.ref_point,4326) as ref_point, 
+st_setsrid(f.ref_point,4326) as ref_point,
         CASE
             WHEN (( SELECT count(*) AS count
                FROM gazetteer.feature_geometry
@@ -115,7 +115,7 @@ st_setsrid(f.ref_point,4326) as ref_point,
              LIMIT 1)) = 'X'::bpchar THEN 'POINT'::text
             ELSE NULL::text
         END AS geom_type
-from 
+from
    name n
    join feature f on f.feat_id = n.feat_id
    join system_code ftsc on ftsc.code_group='FTYP' and ftsc.code=f.feat_type
@@ -137,34 +137,34 @@ ALTER TABLE name_export
 
 '''
 
-sql = re.sub(r'^\s*([\wā]+)\s+\#(\w+)\s*$',  
+sql = re.sub(r'^\s*([\wā]+)\s+\#(\w+)\s*$',
              lambda m: (
-             '''  (select 
-             array_to_string(array_agg(annotation),' ') 
-             from name_annotation na 
+             '''  (select
+             array_to_string(array_agg(annotation),' ')
+             from name_annotation na
              where na.name_id=n.name_id and na.annotation_type= '''+
              "'"+m.group(2)+"'"+
              ' group by na.name_id) as '+m.group(1)+","
              ),sql,0,re.M)
 
-sql = re.sub(r'^\s*(\w+)\s+\@(\w+)\s*$',  
+sql = re.sub(r'^\s*(\w+)\s+\@(\w+)\s*$',
              lambda m: (
-             '''   (select 
-             array_to_string(array_agg(annotation),' ') 
-             from feature_annotation fa 
+             '''   (select
+             array_to_string(array_agg(annotation),' ')
+             from feature_annotation fa
              where fa.feat_id=f.feat_id and fa.annotation_type='''+
                  "'"+m.group(2)+"'"+
              ' group by fa.feat_id) as '+m.group(1)+","
              ),sql,0,re.M)
 
 
-sql = re.sub(r'^\s*(\w+)\s+\%(\w+)(?:\/(\w+))?\s*$',  
+sql = re.sub(r'^\s*(\w+)\s+\%(\w+)(?:\/(\w+))?\s*$',
     lambda m:(
      '''   (select ref from (select
             event_reference as ref,
             event_date
             from name_event ne
-            where ne.name_id = n.name_id 
+            where ne.name_id = n.name_id
             and  ne.event_type=''' + "'"+m.group(2)+ "'"+('''
             and  ne.authority='''+"'"+m.group(3)+"'" if m.group(3) else '') + '''
             order by event_date desc
@@ -278,11 +278,11 @@ CREATE OR REPLACE VIEW
 gazetteer_export_tables AS
 WITH ds(code,category,name,cat_array) AS
 (
-SELECT 
+SELECT
    sc.code,
    sc.category,
    sc.value,
-   CASE WHEN COALESCE(scc.value,'') = '' 
+   CASE WHEN COALESCE(scc.value,'') = ''
      THEN (SELECT array_agg(DISTINCT category) FROM system_code WHERE code_group='XCOL')
      ELSE regexp_split_to_array(trim(scc.value),E'\\\\s+')
      END
@@ -294,31 +294,31 @@ WHERE
 ),
 gnc(colname) as
 (
-select 
+select
    lower(attname)
-from 
+from
    pg_attribute
-where 
+where
    attrelid='gazetteer.name_export'::regclass
 )
-SELECT 
+SELECT
    ds.code as data_set,
    ds.name as data_set_name,
    ds.category as data_set_type,
-   (SELECT array_agg(RPAD(csc.code,4) || ':' || csc.value) 
+   (SELECT array_agg(RPAD(csc.code,4) || ':' || csc.value)
        FROM
-       system_code csc 
+       system_code csc
        WHERE csc.code_group='XCOL' AND
        csc.category in (SELECT c FROM unnest(ds.cat_array) as c)
        and lower(csc.value) in (select colname from gnc)
        )  AS data_columns,
-   (SELECT array_agg(csc.value) 
+   (SELECT array_agg(csc.value)
        FROM
-       system_code csc 
+       system_code csc
        WHERE csc.code_group='XCRT' AND
        csc.category in (SELECT c FROM unnest(ds.cat_array) as c)
        )  AS criteria
-FROM 
+FROM
    ds;
 
 ALTER TABLE gazetteer_export_tables
@@ -327,7 +327,7 @@ ALTER TABLE gazetteer_export_tables
   GRANT SELECT ON TABLE gazetteer_export_tables TO gazetteer_user;
   GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE gazetteer_export_tables TO gazetteer_admin;
 
-       
+
    '''
 
 with open("gazetteer_export.sql","w") as f:

@@ -1,5 +1,5 @@
 # Contributing to the NZGB Gazetteer App
-To contribute to the project certain standards are enforced and must be follow. 
+To contribute to the project certain standards are enforced and must be follow.
 
 ## Formatting
 

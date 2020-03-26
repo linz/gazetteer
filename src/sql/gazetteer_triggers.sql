@@ -26,7 +26,7 @@ BEGIN
     NEW.updated_by=current_user;
     NEW.update_date=current_timestamp;
     RETURN NEW;
-END        
+END
 $TRIGGER$ LANGUAGE plpgsql SECURITY DEFINER SET search_path FROM CURRENT;
     $template$;
 
@@ -36,7 +36,7 @@ $TRIGGER$ LANGUAGE plpgsql SECURITY DEFINER SET search_path FROM CURRENT;
     EXECUTE 'DROP TRIGGER IF EXISTS trg_' || p_tabname || '_update ON ' || p_tabname;
     EXECUTE 'CREATE TRIGGER trg_'  || p_tabname || '_update BEFORE UPDATE OR INSERT ON ' ||  p_tabname ||
         ' FOR EACH ROW EXECUTE PROCEDURE trgfunc_' || p_tabname || '_update()';
-    
+
     RETURN TRUE;
 END;
 $BODY$

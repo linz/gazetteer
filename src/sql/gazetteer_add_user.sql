@@ -19,18 +19,18 @@ CREATE OR REPLACE FUNCTION gaz_AddUser(  p_userid name, p_isdba bool )
 RETURNS INT
 AS
 $body$
-DECLARE 
+DECLARE
     l_exists BOOL;
 BEGIN
     IF NOT EXISTS (SELECT * FROM pg_user WHERE usename=p_userid ) THEN
-	EXECUTE 'CREATE ROLE "' || p_userid || 
+	EXECUTE 'CREATE ROLE "' || p_userid ||
 	   '" LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE';
     END IF;
     EXECUTE 'GRANT gazetteer_admin TO "' || p_userid || '"';
     IF p_isdba THEN
         EXECUTE 'GRANT gazetteer_dba TO "' || p_userid || '"';
     ELSE
-	EXECUTE 'REVOKE gazetteer_dba FROM "' || p_userid || '"';       
+	EXECUTE 'REVOKE gazetteer_dba FROM "' || p_userid || '"';
     END IF;
     RETURN 1;
 END
@@ -54,7 +54,7 @@ BEGIN
     END IF;
     RETURN 1;
 END
-   
+
 $body$
 LANGUAGE plpgsql
 SECURITY DEFINER;
@@ -66,9 +66,9 @@ GRANT EXECUTE ON FUNCTION gazetteer.gaz_RemoveUser( name ) TO gazetteer_dba;
 
 DROP VIEW IF EXISTS gazetteer_users;
 
-CREATE OR REPLACE VIEW gazetteer_users 
+CREATE OR REPLACE VIEW gazetteer_users
 AS
-SELECT 
+SELECT
    r.rolname as userid,
    CASE WHEN rmdba.member IS NULL THEN FALSE ELSE TRUE END AS isdba
 FROM
@@ -76,7 +76,7 @@ FROM
    JOIN pg_auth_members rm ON rm.member = r.oid
    JOIN pg_roles ruser ON ruser.oid = rm.roleid AND ruser.rolname='gazetteer_admin'
    LEFT OUTER JOIN pg_auth_members rmdba ON rmdba.member = r.oid AND
-      rmdba.roleid = (SELECT oid FROM pg_roles WHERE rolname='gazetteer_dba')   
+      rmdba.roleid = (SELECT oid FROM pg_roles WHERE rolname='gazetteer_dba')
 WHERE
    r.rolcanlogin;
 
@@ -85,7 +85,7 @@ CREATE RULE gaz_users_ins AS ON INSERT TO gazetteer_users DO INSTEAD
 
 CREATE RULE gaz_users_upd AS ON UPDATE TO gazetteer_users DO INSTEAD
   SELECT gaz_AddUser( OLD.userid, NEW.isdba );
-  
+
 CREATE RULE gaz_users_del AS ON DELETE TO gazetteer_users DO INSTEAD
   SELECT gaz_RemoveUser( OLD.userid );
 
@@ -110,7 +110,7 @@ $code$
 $code$
 LANGUAGE sql
 SET search_path FROM CURRENT;
-  
+
 -- INSERT INTO gazetteer_users (userid, isdba) values ( 'peter', TRUE )
 -- UPDATE gazetteer_users SET isdba=FALSE WHERE userid='peter';
 -- DELETE FROM gazetteer_users WHERE userid='peter';
