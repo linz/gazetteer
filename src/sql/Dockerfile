@@ -55,3 +55,7 @@ ENTRYPOINT su - postgres -c "/usr/lib/postgresql/8.4/bin/postgres \
   -c config_file=/etc/postgresql/8.4/main/postgresql.conf \
   -c listen_addresses='*' \
   "
+
+RUN pg_ctlcluster 8.4 main start && \
+    echo "create user gazadmin IN ROLE gazetteer_admin password 'gazadmin'" | \
+    su postgres -c psql
