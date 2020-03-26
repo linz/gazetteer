@@ -1,0 +1,17 @@
+name: Style
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Check files have no trailing blanks
+      run: |
+        ! find . -type f | \
+                grep -v '\.git/' | \
+                grep -v '\.png$' | \
+                xargs grep -n '[[:space:]]$'
