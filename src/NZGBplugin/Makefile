@@ -16,7 +16,7 @@ docker: ## Build the linz-gazetteer-qgis:2.14 docker image
 
 .PHONY: docker-qgis-shell
 docker-qgis-shell: docker ## Start a shell in the containerized qgis
-	docker run --rm -it --name qgis $(DOCKERNAME) /bin/bash
+	docker run -v $(PWD):/plugin --rm -it --name qgis $(DOCKERNAME) /bin/bash
 
 .PHONY: docker-qgis-start
 docker-qgis-start: ## Start the containerized qgis
