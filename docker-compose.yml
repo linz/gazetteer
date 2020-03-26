@@ -20,11 +20,12 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./src/NZGBplugin:/root/.qgis2/python/plugins/NZGBplugin
-      #- ./:/tests_directory
+      - ./.docker/qgis/scripts:/scripts
     depends_on:
       - db
-    command: tail -F /dev/null
+    command: /scripts/docker-entry.sh
     environment:
       PGHOST: db
       PGPASSWORD: '********'
       PGUSER: gaz_web
+      PGDATABASE: gazetteer
