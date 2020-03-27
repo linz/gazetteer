@@ -17,6 +17,7 @@ import os.path
 
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
 from qgis.gui import QgsMapToolEmitPoint
 
