@@ -59,7 +59,6 @@ else:
     sys.path.append(dirname(dirname(dirname(dirname(abspath(__file__))))))
     from LINZ.gazetteer import Database
     if len(sys.argv) < 2:
-        # fix_print_with_import
         print(syntax)
         sys.argv.append('show')
 
@@ -81,27 +80,23 @@ else:
             check = True
             continue
         if '=' not in arg:
-            # fix_print_with_import
             print("Invalid argument:",arg)
             argsok = False
             break
         key, value = arg.split('=',1)
         if key not in keys:
-            # fix_print_with_import
             print("Invalid argument:",arg)
             argsok = False
             break
         options[key] = value
 
     if not argsok:
-        # fix_print_with_import
         print(syntax)
         sys.exit()
 
     if reset:
         for key in keys:
             Config.remove("Database/"+key)
-        # fix_print_with_import
         print("Default database configuration restored")
 
     for key, value in list(options.items()):
@@ -110,21 +105,15 @@ else:
         else:
             Config.set("Database/"+key,value)
 
-    # fix_print_with_import
     print("Configuration set")
     configureDatabase()
     dbconfig = Database.getConnection()
     for k in keys:
-        # fix_print_with_import
         print("%s: %s" % (k,dbconfig[k]))
 
     if check:
         valid = Database.userIsValid()
         dba = Database.userIsDba()
-        # fix_print_with_import
-        # fix_print_with_import
-print("Current user is gazetteer user: ",valid)
-        # fix_print_with_import
-        # fix_print_with_import
-print("Current user is gazetteer dba: ",dba)
+        print("Current user is gazetteer user: ",valid)
+        print("Current user is gazetteer dba: ",dba)
 
