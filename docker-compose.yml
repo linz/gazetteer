@@ -19,7 +19,7 @@ services:
     build: src/NZGBplugin
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ./src/NZGBplugin:/root/.qgis3/python/plugins/NZGBplugin
+      - ./src/NZGBplugin:/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin
       - ./.docker/qgis/scripts:/scripts
     depends_on:
       - db
