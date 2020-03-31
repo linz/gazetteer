@@ -4,8 +4,8 @@
 /scripts/enable_nzgbplugin || exit 1
 
 # Configure the NZGBplugin
-python \
-  ~/.qgis2/python/plugins/NZGBplugin/LINZ/gazetteer/gui/DatabaseConfiguration.py \
+python3 \
+  ~/.qgis3/python/plugins/NZGBplugin/LINZ/gazetteer/gui/DatabaseConfiguration.py \
   host=${PGHOST} \
   database=${PGDATABASE} \
   user=${PGUSER} \
