@@ -16,7 +16,7 @@ from __future__ import absolute_import
 import getpass
 from PyQt5.QtCore import *
 
-from . import Config
+import Config
 
 def getConfiguration():
     get = Config.get
