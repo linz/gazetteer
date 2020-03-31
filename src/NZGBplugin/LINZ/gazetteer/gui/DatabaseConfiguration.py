@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -45,7 +45,7 @@ Supply any required configuration parameters as command line parameters like:
     user=
     password=
 
-Or use "show" to show the current settings, 
+Or use "show" to show the current settings,
 "reset" to remove local settings,
 or "check" to check connectivity to database
 

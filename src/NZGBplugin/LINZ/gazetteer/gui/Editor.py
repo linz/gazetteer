@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -100,5 +100,5 @@ if __name__ == "__main__":
         main.showSystemCodeEditor()
     main.show()
     app.exec_()
-    
-    
+
+
