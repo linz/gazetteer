@@ -285,18 +285,23 @@ class Plugin:
         NewFeatureDialog.createNewFeature( point.x(), point.y(), self._controller )
 
     def _showInfo(self):
-        conn = {}
+        about=[
+            'Application: {0}'.format(self.Name),
+            'Version: {0}'.format(self.Version),
+            ]
         if  self._controller:
             conn = self._controller.databaseConfiguration()
-        about=''.join([
-            'Application: ',self.Name,'\n',
-            'Version: ',self.Version,'\n',
-            'Database host: ',conn.get('host') or '','\n',
-            'Database name: ',conn.get('database') or '','\n',
-            'Database user: ',conn.get('user') or '','\n',
+            about.extend([
+                'Database host: {0}'.format(conn.get('host') or ''),
+                'Database name: {0}'.format(conn.get('database') or ''),
+                'Database user: {0}'.format(conn.get('user') or ''),
             ])
-        QMessageBox.information(self._iface.mainWindow(),'About',about)
-        
+        else:
+            about.extend([
+                'Database: not connected !'
+            ])
+        QMessageBox.information(self._iface.mainWindow(),'About','\n'.join(about))
+
     def _showHelp(self):
         file = 'file://' + os.path.join(os.path.dirname(__file__),'help','index.html')
         file = file.replace("\\","/")
