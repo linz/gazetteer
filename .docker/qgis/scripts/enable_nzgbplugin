@@ -1,10 +1,12 @@
 #!/bin/sh
 
+CONFIGFILE=/root/.local/share/QGIS/QGIS3/profiles/default/QGIS/QGIS3.ini
+
 # Set NZGBplugin as enabled in config
-mkdir -p /root/.config/QGIS
-echo '[PythonPlugins]' >  /root/.config/QGIS/QGIS3.conf
-echo 'NZGBplugin=true' >> /root/.config/QGIS/QGIS3.conf
+mkdir -p `dirname ${CONFIGFILE}`
+echo '[PythonPlugins]' >  ${CONFIGFILE}
+echo 'NZGBplugin=true' >> ${CONFIGFILE}
 
 # Do not show startup tips in QGIS..
-#echo '[Qgis]' >> /root/.config/QGIS/QGIS3.conf
-#echo 'showTips214=false' >> /root/.config/QGIS/QGIS3.conf
+#echo '[Qgis]' >> ${CONFIGFILE}
+#echo 'showTips214=false' >> ${CONFIGFILE}
