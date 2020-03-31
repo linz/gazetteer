@@ -7,6 +7,14 @@ mkdir -p `dirname ${CONFIGFILE}`
 echo '[PythonPlugins]' >  ${CONFIGFILE}
 echo 'NZGBplugin=true' >> ${CONFIGFILE}
 
-# Do not show startup tips in QGIS..
-#echo '[Qgis]' >> ${CONFIGFILE}
-#echo 'showTips214=false' >> ${CONFIGFILE}
+# Disable newsfeed
+cat <<EOF >> ${CONFIGFILE}
+[core]
+NewsFeed\httpsfeedqgisorg\disabled=true
+EOF
+
+# Do not check for new QGIS versions at startup
+cat <<EOF >> ${CONFIGFILE}
+[qgis]
+checkVersion=false
+EOF
