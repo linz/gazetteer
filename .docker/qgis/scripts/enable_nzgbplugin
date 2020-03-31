@@ -18,3 +18,9 @@ cat <<EOF >> ${CONFIGFILE}
 [qgis]
 checkVersion=false
 EOF
+
+# Disable migration screen
+cat <<EOF >> ${CONFIGFILE}
+[migration]
+firstRunVersionFlag=999999
+EOF
