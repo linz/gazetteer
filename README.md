@@ -1,3 +1,5 @@
+[![Conventional Commits](https://badgen.net/badge/Commits/conventional?labelColor=2e3a44&color=EC5772)](https://conventionalcommits.org)
+
 New Zealand Geographic Board gazetteer application
 ==================================================
 
