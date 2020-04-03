@@ -23,7 +23,7 @@ def getConfiguration():
     get = Config.get
     return dict(
         host=get("Database/host") or None,
-        port=get("Database/port", "5432") or None,
+        port=get("Database/port") or None,
         database=get("Database/database") or None,
         schema=get("Database/schema") or None,
         user=get("Database/user") or None,
