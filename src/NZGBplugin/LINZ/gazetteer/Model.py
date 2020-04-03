@@ -20,7 +20,6 @@ import sqlalchemy.sql
 import sqlalchemy.exc
 import sqlalchemy.schema
 import geoalchemy2 as ga
-from geoalchemy2 import comparator
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Unicode, DateTime
 from sqlalchemy.schema import Table, MetaData, PrimaryKeyConstraint
@@ -184,7 +183,7 @@ class Feature(base):
     feat_type = Column(Unicode(4))
     status = Column(Unicode(4))
     description = Column(Unicode)
-    ref_point = ga.GeometryColumn(ga.Point(2, 4167), comparator=PGComparator)
+    ref_point = Column(ga.Geometry(geometry_type="POINT", srid=4167))
     updated_by = Column(Unicode(64))
     update_date = Column(DateTime)
 
