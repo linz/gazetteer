@@ -297,18 +297,20 @@ class Layers(QObject):
         self._layersOk = ok
 
     def moveLayersIntoGroup(self, group, title):
-        legend = self._iface.legendInterface()
+        root = QgsProject.instance().layerTreeRoot()
+        groups = [group.name() for group in root.findGroups()]
+
         # check if layer title already exists
-        groups = legend.groups()
+        groups = [group.name() for group in root.findGroups()]
         if title not in groups:
-            # add group and store id
-            groupid = legend.addGroup(title)
+            # add group and store ref
+            group_ref = root.addGroup(title)
         else:
-            # get groupid of already existing group
-            groupid = groups.index(title)
+            # get group ref of already existing group
+            group_ref = root.findGroup(title)
         # add layer to group
         for lyr in self.layers(group):
-            legend.moveLayer(lyr, groupid)
+            group_ref.addLayer(lyr)
 
     # Return layer defs in defined order
     def layerDefs(self):
