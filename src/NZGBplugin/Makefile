@@ -22,4 +22,3 @@ docker-qgis-shell: docker ## Start a shell in the containerized qgis
 docker-qgis-start: ## Start the containerized qgis
 	xhost +
 	docker run --rm -it --name qgis -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$$DISPLAY $(DOCKERNAME) qgis
-

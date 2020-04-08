@@ -1,3 +1,5 @@
+[![Conventional Commits](https://badgen.net/badge/Commits/conventional?labelColor=2e3a44&color=EC5772)](https://conventionalcommits.org)
+
 New Zealand Geographic Board gazetteer application
 ==================================================
 
@@ -21,3 +23,6 @@ database schema to which it publishes is.
 More details of the technology implementation are available in the
 developer notes at /src/NZGBplugin/help/devnotes.html.  User help is
 in the file /src/NZGBplugin/help/index.html.
+
+## Contribuiting 
+Before contributing to this project please see [CONTRIBUTING.md](CONTRIBUTING.md)
