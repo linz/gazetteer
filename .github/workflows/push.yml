@@ -18,12 +18,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Check files have no trailing blanks
-        run: |
-          ! find . -type f | \
-                  grep -v '\.git/' | \
-                  grep -v '\.png$' | \
-                  xargs grep -n '[[:space:]]$'
+      # - name: Check files have no trailing blanks
+      #   run: |
+      #     ! find . -type f | \
+      #             grep -v '\.git/' | \
+      #             grep -v '\.png$' | \
+      #             xargs grep -n '[[:space:]]$'
 
       # - name: Commit Lint 
       #   run: |
