@@ -1,4 +1,17 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+################################################################################
+#
+#  New Zealand Geographic Board gazetteer application,
+#  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+#  the New Zealand Government.
+#
+#  This file is released under the MIT licence. See the LICENCE file found
+#  in the top-level directory of this distribution for more information.
+#
+################################################################################
+
 
 # Form implementation generated from reading ui file 'Ui_NewFeatureDialog.ui'
 #
@@ -7,6 +20,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_NewFeatureDialog(object):
     def setupUi(self, NewFeatureDialog):
@@ -18,8 +32,12 @@ class Ui_NewFeatureDialog(object):
         self.action_label.setObjectName("action_label")
         self.verticalLayout.addWidget(self.action_label)
         self.formLayout = QtWidgets.QFormLayout()
-        self.formLayout.setLabelAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        self.formLayout.setFormAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.formLayout.setLabelAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop
+        )
+        self.formLayout.setFormAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+        )
         self.formLayout.setObjectName("formLayout")
         self.nameLabel = QtWidgets.QLabel(NewFeatureDialog)
         self.nameLabel.setObjectName("nameLabel")
@@ -38,7 +56,9 @@ class Ui_NewFeatureDialog(object):
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label)
         self.uFeatTypeClass = QtWidgets.QComboBox(NewFeatureDialog)
         self.uFeatTypeClass.setObjectName("uFeatTypeClass")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.uFeatTypeClass)
+        self.formLayout.setWidget(
+            1, QtWidgets.QFormLayout.FieldRole, self.uFeatTypeClass
+        )
         self.uLongitude = QtWidgets.QLineEdit(NewFeatureDialog)
         self.uLongitude.setObjectName("uLongitude")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.uLongitude)
@@ -54,7 +74,9 @@ class Ui_NewFeatureDialog(object):
         self.verticalLayout.addLayout(self.formLayout)
         self.buttonBox = QtWidgets.QDialogButtonBox(NewFeatureDialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(
+            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok
+        )
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout.addWidget(self.buttonBox)
 
@@ -65,11 +87,14 @@ class Ui_NewFeatureDialog(object):
 
     def retranslateUi(self, NewFeatureDialog):
         _translate = QtCore.QCoreApplication.translate
-        NewFeatureDialog.setWindowTitle(_translate("NewFeatureDialog", "Create new feature"))
-        self.action_label.setText(_translate("NewFeatureDialog", "Enter name and type of new feature"))
+        NewFeatureDialog.setWindowTitle(
+            _translate("NewFeatureDialog", "Create new feature")
+        )
+        self.action_label.setText(
+            _translate("NewFeatureDialog", "Enter name and type of new feature")
+        )
         self.nameLabel.setText(_translate("NewFeatureDialog", "Name"))
         self.lblFeatType.setText(_translate("NewFeatureDialog", "Feature type"))
         self.label.setText(_translate("NewFeatureDialog", "Feature type class"))
         self.label_2.setText(_translate("NewFeatureDialog", "Longitude"))
         self.label_3.setText(_translate("NewFeatureDialog", "Latitude"))
-
