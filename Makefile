@@ -26,9 +26,9 @@ docker-qgis-start: docker-up ## Start the containerized qgis
 	docker-compose exec qgis sh -c 'DISPLAY=$$1 qgis' sh "unix$$DISPLAY"
 
 .PHONY: docker-db-connect
-docker-db-connect: ## Connect to the containerized db using psql
-	docker-compose exec db su postgres -c psql
+docker-db-connect: docker-up ## Connect to the containerized db using psql
+	docker-compose exec db su postgres -c psql gazetteer
 
 .PHONY: docker-db-shell
-docker-db-shell: ## Start a shell to the containerized db
+docker-db-shell: docker-up ## Start a shell to the containerized db
 	docker-compose exec db bash
