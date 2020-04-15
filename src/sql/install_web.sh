@@ -32,6 +32,7 @@ echo "Using $psql"
 
 export PGCLIENTENCODING=UTF8
 
+sleep 15
 
 if [ "$1" = drop ] ; then
 
