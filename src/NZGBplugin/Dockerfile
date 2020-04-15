@@ -1,5 +1,4 @@
-FROM qgis/qgis:final-3_10_4_disco
-
+FROM qgis/qgis:release-3_10
 # Disabled no-more-available qgis apt repositories
 #RUN sed -i 's/\(.*qgis.org\)/#\1/' /etc/apt/sources.list
 
