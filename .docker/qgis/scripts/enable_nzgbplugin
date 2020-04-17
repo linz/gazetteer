@@ -2,6 +2,9 @@
 
 CONFIGFILE=/root/.local/share/QGIS/QGIS3/profiles/default/QGIS/QGIS3.ini
 
+# Install startup.py
+cp /scripts/startup.py /root/.local/share/QGIS/QGIS3/startup.py
+
 # Set NZGBplugin as enabled in config
 mkdir -p `dirname ${CONFIGFILE}`
 echo '[PythonPlugins]' >  ${CONFIGFILE}
