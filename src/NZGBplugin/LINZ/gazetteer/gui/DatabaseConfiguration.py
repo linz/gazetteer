@@ -11,8 +11,6 @@
 ################################################################################
 
 
-from __future__ import print_function
-from __future__ import absolute_import
 import getpass
 from PyQt5.QtCore import *
 
