@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 #       They _need_ to be installed by the same pip call
 #       otherwise `geoalchemy` install will request
 #       to install sqlalchemy>=0.6.1 (not limiting to newer)
-RUN pip3 install geoalchemy sqlalchemy'<0.9'
+RUN pip3 install geoalchemy2 sqlalchemy'<0.9'
 
 # qgis:final-3_10_4_disco requires jinja2 to run MetaSerach
 # See https://github.com/qgis/QGIS/issues/35480

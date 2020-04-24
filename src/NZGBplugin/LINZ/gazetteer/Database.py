@@ -24,13 +24,14 @@ from sqlalchemy import event
 from sqlalchemy.pool import Pool
 from sqlalchemy.sql import text
 
-_host = os.environ.get("GAZETTEER_DBHOST") or "prdgeo01"
-_port = os.environ.get("GAZETTEER_DBPORT") or "5432"
-_database = os.environ.get("GAZETTEER_DB") or "gazetteer"
-_schema = os.environ.get("GAZETTEER_DBSCHEMA") or "gazetteer"
-_user = os.environ.get("GAZETTEER_DBUSER") or getpass.getuser()
-_password = os.environ.get("GAZETTEER_DBUSERPASS") or None
+_host = os.environ.get("PGHOST") or "prdgeo01"
+_port = os.environ.get("PGPORT") or "5432"
+_database = os.environ.get("PGDATABASE") or "gazetteer"
+_schema = os.environ.get("PGSCHEMA") or "gazetteer"
+_user = os.environ.get("PGUSER") or getpass.getuser()
+_password = os.environ.get("PGPASSWORD") or None
 _instance = None
+
 
 func = expression.func
 
