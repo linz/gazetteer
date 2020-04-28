@@ -72,4 +72,6 @@ jobs:
       run: |
         make docker-up
 
-    #TODO: test qgis plugins
+    - name: Run python tests
+      run: |
+        make docker-qgis-test

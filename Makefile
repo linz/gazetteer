@@ -25,12 +25,10 @@ docker-qgis-start: docker-up ## Start the containerized qgis
 	xhost +
 	docker-compose exec qgis sh -c 'DISPLAY=$$1 qgis' sh "unix$$DISPLAY"
 
-
 .PHONY: docker-qgis-test
-docker-qgis-start: docker-up ## Start the containerized qgis
-	docker-compose exec qgis sh -c "ln -s  ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin/tests /tests_directory" #Containerisation should be a modular for all LINZ plugins tested w. gh actions
-	docker-compose exec qgis sh -c "chmod +x /scripts/qgis_testrunner.sh"
-	docker-compose exec qgis sh -c "./scripts/qgis_testrunner.sh test_metadata.py"
+docker-qgis-test: docker-up ## Start the containerized qgis
+	xhost +
+	docker-compose exec qgis sh -c 'DISPLAY=$$1 ./scripts/qgis_testrunner.sh run_tests.run_test_modules' sh "unix$$DISPLAY"
 
 .PHONY: docker-db-connect
 docker-db-connect: docker-up ## Connect to the containerized db using psql

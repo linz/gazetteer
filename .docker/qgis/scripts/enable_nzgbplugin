@@ -5,6 +5,9 @@ CONFIGFILE=/root/.local/share/QGIS/QGIS3/profiles/default/QGIS/QGIS3.ini
 # Install startup.py
 cp /scripts/startup.py /root/.local/share/QGIS/QGIS3/startup.py
 
+#sym link tests
+ln -s  ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin/tests /tests_directory
+
 # Set NZGBplugin as enabled in config
 mkdir -p `dirname ${CONFIGFILE}`
 echo '[PythonPlugins]' >  ${CONFIGFILE}
