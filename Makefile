@@ -27,6 +27,7 @@ docker-qgis-start: docker-up ## Start the containerized qgis
 
 .PHONY: docker-qgis-test
 docker-qgis-test: docker-up ## Run python tests agianst QGIS isntance
+	docker-compose exec qgis sh -c "export COMPOSE_INTERACTIVE_NO_CLI=1"
 	docker-compose exec qgis sh -c "/usr/bin/xvfb-run -- qgis_testrunner.sh tests_directory.run_tests.run_test_modules"
 
 .PHONY: docker-db-connect
