@@ -26,8 +26,8 @@ docker-qgis-start: docker-up ## Start the containerized qgis
 	docker-compose exec qgis sh -c 'DISPLAY=$$1 qgis' sh "unix$$DISPLAY"
 
 .PHONY: docker-qgis-test
-docker-qgis-test: docker-up ## Run python tests agianst QGIS isntance
-	docker-compose exec -T qgis sh -c "/usr/bin/xvfb-run -- /scripts/testrunner.sh tests_directory.run_tests.run_test_modules"
+docker-qgis-test: docker-up ## Run python tests against QGIS isntance
+	docker-compose exec -T qgis sh -c "/usr/bin/xvfb-run -- qgis_testrunner.sh tests_directory.run_tests.run_test_modules"
 
 .PHONY: docker-db-connect
 docker-db-connect: docker-up ## Connect to the containerized db using psql
