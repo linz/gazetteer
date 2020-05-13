@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,6 +10,7 @@
 #
 ################################################################################
 
+from builtins import str
 import sys
 import os.path
 
@@ -18,19 +20,19 @@ if __name__ == '__main__':
     sys.path.append(lib)
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
 
 # Import controller before model components to ensure database is configured..
 
-from Controller import Controller
+from .Controller import Controller
 from LINZ.gazetteer.Model import User
 from LINZ.gazetteer.Model import SystemCode
-from Ui_AdminWidget import Ui_AdminWidget
-import Config
+from .Ui_AdminWidget import Ui_AdminWidget
+from . import Config
 
 class AdminWidget( QWidget, Ui_AdminWidget):
 
@@ -125,7 +127,7 @@ class AdminWidget( QWidget, Ui_AdminWidget):
             self._database.commit()
             self.populateUsers()
         except:
-            msg = unicode(sys.exc_info()[1])
+            msg = str(sys.exc_info()[1])
             QMessageBox.warning(self,"Error updating user",msg)
 
     def publishData( self ):
@@ -153,7 +155,7 @@ class AdminWidget( QWidget, Ui_AdminWidget):
             self.uUpdatingLabel.setText('Data published') #' (download CSV files now)')
         except:
             self.setCursor( oldCursor )
-            msg = unicode(sys.exc_info()[1])
+            msg = str(sys.exc_info()[1])
             QMessageBox.warning(self,"Error publishing data",msg)
             self.uPublishDatabase.setEnabled(True)
             self.uUpdatingLabel.hide()
@@ -168,7 +170,7 @@ class AdminWidget( QWidget, Ui_AdminWidget):
                                               downloaddir )
         if not dir:
             return
-        dir=unicode(dir)
+        dir=str(dir)
         Config.set('CSVDownloadDirectory',dir)
 
         exp = Export()
@@ -216,7 +218,7 @@ class AdminWidget( QWidget, Ui_AdminWidget):
                 QMessageBox.information(self,"CSV files written",msg)
         except:
             self.setCursor( oldCursor )
-            msg = unicode(sys.exc_info()[1])
+            msg = str(sys.exc_info()[1])
             QMessageBox.warning(self,"Error creating CSV file",msg)
         finally:
             self.setCursor( oldCursor )

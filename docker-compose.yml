@@ -15,11 +15,11 @@ services:
       #POSTGRES_PASSWORD: postgres
 
   qgis:
-    image: linz-gazetteer-qgis:2.14
+    image: linz-gazetteer-qgis:3.10
     build: src/NZGBplugin
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ./src/NZGBplugin:/root/.qgis2/python/plugins/NZGBplugin
+      - ./src/NZGBplugin:/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin
       - ./.docker/qgis/scripts:/scripts
     depends_on:
       - db

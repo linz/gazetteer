@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,12 +11,13 @@
 #
 ################################################################################
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from builtins import str
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from qgis.core import *
 
-from LINZ.gazetteer import Model
-from LINZ.gazetteer.gui import FormUtils
+from .LINZ.gazetteer import Model
+from .LINZ.gazetteer.gui import FormUtils
 
 # def getFeatureAttributes( layerId, featureId ):
 #     attribs = {}
@@ -61,7 +64,7 @@ def openFeatRefPointForm(dlg, layerId, featureId):
         if not newFeature:
             dlg.reject()
             return
-        featname = unicode(name.text()).strip()
+        featname = str(name.text()).strip()
         if name.text() == '':
             QMessageBox.information(dlg, 'Name missing', 'You must enter a name for the new feature')
         else:
@@ -79,13 +82,13 @@ def openFeatGeomForm(dlg, lyr, feature):
     feat_id.hide()
     layerId=lyr.id()
     featureId=feature.id()
-    layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
+    layer = QgsProject.instance().mapLayer(layerId)
     ss = layer.subsetString()
     if ss and ss.startswith('feat_id='):
         # SJ: QString method changed
         feat_id.setText(ss[8:])
-    layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
-    type = layer.geometryType()
+    layer = QgsProject.instance().mapLayer(layerId)
+    type = layer.QgsVectorLayer()
     if type == QGis.Point:
         stype = 'point'
     elif type == QGis.Line:

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ################################################################################
 #
@@ -12,27 +12,8 @@
 ################################################################################
 
 
-from Plugin import Plugin
-
-def name():
-    return Plugin.LongName
-
-def description():
-    return Plugin.Description
-
-def version():
-    return Plugin.Version
-
-def qgisMinimumVersion():
-    return Plugin.QgisMinimumVersion
-
-def authorName():
-    return Plugin.Author
+from __future__ import absolute_import
+from .Plugin import Plugin
 
 def classFactory(iface):
     return Plugin(iface)
-
-def icon():
-    return 'icon.png'
-
-

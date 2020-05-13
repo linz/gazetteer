@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -10,7 +11,7 @@
 ################################################################################
 
 
-from Adaptor import Adaptor
+from .Adaptor import Adaptor
 
 class DictionaryAdaptor( Adaptor ):
 

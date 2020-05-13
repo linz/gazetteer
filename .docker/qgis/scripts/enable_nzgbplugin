@@ -1,10 +1,32 @@
 #!/bin/sh
 
-# Set NZGBplugin as enabled in config
-mkdir -p /root/.config/QGIS
-echo '[PythonPlugins]' >  /root/.config/QGIS/QGIS2.conf
-echo 'NZGBplugin=true' >> /root/.config/QGIS/QGIS2.conf
+CONFIGFILE=/root/.local/share/QGIS/QGIS3/profiles/default/QGIS/QGIS3.ini
 
-# Do not show startup tips in QGIS..
-echo '[Qgis]' >> /root/.config/QGIS/QGIS2.conf
-echo 'showTips214=false' >> /root/.config/QGIS/QGIS2.conf
+# Install startup.py
+cp /scripts/startup.py /root/.local/share/QGIS/QGIS3/startup.py
+
+#sym link tests
+ln -s  ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin/tests /tests_directory
+
+# Set NZGBplugin as enabled in config
+mkdir -p `dirname ${CONFIGFILE}`
+echo '[PythonPlugins]' >  ${CONFIGFILE}
+echo 'NZGBplugin=true' >> ${CONFIGFILE}
+
+# Disable newsfeed
+cat <<EOF >> ${CONFIGFILE}
+[core]
+NewsFeed\httpsfeedqgisorg\disabled=true
+EOF
+
+# Do not check for new QGIS versions at startup
+cat <<EOF >> ${CONFIGFILE}
+[qgis]
+checkVersion=false
+EOF
+
+# Disable migration screen
+cat <<EOF >> ${CONFIGFILE}
+[migration]
+firstRunVersionFlag=999999
+EOF

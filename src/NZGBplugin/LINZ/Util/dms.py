@@ -1,3 +1,4 @@
+from __future__ import print_function
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,6 +10,8 @@
 #
 ################################################################################
 
+from builtins import input
+from builtins import str
 import re
 
 latlon_patterns = [''.join(p.split()) for p in
@@ -104,10 +107,12 @@ if __name__ == '__main__':
     except:
         pass
     while True:
-        x = raw_input('Enter a lat/lon string: ')
+        x = input('Enter a lat/lon string: ')
         if not x:
             break
         try:
-            print parse_lonlat(x)
+            # fix_print_with_import
+            print(parse_lonlat(x))
         except:
-            print str(sys.exc_info()[1])
+            # fix_print_with_import
+            print(str(sys.exc_info()[1]))

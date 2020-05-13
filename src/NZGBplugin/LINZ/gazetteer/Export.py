@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
@@ -9,13 +10,15 @@
 #
 ################################################################################
 
+from builtins import str
+from builtins import object
 import re
 import os.path
 import codecs
-import Database
-from Model import SystemCode
+from . import Database
+from .Model import SystemCode
 
-class UnicodeWriter:
+class UnicodeWriter(object):
     """
     A CSV writer which will write rows to CSV file that avoid current 
     unicode issues with csv.writer
@@ -28,7 +31,7 @@ class UnicodeWriter:
     def encodefield( self, field ):
         if field == None:
             return ''
-        field = unicode(field)  
+        field = str(field)  
         return ( '"'+field.replace('"','""')+'"'
                  if '"' in field or '\n' in field or ',' in field
                  else field)

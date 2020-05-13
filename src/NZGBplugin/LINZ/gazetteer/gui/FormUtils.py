@@ -10,10 +10,11 @@
 ################################################################################
 
 
+from builtins import str
 import os.path
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 from LINZ.gazetteer.gui.Controller import Controller
 from LINZ.gazetteer.Model import SystemCode
@@ -22,7 +23,7 @@ from LINZ.Widgets import QtUtils
 def populateCodeCombo( combo, code_group, showAny=False, special=None, category=None ):
     codes = SystemCode.codeGroup( code_group )
     rows = [(c.code, c.value) for c in codes if category==None or c.category==category]
-    rows.sort( key=lambda x:unicode(x[1]).upper() )
+    rows.sort( key=lambda x:str(x[1]).upper() )
     if special:
         rows[0:0]=special
     if showAny:

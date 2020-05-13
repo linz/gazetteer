@@ -1,4 +1,4 @@
-DOCKERNAME = linz-gazetteer-qgis:2.14
+DOCKERNAME = linz-gazetteer-qgis:3.10
 
 .PHONY: help
 help:
@@ -11,7 +11,7 @@ help:
 			{ printf "\033[36m%-30s\033[0m%s%s\n", $$1, "\n ", $$2 }'
 
 .PHONY: docker
-docker: ## Build the linz-gazetteer-qgis:2.14 docker image
+docker: ## Build the linz-gazetteer-qgis:3.10 docker image
 	docker build -t $(DOCKERNAME) .
 
 .PHONY: docker-qgis-shell
@@ -22,4 +22,3 @@ docker-qgis-shell: docker ## Start a shell in the containerized qgis
 docker-qgis-start: ## Start the containerized qgis
 	xhost +
 	docker run --rm -it --name qgis -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$$DISPLAY $(DOCKERNAME) qgis
-

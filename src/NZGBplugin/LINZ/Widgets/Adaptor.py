@@ -10,6 +10,8 @@
 ################################################################################
 
 
+from builtins import str
+from builtins import object
 class Adaptor( object ):
     '''
     Adaptor class is a base class for adaptors to connect classes or other
@@ -30,7 +32,7 @@ class Adaptor( object ):
     to a widget, and AdaptorListModels, which define 
     '''
 
-    class AttDef:
+    class AttDef(object):
 
         def __init__(self,attribute,atype,editable,islist):
             self._attribute = attribute
@@ -65,9 +67,9 @@ class Adaptor( object ):
         while iattr < len(attrlist):
             attr = attrlist[iattr]
             iattr += 1
-            if not isinstance(attr,basestring):
+            if not isinstance(attr,str):
                 raise RuntimeError("Adaptor constructor received invalid attribute name "+str(attr))
-            atype = unicode
+            atype = str
             if iattr < len(attrlist) and type(attrlist[iattr]) == type:
                 atype = attrlist[iattr+1]
                 iattr += 1
@@ -95,7 +97,7 @@ class Adaptor( object ):
         if one is defined, or all attributes if it is blank
         '''
         if not attribute:
-            for a in self._attrdef.values():
+            for a in list(self._attrdef.values()):
                  a._editable = editable
         else:
             if attribute in self._attrdef:
@@ -192,7 +194,7 @@ class Adaptor( object ):
                return attrdef
            elif attrdef.isobject():
                return attrdef.type().getAttrDef(parts[1])
-        raise RuntimeError('Invalid attribute '+unicode(attribute)+' requested for '+self.typename())
+        raise RuntimeError('Invalid attribute '+str(attribute)+' requested for '+self.typename())
 
     def getId( self, object ):
         '''

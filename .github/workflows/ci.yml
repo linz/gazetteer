@@ -19,6 +19,7 @@ jobs:
       APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
     steps:
     - uses: actions/checkout@v1
+
     - name: Install dependencies
       run: |
         sudo ${APT} -qq purge \
@@ -72,4 +73,6 @@ jobs:
       run: |
         make docker-up
 
-    #TODO: test qgis plugins
+    - name: Run python tests
+      run: |
+        make docker-qgis-test
