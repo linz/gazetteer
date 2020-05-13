@@ -29,7 +29,7 @@ def update_config_item( code, value, description="Description not available" ):
 try:
     with open('web_config/gazetteer_help.html') as hf:
         help = hf.read()
-    
+
     m = re.search(r'\<body[^\>]*\>(.*)\<\/body\>',help,re.S)
     if m:
         print "Updating How To"

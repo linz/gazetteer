@@ -23,7 +23,7 @@ CREATE OR REPLACE FUNCTION gazetteer.gweb_html_encode( string TEXT )
 RETURNS TEXT
 AS
 $body$
-    SELECT 
+    SELECT
        replace(
        replace(
        replace(
@@ -130,10 +130,10 @@ BEGIN
 DROP TABLE IF EXISTS tmp_name_id;
 
 CREATE TEMP TABLE tmp_name_id AS
-SELECT 
+SELECT
    n.name_id,
    n.feat_id
-FROM 
+FROM
    name n
    join feature f on f.feat_id = n.feat_id
    join system_code ftsc on ftsc.code_group='FTYP' and ftsc.code=f.feat_type
@@ -154,7 +154,7 @@ ANALYZE tmp_name_id;
 truncate gaz_feature;
 
 insert into gaz_feature( id, type, status, description )
-select 
+select
    f.feat_id,
    f.feat_type,
    f.status,
@@ -184,15 +184,15 @@ $code$
 BEGIN
 truncate gaz_name;
 
-insert into gaz_name( 
-   id, 
+insert into gaz_name(
+   id,
    feat_id,
    ascii_name,
    name,
    status
    )
 select
-   n.name_id, 
+   n.name_id,
    n.feat_id,
    gaz_plaintext(n.name),
    n.name,
@@ -207,13 +207,13 @@ truncate gaz_word;
 
 insert into gaz_word( name_id, nword, word )
 with w(id,words) as (
-select 
-     id, 
+select
+     id,
      gaz_plaintextwords(name)
 from gaz_name
 ),
 nw( id, n ) as (
-select 
+select
    id,
    generate_series(1,array_length(words,1))
 from
@@ -223,7 +223,7 @@ select
    w.id as name_id,
    nw.n as nword,
    words[n] as word
-from 
+from
    w join nw on w.id = nw.id;
 
 ANALYZE gaz_word;
@@ -251,7 +251,7 @@ truncate gaz_annotation;
 
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'FEAT',
    f.feat_id,
    1,
@@ -262,13 +262,13 @@ select
    'DESC',
    '<p class="hanging_indent"><span class="annot_prefix">Feature Type:</span> ' || gweb_html_encode(s.value) || '</p>'
 from
-   feature f 
+   feature f
    join system_code s ON s.code_group='FTYP' and s.code=f.feat_type
 where
    f.feat_id in (select feat_id from gaz_feature);
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'FEAT',
    feat_id,
    2,
@@ -279,7 +279,7 @@ select
    'DESC',
    '<p class="hanging_indent">' || gweb_html_encode(description) || '</p>'
 from
-   feature 
+   feature
 where
    feat_id in (select feat_id from gaz_feature);
 
@@ -294,8 +294,8 @@ FROM
    gaz_name
 WHERE status IN (select CODE from gaz_code where code_group='NSTP' and value like 'O%')
   ;
-CREATE INDEX  idx_tmp_gweb_name_is_official_name_id ON tmp_gweb_name_is_official(name_id); 
-CREATE INDEX  idx_tmp_gweb_name_is_official_feat_id ON tmp_gweb_name_is_official(feat_id); 
+CREATE INDEX  idx_tmp_gweb_name_is_official_name_id ON tmp_gweb_name_is_official(name_id);
+CREATE INDEX  idx_tmp_gweb_name_is_official_feat_id ON tmp_gweb_name_is_official(feat_id);
 ANALYZE tmp_gweb_name_is_official;
 
 drop table if exists tmp_name_last_event;
@@ -303,9 +303,9 @@ create temp table tmp_name_last_event as
 select
    name_id,
    event_type,
-   event_reference, 
+   event_reference,
    row_number() over (partition by name_id order by event_date desc) as rowno
-from 
+from
    name_event;
 
 delete from tmp_name_last_event where rowno <> 1 or event_type not in ('NZGZ','TSLG','DOCG');
@@ -314,7 +314,7 @@ create index tmp_name_last_event_id on tmp_name_last_event( name_id );
 analyze tmp_name_last_event;
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    id,
    10,
@@ -334,7 +334,7 @@ from
    gaz_name n;
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    id,
    15,
@@ -351,14 +351,14 @@ from
    join gaz_code gc ON gc.code_group='NSTS' and gc.code=nm.status
    left outer join tmp_name_last_event ne on ne.name_id = n.id;
 
-   
+
 DROP TABLE IF EXISTS tmp_name_last_event;
 DROP TABLE IF EXISTS tmp_gweb_name_is_official;
 
 -- Name annotation history/origin/meaning, notes
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    20,
@@ -373,7 +373,7 @@ from
    join name_annotation d on d.name_id = n.id and d.annotation_type='HORM';
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    22,
@@ -389,7 +389,7 @@ from
 
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    24,
@@ -404,7 +404,7 @@ from
    join name_annotation d on d.name_id = n.id and d.annotation_type='NNOT';
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    26,
@@ -414,7 +414,7 @@ select
    'Y',
    'ORGN',
    '<p class="hanging_indent"><span class="annot_prefix">Māori Name:</span> ' ||
-   (CASE 
+   (CASE
       WHEN d.annotation ilike 'yes' THEN 'Yes'
       WHEN d.annotation ilike 'no' THEN 'No'
       WHEN d.annotation ilike 'tbi' THEN 'To be investigated'
@@ -427,7 +427,7 @@ from
 -- Land district
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    30,
@@ -444,7 +444,7 @@ from
 -- Doc conservancy
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    32,
@@ -461,7 +461,7 @@ from
 -- Island
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    34,
@@ -482,7 +482,7 @@ where
 -- Undersea/antarctic
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    36,
@@ -494,13 +494,13 @@ select
    '<p class="hanging_indent">This is an undersea feature.</p>'
 from
    gaz_name n
-   join feature f on f.feat_id = n.feat_id 
+   join feature f on f.feat_id = n.feat_id
    join system_code s on s.code_group='FTYP' and s.code=f.feat_type
 where
    s.category='USEA';
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'NAME',
    n.id,
    38,
@@ -512,14 +512,14 @@ select
    '<p class="hanging_indent">This feature is in Antarctica.</p>'
 from
    gaz_name n
-   join feature f on f.feat_id = n.feat_id 
+   join feature f on f.feat_id = n.feat_id
    join system_code s on s.code_group='FTYP' and s.code=f.feat_type
 where
    ST_Y(f.ref_point) < -60.0 AND
    s.category <> 'USEA';
 
 
--- 
+--
 -- insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
 -- select
 --    'FEAT',
@@ -531,7 +531,7 @@ where
 --    'N',
 --    'LOCN',
 --    'Location: Antarctica'
--- from 
+-- from
 --    gaz_name n
 --    join data d on d.id = n.id
 -- where
@@ -546,8 +546,8 @@ SELECT
    ROUND((CASE WHEN ST_X(f.ref_point) > 180 THEN ST_X(f.ref_point)-360 ELSE ST_X(f.ref_point) END)::numeric,6)  AS lon
 FROM
    feature f
-WHERE 
-   feat_id in (select feat_id from gaz_name);   
+WHERE
+   feat_id in (select feat_id from gaz_name);
 
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
@@ -563,13 +563,13 @@ select
    '<p class="hanging_indent"><span class="annot_prefix">Approximate Location:</span> '
    ||
    CASE WHEN lat >= 0 THEN
-      ROUND(lat,3)::varchar || 'N' 
+      ROUND(lat,3)::varchar || 'N'
    ELSE
       ROUND(-lat,3)::varchar || 'S'
    END
    || ' ' ||
    CASE WHEN lon >= 0 THEN
-      ROUND(lon,3)::varchar || 'E' 
+      ROUND(lon,3)::varchar || 'E'
    ELSE
       ROUND(-lon,3)::varchar || 'W'
    END
@@ -577,12 +577,12 @@ select
    ' (View in <a target="_blank" href="http://maps.google.co.nz/maps?q=loc:' ||
      lat::varchar || ',' || lon::varchar ||
      '&z=5&t=m">Google maps</a>)</p>'
-from 
+from
    tmp_name_latlon;
 
 
 insert into gaz_annotation( ref_type, ref_id, sequence, list_view, details_view, selected_detail_view, is_html, note_type, note )
-select 
+select
    'FEAT',
    d.feat_id,
    42,
@@ -593,7 +593,7 @@ select
    'ORGN',
    '<p class="hanging_indent"><span class="annot_prefix">Feature Notes:</span> ' || gweb_html_encode(d.annotation) || '</p>'
 from
-   feature_annotation d 
+   feature_annotation d
 where
    d.annotation_type='FNOT' and
    d.feat_id in (select feat_id from gaz_name);
@@ -612,7 +612,7 @@ select
      ll.lat::varchar || ',' || ll.lon::varchar ||
      '&z=5&t=m">Google maps</a>)</p>'
 from
-   gaz_name n  
+   gaz_name n
    join tmp_name_latlon ll on n.feat_id = ll.feat_id;
 
 DROP TABLE tmp_name_latlon;
@@ -649,8 +649,8 @@ DECLARE
 BEGIN
     -- Work out the tunnel half width for scaling
     -- Final range (ie to infinity = 100) simplifies to top of the range
-    IF zmax = 100 THEN 
-	thw := 1.5/(2.0^zmin); 
+    IF zmax = 100 THEN
+	thw := 1.5/(2.0^zmin);
     ELSE
         thw := 1.5/(2.0^zmax);
     END IF;
@@ -683,7 +683,7 @@ BEGIN
 
     INSERT INTO gaz_shape (feat_id, min_zoom, max_zoom, shape )
     SELECT feat_id, min_zoom, zmax, shape FROM tmp_simplified_geom;
-         
+
     -- DROP TABLE IF EXISTS tmp_simplified_geom;
     -- DROP TABLE IF EXISTS tmp_simplified_geom_id;
     RETURN 1;
@@ -726,19 +726,19 @@ insert into tmp_gis2 (feat_id, geom )
 select
    g.feat_id,
    g.shape
-from 
+from
    feature_geometry g
    join feature f on g.feat_id = f.feat_id
 where
    g.feat_id in (select id from gaz_feature)
    and (
-    g.geom_type <> 'P' or 
+    g.geom_type <> 'P' or
     f.feat_type in (
         'LAKE',
         'STRM'
     ))
-   ; 
-   
+   ;
+
 create index tmp_fid on tmp_gis2( feat_id );
 analyze tmp_gis2;
 
@@ -746,14 +746,14 @@ insert into tmp_gis2 (feat_id, geom )
 select
    f.feat_id,
    f.ref_point
-from 
+from
    feature f
    join gaz_feature gf on gf.id = f.feat_id
    left outer join tmp_gis2 g on g.feat_id = f.feat_id
 where
    g.feat_id is NULL
-   ; 
-   
+   ;
+
 analyze tmp_gis2;
 
 drop table if exists tmp_gis3;
@@ -778,20 +778,20 @@ group by
 -- to determine which features to display at a given zoom level
 --
 -- For now base the zoom levels on the number of features of the type.
--- This will need to be refined significantly, to start with by better 
+-- This will need to be refined significantly, to start with by better
 -- categorisation.  Then perhaps by looking at size of features, where not
 -- just points ...
 --
 -- http://gis.stackexchange.com/questions/7430/google-maps-zoom-level-ratio
 -- Google's web map tile has 256 pixels of width
 -- let's say your computer monitor has 100 pixels per inch (PPI). That means 256 pixels are roughly 6.5 cm of length. And that's 0.065 m.
--- 
+--
 -- on zoom level 0, the whole 360 degrees of longitude are visible in a single tile. You cannot observe this in Google Maps since it automatically moves to the zoom level 1, but you can see it on OpenStreetMap's map (it uses the same tiling scheme).
--- 
+--
 -- 360 degress on the Equator are equal to Earth's circumference, 40,075.16 km, which is 40075160 m
--- 
+--
 -- divide 40075160 m with 0.065 m and you'll get 616313361, which is a scale of zoom level 0 on the Equator for a computer monitor with 100 DPI
--- 
+--
 -- so the point is that the scale depends on your monitor's PPI and on the latitude (because of the Mercator projection)
 -- for zoom level 1, the scale is one half of that of zoom level 0
 -- ...
@@ -800,7 +800,7 @@ group by
 -- We want maximum of 200 features of a type to be displayed...
 -- NZ extents are approx 10x10 degrees, of which say 20% is land, so 200 degrees squared.
 -- So if M points, average density is approx M/200 points per degrees squared.
--- Zoom level 0 displays 360*360 degrees squared.  
+-- Zoom level 0 displays 360*360 degrees squared.
 -- So zoom level n displays approx 360*360/(4**n) degrees squared.
 -- So number of points at zoom level n is 360*360*M/(200*(4**n))
 -- So choose n such that 360*360*M/(200*(4**n)) < 200.
@@ -813,23 +813,23 @@ group by
 --  Don't show any features until zoomed into country scale, ie zoom level about 5
 --
 -- Revised to only show about 20 features, as at the moment have too many feature classes, ie add ln(10)=2.3
--- 
+--
 -- drop table if exists tmp_ftype_min_scale;
--- 
+--
 -- create temp table tmp_ftype_scale (
 --     type char(4) not null primary key,
 --     min_scale int
 --     );
--- 
+--
 -- insert into tmp_ftype_scale( type, min_scale )
--- select 
+-- select
 --     type,
 --     greatest(5,ceiling(ln(count(*))/1.486+1.35+2.3))
 -- from
 --     gaz_feature
 -- group by type;
 -- Insert point references to each entity into the shape table.
--- 
+--
 -- insert into gaz_shape( feat_id, min_zoom, max_zoom, shape )
 -- select
 --    f.id,
@@ -840,7 +840,7 @@ group by
 --    gaz_feature f
 --    join tmp_gis3 g on g.feat_id = f.id
 --    join tmp_ftype_scale s on s.type=f.type;
---    
+--
 -- drop table if exists tmp_ftype_scale;
 
 insert into gaz_shape( feat_id, min_zoom, max_zoom, shape )
@@ -857,7 +857,7 @@ from
 -- approach as follows:
 --  1) Work out maximum extent in degrees, based RMS of y range and x range / cos(mid y range)
 --  2) Convert to pixels - At zoom 0, 360 degrees = 256 pixels, at zoom n 360/2**n degrees = 256 pixels,
---     so pixels per degree is 256/(360/2**n), So the number of pixels to display the object is 
+--     so pixels per degree is 256/(360/2**n), So the number of pixels to display the object is
 --       range * 256 * 2**n / 360.
 --  3) Want this to be at least 10 pixels to display, so require
 --       range * 256 * 2**n / 360 > 10,
@@ -867,7 +867,7 @@ from
 --             nmin = ceiling((2.64-ln(range))/0.6931)
 
 -- Select the set of features with complex geometries (assume these are only defined in data from ArcGIS for the moment
--- (some of the hydro features in spreadsheet data have multiple point geometries - to be handled later).  Complex 
+-- (some of the hydro features in spreadsheet data have multiple point geometries - to be handled later).  Complex
 -- geometries are those with non-point format or more than one feature.
 
 drop table if exists tmp_gis4;
@@ -882,15 +882,15 @@ insert into tmp_gis4( feat_id, extents )
 select
    feat_id,
    ST_Extent(geom)
-from 
+from
    tmp_gis2
 where
    (GeometryType(geom) <> 'POINT' or
    feat_id in
    (
-	select 
+	select
 	   feat_id
-	from 
+	from
            tmp_gis2
 	group by
 	   feat_id
@@ -913,7 +913,7 @@ set
 where
    feat_id in (select feat_id from tmp_gis4);
 
-delete from gaz_shape 
+delete from gaz_shape
 where min_zoom > max_zoom;
 
 -- Add the complex features...
@@ -938,12 +938,12 @@ PERFORM gweb_simplify_shapes( 6, 8 );
 
 DROP TABLE IF EXISTS tmp_simple_geoms;
 CREATE TEMP TABLE tmp_simple_geoms AS
-SELECT feat_id, min_zoom, max_zoom, ST_GeometryN(shape, generate_series(1, ST_NumGeometries(shape))) as shape 
+SELECT feat_id, min_zoom, max_zoom, ST_GeometryN(shape, generate_series(1, ST_NumGeometries(shape))) as shape
 FROM gaz_shape WHERE GeometryType(shape) IN ('MULTIPOLYGON','MULTILINESTRING');
 
 DELETE FROM gaz_shape WHERE GeometryType(shape) IN ('MULTIPOLYGON','MULTILINESTRING');
 INSERT INTO gaz_shape (feat_id, min_zoom, max_zoom, shape)
-SELECT feat_id, min_zoom, max_zoom, shape 
+SELECT feat_id, min_zoom, max_zoom, shape
 FROM tmp_simple_geoms;
 
 DROP TABLE tmp_simple_geoms;
@@ -969,14 +969,14 @@ SET search_path FROM CURRENT;
 -- -- Reduce number of decimal places...
 -- -- This was to reduce the file size when we were dumping to a text file for uploading.
 -- -- Not applicable to current implementation.
--- 
+--
 -- DROP TABLE IF EXISTS tmp_ndp_re;
 -- CREATE TEMP TABLE tmp_ndp_re AS
 -- SELECT generate_series(1,15) as zoom,''::varchar(50) as re;
--- 
+--
 -- UPDATE tmp_ndp_re
 -- SET re=E'(\\.\\d{' || greatest(ceiling(-log(0.15/(2.0^zoom))),1)::varchar || E'})\\d*';
--- 
+--
 -- UPDATE gaz_shape
 -- SET shape=ST_GeomFromText(regexp_replace(ST_AsText(shape),
 --     (SELECT re FROM tmp_ndp_re WHERE zoom=least(15,gaz_shape.max_zoom)),E'\\1','g'),
@@ -1015,11 +1015,11 @@ create temp table tmp_all_shapes1
 
 --get merged geoms for all defined geometries. i.e features with multiple geometeries of the same type will be merged into multigeoms.
 insert into tmp_all_shapes1 (feat_id, geom_type, geom )
-select 
-	g.feat_id, 
-	g.geom_type, 
+select
+	g.feat_id,
+	g.geom_type,
 	st_union(ST_Force_2D(g.shape))
-from 
+from
    feature_geometry g
    join feature f on g.feat_id = f.feat_id
 group by g.feat_id, g.geom_type;
@@ -1029,11 +1029,11 @@ analyze tmp_all_shapes1;
 
 --get ref points for all except features that already have points defined as their geometry. If they're polygons or lines we also want the ref points.
 insert into gaz_all_shapes (feat_id, geom_type, shape )
-select 
+select
 	f.feat_id,
 	'X',
-	f.ref_point 
-from 
+	f.ref_point
+from
    feature f
    join gaz_feature gf on gf.id = f.feat_id
 where f.feat_id not in (select feat_id from tmp_all_shapes1 where geom_type='X')
@@ -1041,10 +1041,10 @@ group by f.feat_id, 2, f.ref_point;
 
 insert into gaz_all_shapes (feat_id, geom_type, shape )
 select
-	feat_id, 
-	geom_type, 
+	feat_id,
+	geom_type,
 	geom
-from 
+from
 tmp_all_shapes1;
 
 ANALYZE gaz_all_shapes;

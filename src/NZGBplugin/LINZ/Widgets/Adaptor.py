@@ -17,21 +17,21 @@ from builtins import object
 class Adaptor(object):
     """
     Adaptor class is a base class for adaptors to connect classes or other
-    object representations to widgets.  The Adaptor defines the attributes 
+    object representations to widgets.  The Adaptor defines the attributes
     of an object, their type, and provides functions gets and sets values.
     The Adaptor must be subclassed.
 
-    Also it supports heirarchies of objects using the conventional dot 
+    Also it supports heirarchies of objects using the conventional dot
     notation (ie attributes like "owner.name")
 
     The attributes defined in the adaptor have a defined type, and can
     be editable or not.
 
-    One attribute can be set as an idattribute, defining the unique id 
+    One attribute can be set as an idattribute, defining the unique id
     for the object
 
-    Adaptors are used with AdaptorConnectors, which connect the adaptor 
-    to a widget, and AdaptorListModels, which define 
+    Adaptors are used with AdaptorConnectors, which connect the adaptor
+    to a widget, and AdaptorListModels, which define
     """
 
     class AttDef(object):
@@ -58,12 +58,12 @@ class Adaptor(object):
             return self._islist
 
     def __init__(self, *attrlist, **attributes):
-        """ 
+        """
         Initiallize the attribute list.  This optionally defines
         a set of attributes, supplied as name=type pairs.  Attributes
         added this way are stored in sorted order of names.
 
-        For attributes which are themselves objects use an Adaptor 
+        For attributes which are themselves objects use an Adaptor
         for the object instead of a type.
         """
         # If using python > 2.7 this is could be replaced with collections.OrderedDict
@@ -91,8 +91,8 @@ class Adaptor(object):
             self.addAttribute(key, attributes[key])
 
     def addAttribute(self, attribute, atype, editable=False, isid=False, islist=False):
-        """ 
-        Add an attribute, defining the object and type. 
+        """
+        Add an attribute, defining the object and type.
         Attributes retain the order they are added in.
         """
         if not isinstance(atype, type) and not isinstance(atype, Adaptor):
@@ -126,7 +126,7 @@ class Adaptor(object):
 
     def setIdAttribute(self, idattribute):
         """
-        Set an attribute is the unique identifier for the object 
+        Set an attribute is the unique identifier for the object
         where appropriate.
         """
         if idattribute not in self._attrdef:
@@ -179,7 +179,7 @@ class Adaptor(object):
     def _getObjectValue(self, object, attribute):
         """
         Must be overridden in a subclass to provide the code for
-        getting an attribute value from an object.  
+        getting an attribute value from an object.
 
         Not intended to be called directly - use getValue
         """
@@ -189,7 +189,7 @@ class Adaptor(object):
 
     def _setObjectValue(self, object, attribute, value):
         """
-        Must be overridden in a subclass to provide the code for 
+        Must be overridden in a subclass to provide the code for
         setting an object value
 
         Not intended to be called directly - use setValue

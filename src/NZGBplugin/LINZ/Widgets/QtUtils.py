@@ -18,8 +18,8 @@ def populateCombo(widget, rows, display=""):
     """
     Populate a QComboWidget with a list of items defined by in iterator
     returning either single values, or [value, string] pairs.
-    
-    Optionally can have a display element, which is either a function to 
+
+    Optionally can have a display element, which is either a function to
     get the display value from each object in the list, or the name of an
     attribute to use for displaying each item.
     """

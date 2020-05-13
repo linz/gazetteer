@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import *
 
 
 class ListModelConnector(QAbstractTableModel):
-    """ 
+    """
     Represents a list of objects which are accessed via an Adaptor as in a QAbstractTableModel,
     for incorporating into a QTableView or similar.
 
@@ -71,7 +71,7 @@ class ListModelConnector(QAbstractTableModel):
     ):
         """
         Attach a new item list to the model.  The columns, headers, and id column
-        will be based on the first item in the list if they are not defined 
+        will be based on the first item in the list if they are not defined
         explicitely
         """
         self.resettingModel.emit()
@@ -115,7 +115,7 @@ class ListModelConnector(QAbstractTableModel):
     def setFilter(self, filter=None):
         """
         Define a filter function restricting the list of items to display.  The
-        function takes an item as a parameter, and returns a True value if the 
+        function takes an item as a parameter, and returns a True value if the
         item is to be displayed in the view.
         """
         self.resettingModel.emit()
@@ -142,7 +142,7 @@ class ListModelConnector(QAbstractTableModel):
     def _setColumns(self, columns, headers):
         """
         Reset the columns and column headers.  If values are provided use them.
-        Otherwise use already set values, or if none, infer values from the 
+        Otherwise use already set values, or if none, infer values from the
         first item in the list.
         """
         if columns:
@@ -173,7 +173,7 @@ class ListModelConnector(QAbstractTableModel):
 
     def _createIndex(self):
         """
-        Create the index mapping list index to view rows 
+        Create the index mapping list index to view rows
         """
         if self._filter:
             self._index = [
@@ -379,7 +379,7 @@ class ListModelConnector(QAbstractTableModel):
 
 class ListModelTableView(QTableView):
     """
-    ListModelTableView provides some extra signals, default settings, and 
+    ListModelTableView provides some extra signals, default settings, and
     intelligence to the QTableView to support interacting with a ListModelConnector
     """
 

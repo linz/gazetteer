@@ -18,12 +18,12 @@ set role postgres;
 
 SET client_min_messages=WARNING;
 
--- Create a table tmp_sql with sql to drop foreign table constraints, 
+-- Create a table tmp_sql with sql to drop foreign table constraints,
 -- disable triggers, and to restore them, and a procedure tmp_run_sql
 -- to apply these changes
 
 CREATE OR REPLACE FUNCTION tmp_acl_role( p_acl aclitem )
-RETURNS varchar 
+RETURNS varchar
 AS
 $body$
     SELECT regexp_replace(
@@ -37,14 +37,14 @@ DROP TABLE IF EXISTS tmp_sql;
 CREATE TEMP TABLE tmp_sql AS
 WITH tab(oid,seluser,name,acl,tabtype) AS
 (
-SELECT 
+SELECT
     cl.oid,
     CASE WHEN cl.relname ILIKE 'gazetteer_users' THEN 'PUBLIC' ELSE 'gazetteer_user' END,
     ns.nspname || '.' || cl.relname,
     cl.relacl,
     CASE WHEN cl.relkind = 'r' THEN 'TABLE' ELSE 'VIEW' END
-FROM 
-    pg_class cl 
+FROM
+    pg_class cl
     JOIN pg_namespace ns ON cl.relnamespace = ns.oid
 WHERE
     ns.nspname in ('gazetteer', 'gazetteer_history')  AND
@@ -54,7 +54,7 @@ seq(name) AS
 (
     SELECT
        ns.nspname || '.' || cl.relname
-    FROM 
+    FROM
        pg_class cl
       JOIN pg_namespace ns ON cl.relnamespace = ns.oid
     WHERE
@@ -65,14 +65,14 @@ pro(name,execrole,secrole,acl) AS
 (
     SELECT
        pr.oid::regprocedure::varchar,
-       CASE WHEN 
+       CASE WHEN
            pr.proname ILIKE 'gaz_adduser' OR
            pr.proname ILIKE 'gaz_removeuser' OR
            pr.proname ILIKE 'gweb_update%' OR
            pr.proname ILIKE 'gaz_update_export_database'
        THEN
            'gazetteer_dba'
-       WHEN 
+       WHEN
            pr.proname ILIKE 'gaz_isgazetteeruser' OR
            pr.proname ILIKE 'gaz_degreestodms' OR
            pr.proname ILIKE 'gaz_featurerelationshipistwoway' OR
@@ -87,7 +87,7 @@ pro(name,execrole,secrole,acl) AS
            pr.proname ILIKE 'gaz_searchname2'
        THEN
            'gazetteer_user'
-       WHEN 
+       WHEN
            pr.proname ILIKE 'gaz_isgazetteeruser' OR
            pr.proname ILIKE 'gaz_isgazetteerdba'
        THEN
@@ -95,7 +95,7 @@ pro(name,execrole,secrole,acl) AS
        ELSE
            'gazetteer_admin'
        END,
-       CASE WHEN 
+       CASE WHEN
            pr.proname ILIKE 'gaz_adduser' OR
            pr.proname ILIKE 'gaz_removeuser'
        THEN
@@ -104,7 +104,7 @@ pro(name,execrole,secrole,acl) AS
            'INVOKER'
        END,
        pr.proacl
-    FROM 
+    FROM
        pg_proc pr
        JOIN pg_namespace ns ON pr.pronamespace = ns.oid
     WHERE
@@ -113,12 +113,12 @@ pro(name,execrole,secrole,acl) AS
 ),
 wtab(oid,name,acl) AS
 (
-SELECT 
+SELECT
     cl.oid,
     ns.nspname || '.' || cl.relname,
     cl.relacl
-FROM 
-    pg_class cl 
+FROM
+    pg_class cl
     JOIN pg_namespace ns ON cl.relnamespace = ns.oid
 WHERE
     ns.nspname = 'gazetteer_web' AND
@@ -128,7 +128,7 @@ wseq(name) AS
 (
     SELECT
        ns.nspname || '.' || cl.relname
-    FROM 
+    FROM
        pg_class cl
       JOIN pg_namespace ns ON cl.relnamespace = ns.oid
     WHERE
@@ -140,42 +140,42 @@ wpro(name,acl) AS
     SELECT
        pr.oid::regprocedure::varchar,
        pr.proacl
-    FROM 
+    FROM
        pg_proc pr
        JOIN pg_namespace ns ON pr.pronamespace = ns.oid
     WHERE
        ns.nspname = 'gazetteer_web'
 )
 
-SELECT 
+SELECT
     'REVOKE ALL ON ' || tab.name || ' FROM ' || tmp_acl_role(unnest(acl)) AS sql,
     13 as priority
 FROM
-    tab 
+    tab
 UNION
-SELECT 
+SELECT
     'GRANT SELECT ON ' || tab.name || ' TO ' || seluser AS sql,
     14 as priority
 FROM
-    tab 
+    tab
 UNION
-SELECT 
+SELECT
     'GRANT SELECT, INSERT, UPDATE, DELETE ON ' || tab.name || ' TO gazetteer_admin' AS sql,
     15 as priority
 FROM
-    tab 
+    tab
 UNION
-SELECT 
+SELECT
     'ALTER ' || tab.tabtype || ' ' || tab.name || ' OWNER TO gazetteer_dba' AS sql,
     11 as priority
 FROM
-    tab 
+    tab
 UNION
-SELECT 
+SELECT
     'REVOKE ALL ON FUNCTION ' || pro.name || ' FROM ' || tmp_acl_role(unnest(acl)) AS sql,
     23 as priority
 FROM
-    pro 
+    pro
 UNION
 SELECT
     'GRANT EXECUTE ON FUNCTION ' || pro.name || ' TO ' || pro.execrole as sql,
@@ -184,54 +184,54 @@ FROM
     pro
 UNION
 SELECT
-    'ALTER FUNCTION ' || pro.name || ' OWNER TO ' || 
+    'ALTER FUNCTION ' || pro.name || ' OWNER TO ' ||
     CASE WHEN secrole = 'DEFINER' THEN 'postgres' ELSE 'gazetteer_dba' END as sql,
     21 as priority
 FROM
-    pro    
+    pro
 UNION
 SELECT
     'ALTER FUNCTION ' || pro.name || ' SECURITY ' || secrole as sql,
     22 as priority
 FROM
-    pro    
+    pro
 UNION
 SELECT
     'GRANT USAGE, SELECT ON SEQUENCE ' || seq.name || ' TO gazetteer_admin' as sql,
     34 as priority
 FROM
-    seq  
+    seq
 
 UNION
-SELECT 
+SELECT
     'REVOKE ALL ON ' || name || ' FROM ' || tmp_acl_role(unnest(acl)) AS sql,
     113 as priority
 FROM
-    wtab 
+    wtab
 UNION
-SELECT 
+SELECT
     'GRANT SELECT ON ' || name || ' TO gaz_web_reader'  AS sql,
     114 as priority
 FROM
-    wtab 
+    wtab
 UNION
-SELECT 
+SELECT
     'GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE ON ' || name || ' TO gaz_web_admin' AS sql,
     115 as priority
 FROM
-    wtab 
+    wtab
 UNION
-SELECT 
+SELECT
     'ALTER TABLE ' || name || ' OWNER TO gaz_owner' AS sql,
     111 as priority
 FROM
-    wtab 
+    wtab
 UNION
-SELECT 
+SELECT
     'REVOKE ALL ON FUNCTION ' || name || ' FROM ' || tmp_acl_role(unnest(acl)) AS sql,
     123 as priority
 FROM
-    wpro 
+    wpro
 UNION
 SELECT
     'GRANT EXECUTE ON FUNCTION ' || name || ' TO gaz_web_reader' as sql,
@@ -243,19 +243,19 @@ SELECT
     'ALTER FUNCTION ' || name || ' OWNER TO gaz_owner' as sql,
     121 as priority
 FROM
-    wpro    
+    wpro
 UNION
 SELECT
     'ALTER FUNCTION ' || name || ' SECURITY INVOKER' as sql,
     122 as priority
 FROM
-    wpro    
+    wpro
 UNION
 SELECT
     'GRANT USAGE, SELECT ON SEQUENCE ' || name || ' TO gaz_web_reader' as sql,
     134 as priority
 FROM
-    wseq;  
+    wseq;
 
 -- SELECT sql FROM tmp_sql order by priority, sql
 
@@ -275,7 +275,7 @@ $body$
 LANGUAGE plpgsql;
 
 SELECT tmp_run_sql();
-  
+
 DROP FUNCTION tmp_acl_role( aclitem );
 DROP FUNCTION tmp_run_sql();
 DROP TABLE tmp_sql;

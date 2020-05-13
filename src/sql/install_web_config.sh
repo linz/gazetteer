@@ -32,5 +32,5 @@ echo "Using $psql"
 
 export PGCLIENTENCODING=UTF8
 
-$psql -f gaz_add_config.sql 
+$psql -f gaz_add_config.sql
 python install_web_config.py $params

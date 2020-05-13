@@ -22,7 +22,7 @@ from .Model import SystemCode
 
 class UnicodeWriter(object):
     """
-    A CSV writer which will write rows to CSV file that avoid current 
+    A CSV writer which will write rows to CSV file that avoid current
     unicode issues with csv.writer
     """
 
@@ -59,14 +59,14 @@ class Export(object):
 
     def getTableCols(self, table):
         sql = """
-        select 
+        select
            lower(attname)
-        from 
+        from
            pg_attribute
-        where 
+        where
            attrelid='{table}'::regclass
            and attnum > 0
-        order by 
+        order by
            attnum
         """.replace(
             "{table}", table

@@ -44,7 +44,7 @@ CREATE TABLE system_code
     PRIMARY KEY (code_group, code)
 );
 
--- The feature table.  Defines geographical features to which 
+-- The feature table.  Defines geographical features to which
 -- names can be associated.
 
 CREATE TABLE feature

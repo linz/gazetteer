@@ -160,7 +160,7 @@ class TableViewLinker(WidgetLinker):
 class Linkage(QObject):
 
     """
-    Class for linking a specific attribute of an object with a 
+    Class for linking a specific attribute of an object with a
     particular widget.
     """
 
@@ -212,15 +212,15 @@ class Linkage(QObject):
 
 
 class WidgetConnector(QObject):
-    """ 
+    """
     Mixin class for a widget to provide automatic connection with an
-    ORM base class from SqlAlchemy.  
+    ORM base class from SqlAlchemy.
 
     Interrogates the object to determine the field names, then attempts
-    to link each field with a child widget of the form with the same 
+    to link each field with a child widget of the form with the same
     name.
 
-    The LoadEntity function and SaveEntity functions provide the main 
+    The LoadEntity function and SaveEntity functions provide the main
     connection between the entity and the object.  The IsDirty function
     determines whether an entity has changed.
     """

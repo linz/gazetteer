@@ -32,5 +32,5 @@ while i < len(sys.argv)-1:
     else:
         i += 1
 
-def db(): 
+def db():
     return psycopg2.connect(**db_def)
