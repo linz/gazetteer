@@ -16,50 +16,54 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 
-class ValidatorList( QObject ):
-    
-    class Validator( QObject ):
-        
-        def __init__( self, parent, widget, validator, message ):
-            QObject.__init__(self,parent)
+class ValidatorList(QObject):
+    class Validator(QObject):
+        def __init__(self, parent, widget, validator, message):
+            QObject.__init__(self, parent)
             self.widget = widget
             self.validate = validator
             self.message = message
-    
-    def __init__( self, parent=None ):
-        QObject.__init__(self,parent)
+
+    def __init__(self, parent=None):
+        QObject.__init__(self, parent)
         self._parent = parent
         self._validators = []
-        
-        
-    def parent( self ):
+
+    def parent(self):
         return _self.parent
-    
-    def setParent( self, parent ):
+
+    def setParent(self, parent):
         self._parent = parent
-        
-    def addValidator( self, widget, validator, message ):
+
+    def addValidator(self, widget, validator, message):
         validfunc = None
         if not message and widget:
-            message = "Error in "+widget.objectName()
+            message = "Error in " + widget.objectName()
         if not message:
-            message = "Error in validator "+str(validator)
+            message = "Error in validator " + str(validator)
         if callable(validator):
             validfunc = validator
         else:
-            if isinstance( validator, str ):
+            if isinstance(validator, str):
                 validator = QRegExp(validator)
-            if isinstance( validator, QRegExp ):
-                validator = QRegExpValidator(QRegExp(validator),self._parent)
-            if isinstance( validator, QValidator ):
-                if isinstance(widget,QLineEdit):
-                    widget.setValidator( validator )
-                    validfunc = lambda : validator.validate(widget.text(),0)[0] == QValidator.Acceptable
+            if isinstance(validator, QRegExp):
+                validator = QRegExpValidator(QRegExp(validator), self._parent)
+            if isinstance(validator, QValidator):
+                if isinstance(widget, QLineEdit):
+                    widget.setValidator(validator)
+                    validfunc = (
+                        lambda: validator.validate(widget.text(), 0)[0]
+                        == QValidator.Acceptable
+                    )
         if callable(validfunc):
-            self._validators.append(ValidatorList.Validator(self,widget,validfunc,message))
+            self._validators.append(
+                ValidatorList.Validator(self, widget, validfunc, message)
+            )
         else:
-            raise RuntimeError(str(validator)+" is not a validator for "+widget.objectName())
-            
+            raise RuntimeError(
+                str(validator) + " is not a validator for " + widget.objectName()
+            )
+
     def validate(self):
         messages = []
         valid = True

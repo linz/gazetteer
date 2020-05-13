@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_AdminWidget(object):
     def setupUi(self, AdminWidget):
         AdminWidget.setObjectName("AdminWidget")
@@ -28,12 +29,16 @@ class Ui_AdminWidget(object):
         self.uLastUpdateLabel.setText("")
         self.uLastUpdateLabel.setObjectName("uLastUpdateLabel")
         self.verticalLayout_4.addWidget(self.uLastUpdateLabel)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_4.addItem(spacerItem)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem1)
         self.uPublishDatabase = QtWidgets.QPushButton(self.tab)
         self.uPublishDatabase.setObjectName("uPublishDatabase")
@@ -41,10 +46,14 @@ class Ui_AdminWidget(object):
         self.uDownloadCSV = QtWidgets.QPushButton(self.tab)
         self.uDownloadCSV.setObjectName("uDownloadCSV")
         self.horizontalLayout_3.addWidget(self.uDownloadCSV)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem2)
         self.verticalLayout_4.addLayout(self.horizontalLayout_3)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_4.addItem(spacerItem3)
         self.uUpdatingLabel = QtWidgets.QLabel(self.tab)
         font = QtGui.QFont()
@@ -55,7 +64,9 @@ class Ui_AdminWidget(object):
         self.uUpdatingLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.uUpdatingLabel.setObjectName("uUpdatingLabel")
         self.verticalLayout_4.addWidget(self.uUpdatingLabel)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 140, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            20, 140, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_4.addItem(spacerItem4)
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
@@ -117,26 +128,57 @@ class Ui_AdminWidget(object):
     def retranslateUi(self, AdminWidget):
         _translate = QtCore.QCoreApplication.translate
         AdminWidget.setWindowTitle(_translate("AdminWidget", "Form"))
-        self.label.setText(_translate("AdminWidget", "Use this button to update the published data on the web application, LDS, and CSV files.\n"
-"This will publish the data for all publishable names.\n"
-"\n"
-"Check the advanced search for status  (Unpublished) and for \"names with not published annotation\" to see what will not be published.\n"
-"\n"
-"When you run the update the web database may be unavailable for about 5 minutes while this update runs."))
+        self.label.setText(
+            _translate(
+                "AdminWidget",
+                "Use this button to update the published data on the web application, LDS, and CSV files.\n"
+                "This will publish the data for all publishable names.\n"
+                "\n"
+                'Check the advanced search for status  (Unpublished) and for "names with not published annotation" to see what will not be published.\n'
+                "\n"
+                "When you run the update the web database may be unavailable for about 5 minutes while this update runs.",
+            )
+        )
         self.uPublishDatabase.setText(_translate("AdminWidget", "Publish data"))
         self.uDownloadCSV.setText(_translate("AdminWidget", "Download CSV"))
-        self.uUpdatingLabel.setText(_translate("AdminWidget", "Updating web database - please wait ....."))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("AdminWidget", "Publish gazetteer data"))
-        self.label_2.setText(_translate("AdminWidget", "Administer gazetteer application users.  Users must have a network login.  "))
-        self.label_4.setText(_translate("AdminWidget", "Admin users can use the admin screens to update the web database, add and remove users, and update systems codes"))
-        self.label_5.setText(_translate("AdminWidget", "To add a new user, just enter their network login userid below and click Add."))
+        self.uUpdatingLabel.setText(
+            _translate("AdminWidget", "Updating web database - please wait .....")
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab),
+            _translate("AdminWidget", "Publish gazetteer data"),
+        )
+        self.label_2.setText(
+            _translate(
+                "AdminWidget",
+                "Administer gazetteer application users.  Users must have a network login.  ",
+            )
+        )
+        self.label_4.setText(
+            _translate(
+                "AdminWidget",
+                "Admin users can use the admin screens to update the web database, add and remove users, and update systems codes",
+            )
+        )
+        self.label_5.setText(
+            _translate(
+                "AdminWidget",
+                "To add a new user, just enter their network login userid below and click Add.",
+            )
+        )
         self.label_3.setText(_translate("AdminWidget", "User name"))
         self.uUserIsAdmin.setText(_translate("AdminWidget", "Admin user"))
         self.uAddUser.setText(_translate("AdminWidget", "Add"))
         self.uUpdateUser.setText(_translate("AdminWidget", "Update"))
         self.uRemoveUser.setText(_translate("AdminWidget", "Remove"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("AdminWidget", "Users"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("AdminWidget", "System Codes"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_2), _translate("AdminWidget", "Users")
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_3),
+            _translate("AdminWidget", "System Codes"),
+        )
+
 
 from LINZ.Widgets.ListModelConnector import ListModelTableView
 from SystemCodeEditorWidget import SystemCodeEditorWidget

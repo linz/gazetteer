@@ -28,3 +28,7 @@ jobs:
       # - name: Commit Lint 
       #   run: |
       #     gitlint --commits origin/master
+
+      - name: Format (black)
+        run: |
+          black src/NZGBplugin/ --check --diff
