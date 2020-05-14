@@ -466,15 +466,16 @@ class Layers(QObject):
         feat_id = None
         name = None
         for layer in layers:
-            request=QgsFeatureRequest()
+            request = QgsFeatureRequest()
             request.setFilterRect(extent)
-            attlist=['feat_id','name']
-            fields=layer.fields()
-            request.setSubsetOfAttributes([fields.indexFromName(attlist[0]),
-                                          fields.indexFromName(attlist[1])])
-            request.setFlags(QgsFeatureRequest.NoGeometry )
+            attlist = ["feat_id", "name"]
+            fields = layer.fields()
+            request.setSubsetOfAttributes(
+                [fields.indexFromName(attlist[0]), fields.indexFromName(attlist[1])]
+            )
+            request.setFlags(QgsFeatureRequest.NoGeometry)
             request.setFlags(QgsFeatureRequest.ExactIntersect)
-            # SJ: old vectorLayer API 
+            # SJ: old vectorLayer API
             # layer.select(attlist,extent,False,True)
 
             # if layer.nextFeature(feat):

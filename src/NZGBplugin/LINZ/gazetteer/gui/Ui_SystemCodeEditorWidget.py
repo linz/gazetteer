@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_SystemCodeEditorWidget(object):
     def setupUi(self, SystemCodeEditorWidget):
         SystemCodeEditorWidget.setObjectName("SystemCodeEditorWidget")
@@ -46,7 +47,9 @@ class Ui_SystemCodeEditorWidget(object):
         self.uDeleteCodeButton.setEnabled(False)
         self.uDeleteCodeButton.setObjectName("uDeleteCodeButton")
         self.verticalLayout.addWidget(self.uDeleteCodeButton)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.frame = QtWidgets.QFrame(self.splitter)
@@ -79,19 +82,27 @@ class Ui_SystemCodeEditorWidget(object):
         self.code_code.setObjectName("code_code")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.code_code)
         self.code_category = QtWidgets.QComboBox(self.uCodeEditor)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.code_category.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.code_category.sizePolicy().hasHeightForWidth()
+        )
         self.code_category.setSizePolicy(sizePolicy)
         self.code_category.setObjectName("code_category")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.code_category)
+        self.formLayout.setWidget(
+            1, QtWidgets.QFormLayout.FieldRole, self.code_category
+        )
         self.code_value = QtWidgets.QLineEdit(self.uCodeEditor)
         self.code_value.setObjectName("code_value")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.code_value)
         self.code_description = QtWidgets.QPlainTextEdit(self.uCodeEditor)
         self.code_description.setObjectName("code_description")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.code_description)
+        self.formLayout.setWidget(
+            3, QtWidgets.QFormLayout.FieldRole, self.code_description
+        )
         self.horizontalLayout_3.addLayout(self.formLayout)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -103,7 +114,9 @@ class Ui_SystemCodeEditorWidget(object):
         self.code_cancel_button.setEnabled(False)
         self.code_cancel_button.setObjectName("code_cancel_button")
         self.verticalLayout_3.addWidget(self.code_cancel_button)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_3.addItem(spacerItem1)
         self.horizontalLayout_3.addLayout(self.verticalLayout_3)
         self.horizontalLayout_4.addWidget(self.uCodeEditor)
@@ -114,7 +127,9 @@ class Ui_SystemCodeEditorWidget(object):
 
     def retranslateUi(self, SystemCodeEditorWidget):
         _translate = QtCore.QCoreApplication.translate
-        SystemCodeEditorWidget.setWindowTitle(_translate("SystemCodeEditorWidget", "Form"))
+        SystemCodeEditorWidget.setWindowTitle(
+            _translate("SystemCodeEditorWidget", "Form")
+        )
         self.label_2.setText(_translate("SystemCodeEditorWidget", "System code group"))
         self.uNewCodeButton.setText(_translate("SystemCodeEditorWidget", "New"))
         self.uDeleteCodeButton.setText(_translate("SystemCodeEditorWidget", "Delete"))
@@ -124,6 +139,7 @@ class Ui_SystemCodeEditorWidget(object):
         self.label_5.setText(_translate("SystemCodeEditorWidget", "Description"))
         self.code_save_button.setText(_translate("SystemCodeEditorWidget", "Save"))
         self.code_cancel_button.setText(_translate("SystemCodeEditorWidget", "Cancel"))
+
 
 from LINZ.Widgets.ConnectedWidget import ConnectedWidget
 from LINZ.Widgets.ListModelConnector import ListModelTableView

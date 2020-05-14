@@ -15,7 +15,7 @@ SET search_path=gazetteer, public;
 
 -- DROP TABLE IF EXISTS app_usage;
 
-CREATE TABLE app_usage 
+CREATE TABLE app_usage
 (
     usage_id SERIAL NOT NULL PRIMARY KEY,
     userid NAME NOT NULL,

@@ -36,3 +36,24 @@ docker-db-connect: docker-up ## Connect to the containerized db using psql
 .PHONY: docker-db-shell
 docker-db-shell: docker-up ## Start a shell to the containerized db
 	docker-compose exec db bash
+
+
+##################################################
+# Targets for src code validation and formating
+##################################################
+
+.PHONY: formatting-validate-trailing-whitespace
+formatting-validate-trailing-whitespace: ##  Test for trailing whitespace
+	! find . -type f | grep -v '\.git/' | grep -v '\.png$' | xargs grep -n '[[:space:]]$'
+
+.PHONY: formatting-clean-trailing-whitespace
+formatting-clean-trailing-whitespace: ## Remove trailing whitespace
+	find . !  -name '*.git' !  -name '*.png'  -type f -print0 | xargs -r0 sed -e 's/[[:space:]]\+$//' -i
+
+.PHONY: formatting-validate-black
+formatting-validate-black: ## Ensure src code is Black compliant
+	black src/NZGBplugin/ --check --diff
+
+.PHONY: formatting-clean-black
+formatting-clean-black: ## Black formatting
+	black src/NZGBplugin/

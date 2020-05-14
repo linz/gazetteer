@@ -32,11 +32,11 @@ create table gaz_feature
     description text
 );
 
-comment on table gaz_feature is 
+comment on table gaz_feature is
 $comment$
-Table of features that have names.  
+Table of features that have names.
 
-id          is the unique identifier for features, referenced as feat_id 
+id          is the unique identifier for features, referenced as feat_id
             in the gaz_name, gaz_shape, and gaz_annotation.
 type        references code in gaz_code where code_group='FTYP'
 status      references code in gaz_code where code_group='FSTS'
@@ -63,13 +63,13 @@ List of names that may be associated with features.
 
 id             is a unique identifier for the name
 feat_id        is the feature that the name references
-ascii_name     is the ascii version of the name, used for 
-               searching/sorting 
+ascii_name     is the ascii version of the name, used for
+               searching/sorting
 name           is the UTF-8 name including diacritical marks
 status         references code in gaz_code where code_group='NSTS'
 $comment$;
 
-create table gaz_word 
+create table gaz_word
 (
     name_id int not null,
     nword int not null,
@@ -104,15 +104,15 @@ create index gaz_shape_extents on gaz_shape using GIST ( shape );
 
 comment on table gaz_shape is
 $comment$
-Spatial representation of features.  
+Spatial representation of features.
 
 Each feature may have multiple spatial
-components at multiple resolutions (zoom levels).  Shapes are held in 
-geographical (lat/lon) coordinates in the official coordinate system of the 
-area in which they apply (eg NZGD2000, RSRGD2000).  The representation of 
+components at multiple resolutions (zoom levels).  Shapes are held in
+geographical (lat/lon) coordinates in the official coordinate system of the
+area in which they apply (eg NZGD2000, RSRGD2000).  The representation of
 feature with id f at a specific zoom level z is obtained by the query
    select shape from gaz_shape where feat_id=f and min_zoom<=z and max_zoom>=z
-Zoom levels are based on the google maps levels, where (approximately) 
+Zoom levels are based on the google maps levels, where (approximately)
 at zoom level 0 360 degrees is represented in 256 pixels, and the precision
 increases by a factor of 2 for each zoom level.
 Not all features are represented at lower zoom levels.
@@ -123,7 +123,7 @@ min_zoom    is the minimum zoom level at which to use the representation
 max_zoom    is the maximum zoom level at which to use the representation
 shape       is the geometry object
 
-Note: May want to change the default coordinate system to one more 
+Note: May want to change the default coordinate system to one more
 suitable for web mapping application.  Also may need reworking to handle
 multiple geometry types better.
 $comment$;
@@ -184,7 +184,7 @@ This defines code lists for each group code_group.  The code_group
 'CODE' defines the code groups (!)
 
 code_group  identifies a set of codes
-code        is the code 
+code        is the code
 value       is the value the code represents
 $comment$;
 

@@ -1,4 +1,4 @@
 This application requires the geoalchemy extension to sqlalchemy.  This can be installed from
-https://github.com/geoalchemy/geoalchemy/tree/master/geoalchemy into this folder, or 
-geoalchemy can be installed directly.  Note this is currently using the "old" version 
+https://github.com/geoalchemy/geoalchemy/tree/master/geoalchemy into this folder, or
+geoalchemy can be installed directly.  Note this is currently using the "old" version
 of geoalchemy.

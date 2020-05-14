@@ -62,13 +62,13 @@ RETURNS TABLE (
     )
 AS
 $body$
-SELECT   
+SELECT
    name.name_id,
    name.name,
    name.status,
    feature.feat_type
 FROM
-   name 
+   name
    JOIN feature ON name.feat_id = feature.feat_id
    JOIN app_favourites fav ON fav.name_id = name.name_id
 WHERE
@@ -80,7 +80,7 @@ LANGUAGE sql STABLE SET search_path FROM CURRENT;
 GRANT EXECUTE ON FUNCTION gapp_get_favourites() TO gazetteer_user;
 
 
--- Record name viewed 
+-- Record name viewed
 
 CREATE OR REPLACE FUNCTION gapp_record_viewed( p_name_id INTEGER )
 RETURNS INTEGER
@@ -140,11 +140,11 @@ AS
 $body$
 WITH rn( name_id, use_date ) AS
 (
-SELECT 
+SELECT
    name.name_id,
    max(CASE WHEN $2 THEN usg.last_edit ELSE usg.last_view END) as use_date
 FROM
-   name 
+   name
    JOIN app_usage usg ON  usg.name_id = name.name_id
 WHERE
     (usg.userid = current_user OR $1) AND
@@ -153,17 +153,17 @@ GROUP BY
     name.name_id
 ORDER BY
     use_date DESC
-LIMIT 
+LIMIT
     $3
 )
-SELECT   
+SELECT
    name.name_id,
    name.name,
    name.status,
    feature.feat_type,
    rn.use_date
 FROM
-   name 
+   name
    JOIN feature ON name.feat_id = feature.feat_id
    JOIN rn ON rn.name_id = name.name_id
 WHERE

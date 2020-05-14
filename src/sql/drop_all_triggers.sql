@@ -15,7 +15,7 @@ CREATE OR REPLACE FUNCTION tmp_drop_all_triggers()
 RETURNS INT
 AS
 $body$
-DECLARE 
+DECLARE
     v_count INTEGER;
     v_sql RECORD;
 BEGIN
@@ -23,24 +23,24 @@ DROP TABLE IF EXISTS tmp_sql;
 CREATE TEMP TABLE tmp_sql AS
 WITH tab(oid,name) AS
 (
-SELECT 
+SELECT
     cl.oid,
     cl.relname
-FROM 
-    pg_class cl 
+FROM
+    pg_class cl
     JOIN pg_namespace ns ON cl.relnamespace = ns.oid
 WHERE
     ns.nspname='gazetteer' AND
     cl.relkind='r'
 )
-SELECT 
+SELECT
     'DROP TRIGGER IF EXISTS ' || tg.tgname || ' ON gazetteer.' || tab.name  AS sql
-FROM 
+FROM
     pg_trigger tg
     JOIN tab ON tg.tgrelid=tab.oid
-WHERE 
+WHERE
     tg.tgconstrrelid=0;
-v_count := 0;    
+v_count := 0;
 FOR v_sql IN SELECT sql FROM tmp_sql LOOP
    EXECUTE v_sql.sql;
    v_count := v_count + 1;

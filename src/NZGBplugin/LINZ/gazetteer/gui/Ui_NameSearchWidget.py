@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_NameSearchWidget(object):
     def setupUi(self, NameSearchWidget):
         NameSearchWidget.setObjectName("NameSearchWidget")
@@ -50,13 +51,19 @@ class Ui_NameSearchWidget(object):
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_3)
         self.uSearchNameStatus = QtWidgets.QComboBox(self.uSearchAdvanced)
         self.uSearchNameStatus.setObjectName("uSearchNameStatus")
-        self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.uSearchNameStatus)
+        self.formLayout_3.setWidget(
+            2, QtWidgets.QFormLayout.FieldRole, self.uSearchNameStatus
+        )
         self.uSearchMapExtent = QtWidgets.QCheckBox(self.uSearchAdvanced)
         self.uSearchMapExtent.setObjectName("uSearchMapExtent")
-        self.formLayout_3.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.uSearchMapExtent)
+        self.formLayout_3.setWidget(
+            4, QtWidgets.QFormLayout.FieldRole, self.uSearchMapExtent
+        )
         self.uSearchUnpublished = QtWidgets.QCheckBox(self.uSearchAdvanced)
         self.uSearchUnpublished.setObjectName("uSearchUnpublished")
-        self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.uSearchUnpublished)
+        self.formLayout_3.setWidget(
+            3, QtWidgets.QFormLayout.FieldRole, self.uSearchUnpublished
+        )
         self.label_4 = QtWidgets.QLabel(self.uSearchAdvanced)
         self.label_4.setObjectName("label_4")
         self.formLayout_3.setWidget(5, QtWidgets.QFormLayout.LabelRole, self.label_4)
@@ -70,9 +77,13 @@ class Ui_NameSearchWidget(object):
         self.uSearchMaxResults.setProperty("value", 100)
         self.uSearchMaxResults.setObjectName("uSearchMaxResults")
         self.horizontalLayout_2.addWidget(self.uSearchMaxResults)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem)
-        self.formLayout_3.setLayout(5, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_2)
+        self.formLayout_3.setLayout(
+            5, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_2
+        )
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -82,7 +93,9 @@ class Ui_NameSearchWidget(object):
         self.uSearchFeatType = QtWidgets.QComboBox(self.uSearchAdvanced)
         self.uSearchFeatType.setObjectName("uSearchFeatType")
         self.horizontalLayout_4.addWidget(self.uSearchFeatType)
-        self.formLayout_3.setLayout(0, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_4)
+        self.formLayout_3.setLayout(
+            0, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_4
+        )
         self.verticalLayout_2.addWidget(self.uSearchAdvanced)
         self.uSearchResults = ListModelTableView(self.tabSearch)
         self.uSearchResults.setObjectName("uSearchResults")
@@ -105,7 +118,9 @@ class Ui_NameSearchWidget(object):
         self.uEditOnly = QtWidgets.QCheckBox(self.tabRecent)
         self.uEditOnly.setObjectName("uEditOnly")
         self.horizontalLayout_3.addWidget(self.uEditOnly)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem1)
         self.label = QtWidgets.QLabel(self.tabRecent)
         self.label.setObjectName("label")
@@ -143,14 +158,26 @@ class Ui_NameSearchWidget(object):
         self.uToggleAdvanced.setText(_translate("NameSearchWidget", "Advanced"))
         self.label_2.setText(_translate("NameSearchWidget", "Feature class/type"))
         self.label_3.setText(_translate("NameSearchWidget", "Name status"))
-        self.uSearchMapExtent.setText(_translate("NameSearchWidget", "Limit search to map area"))
-        self.uSearchUnpublished.setText(_translate("NameSearchWidget", "Only names with \"Not published\" annotation"))
+        self.uSearchMapExtent.setText(
+            _translate("NameSearchWidget", "Limit search to map area")
+        )
+        self.uSearchUnpublished.setText(
+            _translate("NameSearchWidget", 'Only names with "Not published" annotation')
+        )
         self.label_4.setText(_translate("NameSearchWidget", "Maximum matches"))
-        self.tabs.setTabText(self.tabs.indexOf(self.tabSearch), _translate("NameSearchWidget", "Search"))
+        self.tabs.setTabText(
+            self.tabs.indexOf(self.tabSearch), _translate("NameSearchWidget", "Search")
+        )
         self.uAllUsers.setText(_translate("NameSearchWidget", "Any user"))
         self.uEditOnly.setText(_translate("NameSearchWidget", "Edited only"))
         self.label.setText(_translate("NameSearchWidget", "Max count "))
-        self.tabs.setTabText(self.tabs.indexOf(self.tabRecent), _translate("NameSearchWidget", "Recent"))
-        self.tabs.setTabText(self.tabs.indexOf(self.tabFavourites), _translate("NameSearchWidget", "Favourites"))
+        self.tabs.setTabText(
+            self.tabs.indexOf(self.tabRecent), _translate("NameSearchWidget", "Recent")
+        )
+        self.tabs.setTabText(
+            self.tabs.indexOf(self.tabFavourites),
+            _translate("NameSearchWidget", "Favourites"),
+        )
+
 
 from LINZ.Widgets.ListModelConnector import ListModelTableView

@@ -15,5 +15,6 @@
 from __future__ import absolute_import
 from .Plugin import Plugin
 
+
 def classFactory(iface):
     return Plugin(iface)

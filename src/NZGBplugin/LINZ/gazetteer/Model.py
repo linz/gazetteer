@@ -46,7 +46,7 @@ def objectClass(objtype):
 
 def objectId(item):
     """
-    Create a string id for a database derived object that can be 
+    Create a string id for a database derived object that can be
     used to identify the object in application code
     """
     if item == None:
@@ -205,7 +205,7 @@ class Feature(base):
             raise RuntimeError("Cannot query location of modifed feature")
         result = Database.querysql(
             """
-            select st_x(pt),st_y(pt) from 
+            select st_x(pt),st_y(pt) from
             (select st_transform(ref_point,:srid) as pt from gazetteer.feature
              where feat_id=:id) as ptq
             """,
@@ -260,8 +260,8 @@ class Name(base):
         nresults = maxresults if maxresults else None
         results = Database.querysql(
             """
-            select name_id, feat_id, name, name_status, feat_type, rank 
-            from gazetteer.gaz_searchname(:name,:ftype,:status,:nmax) 
+            select name_id, feat_id, name, name_status, feat_type, rank
+            from gazetteer.gaz_searchname(:name,:ftype,:status,:nmax)
             order by rank desc, name""",
             name=name,
             ftype=ftype,
@@ -287,7 +287,7 @@ class Name(base):
         nresults = maxresults + 1 if maxresults else None
         results = Database.querysql(
             """
-            select name_id, feat_id, name, name_status, feat_type, rank 
+            select name_id, feat_id, name, name_status, feat_type, rank
             from gazetteer.gaz_searchname2(:name,:ftype,:status,:wkt,:npub,:nmax)
             order by rank desc, name""",
             name=name,

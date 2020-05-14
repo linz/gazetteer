@@ -30,7 +30,7 @@ gazetteer.validators.validateRequired = function( message )
     }
 }
 
-gazetteer.validators.validate_Event_event_date = function(dstr) 
+gazetteer.validators.validate_Event_event_date = function(dstr)
 {
     dstr = dstr.trim();
     if( dstr == '' )
@@ -41,7 +41,7 @@ gazetteer.validators.validate_Event_event_date = function(dstr)
 }
 
 
-gazetteer.validators.validate_Event = function(evt) 
+gazetteer.validators.validate_Event = function(evt)
 {
     if( ! gazetteer.validators.eventReferenceValidators )
     {
@@ -71,7 +71,7 @@ gazetteer.validators.validate_Event = function(evt)
     return '';
 }
 
-gazetteer.validators.validate_NameAnnotation = function(annot) 
+gazetteer.validators.validate_NameAnnotation = function(annot)
 {
     if( ! gazetteer.validators.nameAnnotationValidators )
     {
@@ -101,7 +101,7 @@ gazetteer.validators.validate_NameAnnotation = function(annot)
     return '';
 }
 
-gazetteer.validators.validate_FeatureAnnotation = function(annot) 
+gazetteer.validators.validate_FeatureAnnotation = function(annot)
 {
     if( ! gazetteer.validators.featAnnotationValidators )
     {

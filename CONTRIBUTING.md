@@ -1,6 +1,6 @@
 
 # Contributing to the NZGB Gazetteer App
-To contribute to the project certain standards are enforced and must be follow. 
+To contribute to the project certain standards are enforced and must be follow.
 
 ## Formatting
 
@@ -44,13 +44,13 @@ Must be one of the following:
 - chore: updating grunt tasks etc; no production code change
 
 
-### Local checking 
+### Local checking
 A git-hook can be install to the local git repository.
 This has the benefit of running git commit-msg checks locally for each commit.
 This ensures that CI does not fail unexpectedly due to commit message formatting.
 
 
 1. [gitlint](https://jorisroovers.com/gitlint/) is required to run git-msg checks locally on every commit.
-`pip install gitlint`  
+`pip install gitlint`
 2. gitlint will use the [.gitlint](.gitlint) configuration settings found in the top level directory of this project.
-3. run `gitlint install-hook` to install the git-hook based on the [.gitlint](.gitlint) configuration 
+3. run `gitlint install-hook` to install the git-hook based on the [.gitlint](.gitlint) configuration
