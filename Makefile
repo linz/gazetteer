@@ -44,11 +44,11 @@ docker-db-shell: docker-up ## Start a shell to the containerized db
 
 .PHONY: formatting-validate-trailing-whitespace
 formatting-validate-trailing-whitespace: ##  Test for trailing whitespace
-	! find . -type f | grep -v '\.git/' | grep -v '\.png$' | xargs grep -n '[[:space:]]$'
+	! find . -type f | grep -v '\.git/' | grep -v '\.png$' | xargs grep -n '[[:space:]]$' || true
 
 .PHONY: formatting-clean-trailing-whitespace
 formatting-clean-trailing-whitespace: ## Remove trailing whitespace
-	find . !  -name '*.git' !  -name '*.png'  -type f -print0 | xargs -r0 sed -e 's/[[:space:]]\+$//' -i
+	find . -type f -not -path "*\.git/*" -not -name "*\.png" -print0 | xargs -r0 sed -e 's/[[:space:]]\+$$//' -i || true
 
 .PHONY: formatting-validate-black
 formatting-validate-black: ## Ensure src code is Black compliant
