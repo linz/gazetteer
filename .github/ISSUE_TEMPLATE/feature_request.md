@@ -8,7 +8,7 @@ labels: enhancement
 ### User Story
 <!-- A user story to describe why a user wants to do something, who the user is and what they want to do -->
 
-In order to [accomplish goal], as a [role], I want to [do something]. 
+In order to [accomplish goal], as a [role], I want to [do something].
 
 <!-- optional: Instead of [existing behaviour] -->
 

@@ -4,11 +4,11 @@ about: Create a report to help us improve
 labels: bug
 ---
 
-<!-- 
+<!--
 Checklist before submitting
 
 - [ ] Search through existing issue reports to check whether the issue already exists
-- [ ] Ensure you are running the latest software release, see https://github.com/linz/gazetteer/releases 
+- [ ] Ensure you are running the latest software release, see https://github.com/linz/gazetteer/releases
 - [ ] Check QGIS/plugin log messages for more information.
 - [ ] If you can please create a light and self-contained sample dataset to reproduce the issue.
 -->
