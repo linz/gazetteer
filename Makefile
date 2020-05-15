@@ -23,7 +23,7 @@ docker-qgis-shell: docker-up ## Start a shell in the containerized qgis
 .PHONY: docker-qgis-start
 docker-qgis-start: docker-up ## Start the containerized qgis
 	xhost +
-	docker-compose exec qgis sh -c 'DISPLAY=$$1 qgis' sh "unix$$DISPLAY"
+	docker-compose exec qgis sh -c 'DISPLAY=$$1 qgis' sh "$$DISPLAY"
 
 .PHONY: docker-qgis-test
 docker-qgis-test: docker-up ## Run python tests against QGIS isntance
