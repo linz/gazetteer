@@ -42,6 +42,17 @@ docker-db-shell: docker-up ## Start a shell to the containerized db
 # Targets for src code validation and formating
 ##################################################
 
+.PHONY: gitlint-install-hook
+gitlint-install-hook: ## Install the gitlint hook
+	@if test -e .git/hooks/commit-msg && \
+     grep -q 'gitlint commit-msg hook start' .git/hooks/commit-msg; \
+  then \
+    gitlint uninstall-hook; \
+  fi
+	@gitlint install-hook
+	# Workaround https://github.com/jorisroovers/gitlint/issues/127
+	sed -i 's/python /python3 /' .git/hooks/commit-msg
+
 .PHONY: formatting-validate-trailing-whitespace
 formatting-validate-trailing-whitespace: ##  Test for trailing whitespace
 	! find . -type f | grep -v '\.git/' | grep -v '\.png$' | xargs grep -n '[[:space:]]$'
