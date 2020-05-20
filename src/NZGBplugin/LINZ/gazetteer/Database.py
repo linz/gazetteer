@@ -9,20 +9,17 @@
 #
 ################################################################################
 
-from builtins import str
-from builtins import object
-import re
-import os
-import sys
 import getpass
+import os
+import re
+import sys
+from builtins import object, str
 
 import sqlalchemy
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.sql import expression
-
 from sqlalchemy import event
+from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.pool import Pool
-from sqlalchemy.sql import text
+from sqlalchemy.sql import expression, text
 
 _host = os.environ.get("PGHOST") or "prdgeo01"
 _port = os.environ.get("PGPORT") or "5432"

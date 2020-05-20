@@ -9,29 +9,26 @@
 #
 ################################################################################
 
-from builtins import str
-from builtins import object
-
-import sys
-import os.path
 import datetime
+import os.path
 import re
-
-try:
-    import json
-except ImportError:
-    import simplejson as json
+import sys
+from builtins import object, str
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWebKitWidgets import *
 from PyQt5.QtWidgets import *
 
+from LINZ.Util import dms, pyratemp
+from LINZ.gazetteer import Database, Model
+
 from . import DatabaseConfiguration
 
-from LINZ.gazetteer import Model
-from LINZ.gazetteer import Database
-from LINZ.Util import pyratemp, dms
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 
 class NameWebView(QWebView):

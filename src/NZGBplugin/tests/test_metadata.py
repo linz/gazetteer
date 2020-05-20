@@ -1,6 +1,6 @@
-import unittest
-import os.path
 import configparser
+import os.path
+import unittest
 
 
 class TestMetadata(unittest.TestCase):

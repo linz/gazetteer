@@ -10,12 +10,12 @@
 ################################################################################
 
 
-from past.builtins import cmp
-from builtins import str
-from builtins import range
+from builtins import range, str
+
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from past.builtins import cmp
 
 
 class PythonComboBox(QComboBox):

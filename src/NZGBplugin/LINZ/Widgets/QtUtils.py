@@ -10,8 +10,9 @@
 ################################################################################
 
 
-from past.builtins import cmp
 from builtins import str
+
+from past.builtins import cmp
 
 
 def populateCombo(widget, rows, display=""):

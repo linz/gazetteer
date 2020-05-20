@@ -10,8 +10,9 @@
 ################################################################################
 
 
-import sys
 import getpass
+import sys
+
 import psycopg2
 from osgeo import ogr
 

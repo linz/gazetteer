@@ -9,18 +9,19 @@
 #
 ################################################################################
 
-from builtins import str
 import sys
 import warnings
+from builtins import str
+
+import geoalchemy2 as ga
 import sqlalchemy
-from sqlalchemy.orm import relationship, backref
-import sqlalchemy.sql
 import sqlalchemy.exc
 import sqlalchemy.schema
-import geoalchemy2 as ga
+import sqlalchemy.sql
+from sqlalchemy import Column, DateTime, Integer, String, Unicode
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Unicode, DateTime
-from sqlalchemy.schema import Table, MetaData, PrimaryKeyConstraint
+from sqlalchemy.orm import backref, relationship
+from sqlalchemy.schema import MetaData, PrimaryKeyConstraint, Table
 from sqlalchemy.sql.expression import Function
 
 from . import Database

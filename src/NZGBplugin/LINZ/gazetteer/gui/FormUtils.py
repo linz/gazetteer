@@ -10,15 +10,15 @@
 ################################################################################
 
 
-from builtins import str
 import os.path
+from builtins import str
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-from LINZ.gazetteer.gui.Controller import Controller
-from LINZ.gazetteer.Model import SystemCode
 from LINZ.Widgets import QtUtils
+from LINZ.gazetteer.Model import SystemCode
+from LINZ.gazetteer.gui.Controller import Controller
 
 
 def populateCodeCombo(combo, code_group, showAny=False, special=None, category=None):

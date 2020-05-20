@@ -8,6 +8,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from LINZ.Widgets.ConnectedWidget import ConnectedWidget
+from LINZ.Widgets.ListModelConnector import ListModelTableView
+from LINZ.Widgets.PythonComboBox import PythonComboBox
+
 
 class Ui_SystemCodeEditorWidget(object):
     def setupUi(self, SystemCodeEditorWidget):
@@ -139,8 +143,3 @@ class Ui_SystemCodeEditorWidget(object):
         self.label_5.setText(_translate("SystemCodeEditorWidget", "Description"))
         self.code_save_button.setText(_translate("SystemCodeEditorWidget", "Save"))
         self.code_cancel_button.setText(_translate("SystemCodeEditorWidget", "Cancel"))
-
-
-from LINZ.Widgets.ConnectedWidget import ConnectedWidget
-from LINZ.Widgets.ListModelConnector import ListModelTableView
-from LINZ.Widgets.PythonComboBox import PythonComboBox

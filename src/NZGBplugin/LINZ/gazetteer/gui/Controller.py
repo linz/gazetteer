@@ -10,17 +10,17 @@
 ################################################################################
 
 
-from builtins import str
 import re
+from builtins import str
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from . import DatabaseConfiguration
-
 from LINZ.gazetteer import Database
 from LINZ.gazetteer.Model import *
+
+from . import DatabaseConfiguration
 from .NameWebView import NameWebDock
 
 

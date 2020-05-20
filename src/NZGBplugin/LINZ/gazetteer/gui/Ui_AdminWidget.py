@@ -8,6 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from LINZ.Widgets.ListModelConnector import ListModelTableView
+from SystemCodeEditorWidget import SystemCodeEditorWidget
+
 
 class Ui_AdminWidget(object):
     def setupUi(self, AdminWidget):
@@ -178,7 +181,3 @@ class Ui_AdminWidget(object):
             self.tabWidget.indexOf(self.tab_3),
             _translate("AdminWidget", "System Codes"),
         )
-
-
-from LINZ.Widgets.ListModelConnector import ListModelTableView
-from SystemCodeEditorWidget import SystemCodeEditorWidget

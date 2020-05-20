@@ -10,30 +10,25 @@
 ################################################################################
 
 
-from builtins import str
 import sys
+from builtins import str
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from LINZ.Widgets import QtUtils
-from LINZ.Widgets.ListModelConnector import ListModelConnector
 from LINZ.Widgets.DictionaryAdaptor import DictionaryAdaptor
+from LINZ.Widgets.ErrorHandler import handleException
+from LINZ.Widgets.ListModelConnector import ListModelConnector
 from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
 from LINZ.Widgets.ValidatorList import ValidatorList
 from LINZ.Widgets.WidgetConnector import WidgetConnector
-from LINZ.Widgets.ErrorHandler import handleException
+from LINZ.gazetteer.Model import Name, SystemCode
 
-from . import DatabaseConfiguration
-from LINZ.gazetteer.Model import Name
-from . import FormUtils
-from LINZ.gazetteer.Model import SystemCode
-
-from . import FormUtils
-from .Ui_NameSearchWidget import Ui_NameSearchWidget
-
+from . import DatabaseConfiguration, FormUtils
 from .Controller import Controller
+from .Ui_NameSearchWidget import Ui_NameSearchWidget
 
 
 class NameSearchWidget(QWidget, Ui_NameSearchWidget):

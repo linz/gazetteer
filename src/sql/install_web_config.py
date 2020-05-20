@@ -9,9 +9,10 @@
 #
 ################################################################################
 
-import database
 import re
 import sys
+
+import database
 
 db = database.db()
 dbc = db.cursor()

@@ -9,8 +9,8 @@
 #
 ################################################################################
 
-from builtins import str
 import sys
+from builtins import str
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *

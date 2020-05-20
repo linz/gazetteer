@@ -10,8 +10,9 @@
 ################################################################################
 
 
-from .Adaptor import Adaptor
 from sqlalchemy.orm.properties import RelationshipProperty
+
+from .Adaptor import Adaptor
 
 
 class SqlAlchemyAdaptor(Adaptor):

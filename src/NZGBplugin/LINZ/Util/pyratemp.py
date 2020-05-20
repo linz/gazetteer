@@ -155,13 +155,14 @@ See documentation for a list of features, template-syntax etc.
 :License:   MIT/X11-like, see __license__
 """
 
+import builtins
+import os
+import re
+from builtins import object, range, str, zip
+
 from future import standard_library
 
 standard_library.install_aliases()
-from builtins import str
-from builtins import zip
-from builtins import range
-from builtins import object
 
 __version__ = "0.2.0"
 __author__ = "Roland Koebler <rk at simple-is-better dot org>"
@@ -187,8 +188,6 @@ IN THE SOFTWARE."""
 
 # =========================================
 
-import builtins, os
-import re
 
 # =========================================
 # some useful functions

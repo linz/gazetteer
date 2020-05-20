@@ -13,6 +13,7 @@
 # Configuration settings for NZGB plugin
 
 from builtins import str
+
 from PyQt5.QtCore import *
 
 organisationName = "Land Information New Zealand"

@@ -11,6 +11,20 @@
 
 from builtins import str
 
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
+from LINZ.Widgets import QtUtils
+from LINZ.Widgets.ListModelConnector import ListModelConnector
+from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
+from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
+from LINZ.Widgets.ValidatorList import ValidatorList
+from LINZ.Widgets.WidgetConnector import WidgetConnector
+from LINZ.gazetteer.Model import SystemCode
+
+from .Controller import Controller
+from .Ui_SystemCodeEditorWidget import Ui_SystemCodeEditorWidget
+
 if __name__ == "__main__":
     import sys
     from os.path import dirname, abspath
@@ -19,21 +33,7 @@ if __name__ == "__main__":
     sys.path.append(lib)
 
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-
-from .Ui_SystemCodeEditorWidget import Ui_SystemCodeEditorWidget
-
 # Import controller before model components to ensure database is configured..
-
-from .Controller import Controller
-from LINZ.gazetteer.Model import SystemCode
-from LINZ.Widgets import QtUtils
-from LINZ.Widgets.ListModelConnector import ListModelConnector
-from LINZ.Widgets.WidgetConnector import WidgetConnector
-from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
-from LINZ.Widgets.ValidatorList import ValidatorList
-from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
 
 
 class SystemCodeEditorWidget(QWidget, Ui_SystemCodeEditorWidget):

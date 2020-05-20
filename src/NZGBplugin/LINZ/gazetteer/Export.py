@@ -9,11 +9,11 @@
 #
 ################################################################################
 
-from builtins import str
-from builtins import object
-import re
-import os.path
 import codecs
+import os.path
+import re
+from builtins import object, str
+
 from . import Database
 from .Model import SystemCode
 

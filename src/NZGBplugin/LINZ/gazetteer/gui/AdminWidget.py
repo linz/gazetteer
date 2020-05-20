@@ -9,9 +9,20 @@
 #
 ################################################################################
 
-from builtins import str
-import sys
 import os.path
+import sys
+from builtins import str
+
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
+from LINZ.Widgets import QtUtils
+from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
+from LINZ.gazetteer.Model import SystemCode, User
+
+from . import Config
+from .Controller import Controller
+from .Ui_AdminWidget import Ui_AdminWidget
 
 if __name__ == "__main__":
     from os.path import dirname, abspath
@@ -20,19 +31,7 @@ if __name__ == "__main__":
     sys.path.append(lib)
 
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-
-from LINZ.Widgets import QtUtils
-from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
-
 # Import controller before model components to ensure database is configured..
-
-from .Controller import Controller
-from LINZ.gazetteer.Model import User
-from LINZ.gazetteer.Model import SystemCode
-from .Ui_AdminWidget import Ui_AdminWidget
-from . import Config
 
 
 class AdminWidget(QWidget, Ui_AdminWidget):

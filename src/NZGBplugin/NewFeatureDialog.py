@@ -11,13 +11,13 @@
 
 
 from builtins import str
+
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from qgis.core import *
 
-from .LINZ.gazetteer.gui.Controller import Controller
 from .LINZ.gazetteer.gui import FormUtils
-
+from .LINZ.gazetteer.gui.Controller import Controller
 from .Ui_NewFeatureDialog import Ui_NewFeatureDialog
 
 

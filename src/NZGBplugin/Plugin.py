@@ -9,16 +9,14 @@
 #
 ################################################################################
 
-from builtins import str
-from builtins import object
-import sys
-import os.path
 import configparser
+import os.path
+import sys
+from builtins import object, str
 
-from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-
 from qgis.gui import QgsMapToolEmitPoint
 
 from . import Resources

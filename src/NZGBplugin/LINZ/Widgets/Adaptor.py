@@ -10,8 +10,7 @@
 ################################################################################
 
 
-from builtins import str
-from builtins import object
+from builtins import object, str
 
 
 class Adaptor(object):

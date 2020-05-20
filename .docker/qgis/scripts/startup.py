@@ -1,5 +1,6 @@
-from qgis import utils
 import traceback
+
+from qgis import utils
 
 # Disable QGIS modal error dialog.
 

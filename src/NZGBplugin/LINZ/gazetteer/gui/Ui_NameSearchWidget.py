@@ -8,6 +8,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from LINZ.Widgets.ListModelConnector import ListModelTableView
+
 
 class Ui_NameSearchWidget(object):
     def setupUi(self, NameSearchWidget):
@@ -178,6 +180,3 @@ class Ui_NameSearchWidget(object):
             self.tabs.indexOf(self.tabFavourites),
             _translate("NameSearchWidget", "Favourites"),
         )
-
-
-from LINZ.Widgets.ListModelConnector import ListModelTableView

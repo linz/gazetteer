@@ -9,9 +9,8 @@
 #
 ################################################################################
 
-from builtins import input
-from builtins import str
 import re
+from builtins import input, str
 
 latlon_patterns = [
     "".join(p.split())
