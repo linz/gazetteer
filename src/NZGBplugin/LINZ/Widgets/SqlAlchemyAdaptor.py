@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,

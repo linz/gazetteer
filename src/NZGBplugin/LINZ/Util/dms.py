@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 ################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
