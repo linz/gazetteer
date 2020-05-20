@@ -223,20 +223,20 @@ class Plugin(object):
             version = self._controller.database().scalar(
                 "select value from system_code where code_group='APSD' and code='VRSN'"
             )
-            #             # temp comments out see #103
-            #             if version != self.Version:
-            #                 result = QMessageBox.question(
-            #                     self._iface.mainWindow(),
-            #                     "Application version error",
-            #                     "You are using version "
-            #                     + self.Version
-            #                     + " of the gazetteer plugin,\n"
-            #                     "but the current version is " + version + "\n\n"
-            #                     "Do you want to continue with this version?",
-            #                     QMessageBox.Yes | QMessageBox.No,
-            #                 )
-            #                 if result != QMessageBox.Yes:
-            #                     return
+
+            if version != self.Version:
+                result = QMessageBox.question(
+                    self._iface.mainWindow(),
+                    "Application version error",
+                    "You are using version "
+                    + self.Version
+                    + " of the gazetteer plugin,\n"
+                    "but the current version is " + version + "\n\n"
+                    "Do you want to continue with this version?",
+                    QMessageBox.Yes | QMessageBox.No,
+                )
+                if result != QMessageBox.Yes:
+                    return
 
             from .LINZ.gazetteer.gui.Editor import Editor
             from . import Layers
