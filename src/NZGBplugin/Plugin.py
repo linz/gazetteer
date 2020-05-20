@@ -15,6 +15,7 @@ from builtins import str
 from builtins import object
 import sys
 import os.path
+import configparser
 
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -28,14 +29,12 @@ from .SelectNameTool import SelectNameTool
 
 class Plugin(object):
 
-    Name = "GazetteerEditor"
-    LongName = "GazetteerEditor plugin for QGIS"
-    Version = "1.8.2"
-    QgisMinimumVersion = "2.4"
-    Author = "ccrook@linz.govt.nz <Chris Crook>"
-    PluginUrl = "http://<server>/QgisPluginRepository/GazetteerEditor.zip"
-    Description = "Gazetteer database editor"
+    file_path = os.path.join(os.path.dirname(__file__), "metadata.txt")
+    parser = configparser.ConfigParser()
+    parser.read(file_path)
 
+    Version = parser["general"]["Version"]
+    Name = parser["general"]["Name"]
     _menuName = "Gazetteer editor"
 
     def __init__(self, iface):
@@ -224,20 +223,20 @@ class Plugin(object):
             version = self._controller.database().scalar(
                 "select value from system_code where code_group='APSD' and code='VRSN'"
             )
-            #             # temp comments out see #103
-            #             if version != self.Version:
-            #                 result = QMessageBox.question(
-            #                     self._iface.mainWindow(),
-            #                     "Application version error",
-            #                     "You are using version "
-            #                     + self.Version
-            #                     + " of the gazetteer plugin,\n"
-            #                     "but the current version is " + version + "\n\n"
-            #                     "Do you want to continue with this version?",
-            #                     QMessageBox.Yes | QMessageBox.No,
-            #                 )
-            #                 if result != QMessageBox.Yes:
-            #                     return
+
+            if version != self.Version:
+                result = QMessageBox.question(
+                    self._iface.mainWindow(),
+                    "Application version error",
+                    "You are using version "
+                    + self.Version
+                    + " of the gazetteer plugin,\n"
+                    "but the current version is " + version + "\n\n"
+                    "Do you want to continue with this version?",
+                    QMessageBox.Yes | QMessageBox.No,
+                )
+                if result != QMessageBox.Yes:
+                    return
 
             from .LINZ.gazetteer.gui.Editor import Editor
             from . import Layers

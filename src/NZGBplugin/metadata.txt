@@ -9,5 +9,5 @@ about=QGIS plugin that allows the Geographic board to manage official
 author=Chris Crook
 qgisMinimumVersion=3.10
 description=For maintaining the NZGB gazetteer.
-version=version 1.8.2
+version=1.8.2
 experimental=False
