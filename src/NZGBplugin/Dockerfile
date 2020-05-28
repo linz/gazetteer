@@ -1,4 +1,6 @@
-FROM qgis/qgis:final-3_10_5
+# Pass via env, like: docker build --build-arg # UPSTREAM_TAG=release-3_10 ...
+ARG  UPSTREAM_TAG=final-3_10_5
+FROM qgis/qgis:${UPSTREAM_TAG}
 
 # Disabled no-more-available qgis apt repositories
 #RUN sed -i 's/\(.*qgis.org\)/#\1/' /etc/apt/sources.list
