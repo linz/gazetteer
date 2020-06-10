@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'LINZ/gazetteer/gui/Ui_AdminWidget.ui'
+# Form implementation generated from reading ui file 'Ui_AdminWidget.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -180,5 +180,5 @@ class Ui_AdminWidget(object):
         )
 
 
+from .SystemCodeEditorWidget import SystemCodeEditorWidget
 from LINZ.Widgets.ListModelConnector import ListModelTableView
-from SystemCodeEditorWidget import SystemCodeEditorWidget

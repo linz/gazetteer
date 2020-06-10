@@ -249,7 +249,7 @@ When you run the update the web database may be unavailable for about 5 minutes 
   <customwidget>
    <class>SystemCodeEditorWidget</class>
    <extends>QWidget</extends>
-   <header>SystemCodeEditorWidget</header>
+   <header>.SystemCodeEditorWidget</header>
    <container>1</container>
   </customwidget>
   <customwidget>

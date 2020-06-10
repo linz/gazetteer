@@ -11,6 +11,7 @@
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 from .ValidatorList import ValidatorList
 from .WidgetConnector import WidgetConnector
