@@ -22,6 +22,7 @@ if __name__ == "__main__":
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
