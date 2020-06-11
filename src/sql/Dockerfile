@@ -57,5 +57,13 @@ ENTRYPOINT su - postgres -c "/usr/lib/postgresql/8.4/bin/postgres \
   "
 
 RUN pg_ctlcluster 8.4 main start && \
+    echo "create user gazowner IN ROLE gaz_owner password 'gazowner'" | \
+    su postgres -c psql && \
+    echo "create user gazexport IN ROLE gazetteer_export password 'gazexport'" | \
+    su postgres -c psql && \
+    echo "create user gazuser IN ROLE gazetteer_user password 'gazuser'" | \
+    su postgres -c psql && \
     echo "create user gazadmin IN ROLE gazetteer_admin password 'gazadmin'" | \
+    su postgres -c psql && \
+    echo "create user gazdba IN ROLE gazetteer_admin, gazetteer_dba password 'gazdba'" | \
     su postgres -c psql
