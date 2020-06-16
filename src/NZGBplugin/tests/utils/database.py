@@ -34,7 +34,7 @@ class Database:
             except psycopg2.DatabaseError as error:
                 sys.exit()
 
-    def execute_query(self, statement):
+    def update(self, statement):
         """
         
         """
@@ -46,7 +46,27 @@ class Database:
                 self.conn.commit()
                 cur.close()
                 return f"{cur.rowcount} rows affected."
+
         except psycopg2.IntegrityError as error:
             # The record is already in the DB
             self.conn.rollback()
+            print(error.pgerror)
+
+    def select(self, statement):
+        """
+        So far there is only a need to select one row.
+        ... this may change
+
+        """
+
+        self.connect()
+        try:
+            with self.conn.cursor() as cur:
+                cur.execute(statement)
+                self.conn.commit()
+                row = cur.fetchone()
+                cur.close()
+                return row
+
+        except psycopg2.Error as error:
             print(error.pgerror)

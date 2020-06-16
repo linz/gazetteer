@@ -24,7 +24,7 @@ class TestDataHandler:
 
         for codes in self.data[self.table_sys_code]:
             insert_statement = f"INSERT INTO {self.table_sys_code} VALUES ('{codes['code_group']}', '{codes['code']}','{codes['category']}', '{codes['value']}', '{codes['updated_by']}', '{codes['update_date']}')"
-            self.db.execute_query(insert_statement)
+            self.db.update(insert_statement)
 
     def delete_sys_codes(self):
 
@@ -35,9 +35,28 @@ class TestDataHandler:
                 WHERE   code_group = '{codes['code_group']}'
                 AND     code = '{codes['code']}'
             """
-            self.db.execute_query(delete_statement)
+            self.db.update(delete_statement)
+
+    def last_modified_feature(self, feature_name):
+
+        last_added_feature_statement = f"""
+            SELECT name_id, feat_id, name, process, status, updated_by, update_date
+            FROM gazetteer.name
+            WHERE name = '{feature_name}'
+            ORDER BY feat_id DESC 
+            LIMIT 1
+            """
+        return self.db.select(last_added_feature_statement)
 
 
-util = TestDataHandler()
-util.insert_sys_codes()
-util.delete_sys_codes()
+def main():
+    util = TestDataHandler()
+    util.insert_sys_codes()
+    util.delete_sys_codes()
+    r = util.last_modified_feature("Ashburton Folks")
+    print(r)
+
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    main()
