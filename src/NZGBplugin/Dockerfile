@@ -1,5 +1,5 @@
-# Pass via env, like: docker build --build-arg # UPSTREAM_TAG=release-3_10 ...
-ARG  UPSTREAM_TAG=final-3_10_5
+# Pass via env, like: docker build --build-arg # UPSTREAM_TAG=release-3_12 ...
+ARG  UPSTREAM_TAG=final-3_12_3
 FROM qgis/qgis:${UPSTREAM_TAG}
 
 # Disabled no-more-available qgis apt repositories

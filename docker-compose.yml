@@ -16,7 +16,7 @@ services:
       #POSTGRES_PASSWORD: postgres
 
   qgis:
-    image: linz-gazetteer-qgis:3.10
+    image: linz-gazetteer-qgis:3.12
     build: src/NZGBplugin
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
