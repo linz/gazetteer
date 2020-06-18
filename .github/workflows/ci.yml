@@ -103,9 +103,13 @@ jobs:
       run: |
         make docker
 
-    - name: Run python tests
+    - name: Run qgis tests agains QGIS 3.10
       run: |
-        make docker-qgis-test
+        QGIS_TAG=3.10 make docker-qgis-test
+
+    - name: Run qgis tests agains QGIS 3.12
+      run: |
+        QGIS_TAG=3.12 make docker-qgis-test
 
     - name: Run db tests
       run: |
