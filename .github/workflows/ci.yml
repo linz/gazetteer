@@ -99,9 +99,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Build and start docker containers for plugin test
+    - name: Build plugin docker images
       run: |
-        make docker-up
+        make -C src/NZGBplugin/ docker
+
+    - name: Build database docker images
+      run: |
+        make -C src/sql docker
 
     - name: Run python tests
       run: |
