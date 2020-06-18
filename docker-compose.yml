@@ -16,13 +16,11 @@ services:
       #POSTGRES_PASSWORD: postgres
 
   qgis:
-    environment:
-      - DEFAULT_QGIS_TAG=3.10
-    image: "linz-gazetteer-qgis:${QGIS_TAG:-${DEFAULT_QGIS_TAG}}"
+    image: "linz-gazetteer-qgis:${QGIS_TAG:-3.10}"
     build:
       context: src/NZGBplugin
       args:
-        - UPSTREAM_TAG=${QGIS_TAG:-${DEFAULT_QGIS_TAG}}
+        - UPSTREAM_TAG=${QGIS_TAG:-3.10}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./src/NZGBplugin:/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin
