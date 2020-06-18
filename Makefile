@@ -8,6 +8,11 @@ help:
 			'BEGIN {FS = ":.*?## "}; \
 			{ printf "\033[36m%-30s\033[0m%s%s\n", $$1, "\n ", $$2 }'
 
+.PHONY: docker
+docker: ## Build all docker images
+	make -C src/NZGBplugin/ docker
+	make -C src/sql docker
+
 .PHONY: docker-up
 docker-up: ## Start the containerized environment
 	docker-compose up -d
