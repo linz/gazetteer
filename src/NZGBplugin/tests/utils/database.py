@@ -34,9 +34,10 @@ class Database:
             except psycopg2.DatabaseError as error:
                 sys.exit()
 
-    def update(self, statement):
+    def execute(self, statement):
         """
-        
+        Execute an SQL statement
+        Returns an count of affected rows when successful
         """
 
         self.connect()
@@ -54,9 +55,8 @@ class Database:
 
     def select(self, statement):
         """
-        So far there is only a need to select one row.
-        ... this may change
-
+        Run a sql select statement
+        And return the rows
         """
 
         self.connect()
@@ -64,9 +64,9 @@ class Database:
             with self.conn.cursor() as cur:
                 cur.execute(statement)
                 self.conn.commit()
-                row = cur.fetchone()
+                rows = cur.fetchall()
                 cur.close()
-                return row
+                return rows
 
         except psycopg2.Error as error:
             print(error.pgerror)

@@ -1,21 +1,8 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-################################################################################
-#
-#  New Zealand Geographic Board gazetteer application,
-#  Crown copyright (c) 2020, Land Information New Zealand on behalf of
-#  the New Zealand Government.
-#
-#  This file is released under the MIT licence. See the LICENCE file found
-#  in the top-level directory of this distribution for more information.
-#
-################################################################################
-
 
 # Form implementation generated from reading ui file 'Ui_NewFeatureDialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,7 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_NewFeatureDialog(object):
     def setupUi(self, NewFeatureDialog):
         NewFeatureDialog.setObjectName("NewFeatureDialog")
+        NewFeatureDialog.setWindowModality(QtCore.Qt.WindowModal)
         NewFeatureDialog.resize(517, 223)
+        NewFeatureDialog.setModal(True)
         self.verticalLayout = QtWidgets.QVBoxLayout(NewFeatureDialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.action_label = QtWidgets.QLabel(NewFeatureDialog)
