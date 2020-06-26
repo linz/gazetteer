@@ -52,6 +52,7 @@ class TestDataHandler:
                 WHERE   code_group = '{codes['code_group']}'
                 AND     code = '{codes['code']}'
             """
+
             self.db.execute(delete_statement)
 
     def last_added_feature(self):
@@ -65,17 +66,75 @@ class TestDataHandler:
             ORDER BY feat_id DESC
             LIMIT 1
             """
+
         return self.db.select(last_added_feature_statement)
 
-    def get_feature_by_id(self, name_id):
+    def get_name_by_id(self, name_id):
+        """
+        Get database name by id
+        """
+
+        names = f"""
+            SELECT name_id, feat_id, name, process, status, updated_by, update_date
+            FROM gazetteer.name
+            WHERE name_id = '{name_id}'
+            ORDER BY name_id DESC
+            """
+
+        return self.db.select(names)
+
+    def get_feature_by_id(self, feat_id):
         """
         Get database feature by name
         """
 
-        last_added_feature_statement = f"""
-            SELECT name_id, feat_id, name, process, status, updated_by, update_date
-            FROM gazetteer.name
-            WHERE name_id = '{name_id}'
+        features = f"""
+            SELECT feat_id, feat_type, status, description, updated_by, update_date,ref_point
+            FROM gazetteer.feature
+            WHERE feat_id = '{feat_id}'
             ORDER BY feat_id DESC
             """
-        return self.db.select(last_added_feature_statement)
+
+        return self.db.select(features)
+
+    def get_feat_annotation_by_id(self, feat_id):
+        """
+        Get database feature by name
+        """
+
+        annotations = f"""
+        SELECT annot_id, feat_id, annotation_type, annotation, updated_by, update_date
+        FROM gazetteer.feature_annotation
+        WHERE feat_id = '{feat_id}'
+        ORDER BY  feat_id DESC
+        """
+
+        return self.db.select(annotations)
+
+    def get_event_by_id(self, name_id):
+        """
+        Get database event record by name
+        """
+
+        events = f"""
+        SELECT event_id, name_id, event_date, event_type, authority, event_reference,
+        notes, updated_by, update_date
+        FROM gazetteer.name_event
+        WHERE name_id = '{name_id}'
+        """
+
+        return self.db.select(events)
+
+    def get_name_annotation_by_id(self, name_id):
+        """
+        Get database name annotation record
+        """
+
+        annotations = f"""
+        SELECT annot_id, name_id, annotation_type, annotation, updated_by, update_date
+        FROM gazetteer.name_annotation
+        WHERE name_id = '{name_id}'
+        ORDER BY  name_id DESC
+        """
+
+        return self.db.select(annotations)

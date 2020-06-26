@@ -19,6 +19,24 @@
       "update_date": "2013-04-15 07:23:05.693"
     },
     {
+      "code_group": "FCLS",
+      "code": "WATR",
+      "category": "",
+      "value": "NZ - Water",
+      "description": "",
+      "updated_by": "ccrook-u",
+      "update_date": "2013-04-15 07:23:05.693"
+    },
+    {
+      "code_group": "FTYP",
+      "code": "FORD",
+      "category": "WATR",
+      "value": "Ford",
+      "description": "",
+      "updated_by": "ccrook-u",
+      "update_date": "2013-04-15 07:23:05.693"
+    },
+    {
       "code_group": "NPRO",
       "code": "FATR",
       "category": "",
@@ -81,7 +99,6 @@
       "updated_by": "wshaw",
       "update_date": "2013-11-06 16:20:06.831"
     },
-
     {
       "code_group": "CUSG",
       "code": "NPRO",

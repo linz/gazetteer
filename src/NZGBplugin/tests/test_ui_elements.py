@@ -49,8 +49,8 @@ class TestUi(unittest.TestCase):
         # As not to end up with duplicates when each suite run
         cls.gazetteer_plugin._editorDock.close()
 
-        # removed required sys_codes when finished
-        cls.data_handler.delete_sys_codes()
+        # # removed required sys_codes when finished
+        # cls.data_handler.delete_sys_codes() # TEMP COMMENTED OUT
 
         # Remove all layers
         QgsProject.instance().removeAllMapLayers()
@@ -109,12 +109,11 @@ class TestUi(unittest.TestCase):
         The Help tab is present
         """
 
-        assert (
-            self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(0)
-            == "Search"
+        self.assertEqualassert(
+            self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(0), "Search"
         )
-        assert (
-            self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(1) == "Help"
+        self.assertEqualassert(
+            self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(1), "Help"
         )
 
     def test_F_click_tab_search(self):
