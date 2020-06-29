@@ -1003,4 +1003,3 @@ class TestNewFeature(unittest.TestCase):
     #         .index(1, 0)
     #     )
     #     self.assertEqual(result.data(), "Ashburton")
-
