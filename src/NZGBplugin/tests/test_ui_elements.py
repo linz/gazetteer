@@ -109,10 +109,10 @@ class TestUi(unittest.TestCase):
         The Help tab is present
         """
 
-        self.assertEqualassert(
+        self.assertEqual(
             self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(0), "Search"
         )
-        self.assertEqualassert(
+        self.assertEqual(
             self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(1), "Help"
         )
 

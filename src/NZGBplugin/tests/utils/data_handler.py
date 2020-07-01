@@ -138,3 +138,17 @@ class TestDataHandler:
         """
 
         return self.db.select(annotations)
+
+    def get_feat_association_by_id(self, feat_id):
+        """
+        Get database name association record
+        """
+
+        association = f"""
+        SELECT assoc_id, feat_id_from, feat_id_to, assoc_type, updated_by, update_date
+        FROM gazetteer.feature_association
+        WHERE feat_id_from = '{feat_id}'
+        ORDER BY  assoc_id DESC
+        """
+
+        return self.db.select(association)

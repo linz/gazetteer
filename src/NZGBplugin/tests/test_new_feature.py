@@ -98,28 +98,37 @@ class TestNewFeature(unittest.TestCase):
         """
         pass
 
-    def init_edit_feature(
-        self, feature_name="Ashburton Folks", feature_x=169.8269, feature_y=-44.2000
+    def init_feature(
+        self,
+        feature_name="Ashburton Folks",
+        feature_x=169.8269,
+        feature_y=-44.2000,
+        enable_edit=True,
     ):
 
+        self.name_id, self.feat_id = None, None
         self.trigger_new_feature_dlg(feature_x, feature_y)
         iface.dlg_create_new.uFeatName.setText(feature_name)
         iface.dlg_create_new.accept()
+        QTest.qWait(300)
 
         # Get the HTML document
         self.web_view = self.get_web_view()
         self.html_doc = self.web_view.page().mainFrame().documentElement().document()
-
-        # Click the edit button
-        self.html_doc.findFirst("input[name=Edit]").evaluateJavaScript("this.click()")
-        QTest.qWait(700)
 
         # get feature_id - this allows access to the DB record
         self.name_id, self.feat_id = self.parse_id(
             self.html_doc.findFirst('div[class="idblock"]').toPlainText().strip(" ")
         )
 
-    def get_web_view(self):
+        if enable_edit:
+            # Click the edit button
+            self.html_doc.findFirst("input[name=Edit]").evaluateJavaScript(
+                "this.click()"
+            )
+            QTest.qWait(500)
+
+    def get_web_view(self, index=0):
         """
         Returns the QWebView reference
         """
@@ -128,7 +137,7 @@ class TestNewFeature(unittest.TestCase):
             dock_widget.widget()
             for dock_widget in self.gazetteer_plugin._editor.findChildren(QDockWidget)
             if dock_widget.__class__.__name__ == "NameWebDock"
-        ][0]
+        ][index]
 
     def parse_id(self, id):
         """
@@ -159,6 +168,16 @@ class TestNewFeature(unittest.TestCase):
 
         QTest.qWait(500)
         iface.dlg_create_new.close()
+
+    def xml_to_select_index(self, xmlstring):
+
+        root = ET.fromstring(xmlstring)
+        select_index = {}
+        count = 0
+        for option in root.findall("option"):
+            select_index[option.text] = {"index": count, "value": option.items()[0][1]}
+            count += 1
+        return select_index
 
     @staticmethod
     def format_console_log(msg):
@@ -382,7 +401,7 @@ class TestNewFeature(unittest.TestCase):
         HTML represents the editable form
         """
 
-        self.init_edit_feature()
+        self.init_feature()
 
         # Check edit text is enabled in form
 
@@ -414,7 +433,7 @@ class TestNewFeature(unittest.TestCase):
         Edit the features "process" value
         """
 
-        self.init_edit_feature()
+        self.init_feature()
 
         # Check the DB 'process' value
         db_feature_record = self.data_handler.get_name_by_id(self.name_id)
@@ -513,7 +532,7 @@ class TestNewFeature(unittest.TestCase):
         Edit the features "name" value
         """
 
-        self.init_edit_feature()
+        self.init_feature()
 
         # Feature name as per UI
         header = self.html_doc.findFirst("div.data h1").toPlainText()
@@ -554,7 +573,7 @@ class TestNewFeature(unittest.TestCase):
         Add an "other name" for the feature
         """
 
-        self.init_edit_feature()
+        self.init_feature()
 
         # Click "Create new name for this feature" Btn (there must be a better
         # way to reference this)
@@ -582,7 +601,7 @@ class TestNewFeature(unittest.TestCase):
 
     def test_J_edit_description(self):
 
-        self.init_edit_feature()
+        self.init_feature()
 
         # Click description edit btn
         self.html_doc.findAll("div a")[8].evaluateJavaScript("this.click()")
@@ -664,7 +683,7 @@ class TestNewFeature(unittest.TestCase):
 
     # def test_K_edit_coordinates(self):
 
-    #     self.init_edit_feature()
+    #     self.init_feature()
 
     #     # Click description edit btn
     #     html_doc.findAll("div a")[10].evaluateJavaScript("this.click()")
@@ -679,7 +698,7 @@ class TestNewFeature(unittest.TestCase):
     #     # TODO// FAILING see - https://github.com/linz/gazetteer/issues/151
 
     def test_L_edit_feature_annotation(self):
-        self.init_edit_feature()
+        self.init_feature()
 
         # Click annotations edit btn
         self.html_doc.findAll("div a")[11].evaluateJavaScript("this.click()")
@@ -736,7 +755,7 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(db_annotation_record[0][3], "An annotation")
 
     def test_M_edit_event(self):
-        self.init_edit_feature()
+        self.init_feature()
 
         # Click annotations edit btn
         self.html_doc.findAll("div a")[12].evaluateJavaScript("this.click()")
@@ -884,18 +903,8 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(db_event_record[0][5], "1995 (94) p.213")
         self.assertEqual(db_event_record[0][6], "A New Note")
 
-    def xml_to_select_index(self, xmlstring):
-
-        root = ET.fromstring(xmlstring)
-        select_index = {}
-        count = 0
-        for option in root.findall("option"):
-            select_index[option.text] = {"index": count, "value": option.items()[0][1]}
-            count += 1
-        return select_index
-
     def test_N_edit_name_annotation(self):
-        self.init_edit_feature()
+        self.init_feature()
 
         # Click annotations edit btn
         self.html_doc.findAll("div a")[13].evaluateJavaScript("this.click()")
@@ -973,33 +982,125 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(db_annotation_record[0][2], "MRIN")
         self.assertEqual(db_annotation_record[0][3], "Yes")
 
-    # def test_O_edit_associations(self):
-    #     # Create the feature we will associated with
-    #     self.init_edit_feature(feature_name="Ashburton")
-    #     self.init_edit_feature()
+    def test_O_edit_associations(self):
+        # Create the feature we will associated with
+        self.init_feature(feature_name="Ashburton", enable_edit=False)
 
-    #     # tabs.setCurrentIndex(0)
-    #     search_table = (
-    #         self.gazetteer_plugin._editor._searchWindow.widget().uSearchResults
-    #     )
-    #     self.assertEqualassert(
-    #         self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(0), "Search"
-    #     )
-    #     self.gazetteer_plugin._editor.findChildren(QTabBar)[1].setCurrentIndex(0)
+        self.init_feature()
+        feat_id_from = self.feat_id
 
-    #     # Click the Search Button
-    #     self.gazetteer_plugin._editor._searchWindow.widget().uSearchButton.triggered
+        # Bring search Tab to the front
+        self.gazetteer_plugin._editor.findChildren(QTabBar)[1].setCurrentIndex(0)
 
-    #     # Set the search Text
-    #     search_table.setText("ashburton")
+        self.assertEqual(
+            self.gazetteer_plugin._editor.findChildren(QTabBar)[1].tabText(0), "Search"
+        )
 
-    #     # Get ref to record
-    #     search_table.model().index(1, 0).data()
+        # Get reference to the search widget
+        search_widget = self.gazetteer_plugin._editor._searchWindow.widget()
 
-    #     # # Get data
-    #     result = (
-    #         self.gazetteer_plugin._editor._searchWindow.widget()
-    #         .uSearchResults.model()
-    #         .index(1, 0)
-    #     )
-    #     self.assertEqual(result.data(), "Ashburton")
+        # Get reference to the tableview
+        search_table = search_widget.uSearchResults
+
+        # Set the search Text
+        search_widget.uSearchText.setText("Ashburton")
+
+        # Click the Search Button
+        search_widget.uSearchButton.animateClick()
+        QTest.qWait(500)
+
+        # Check first record is Ashburton
+        data_at_index = search_table.model().index(0, 0).data()
+        self.assertEqual(data_at_index, "Ashburton")
+
+        # Get the name_id for the item at the search result index 0
+        name_id = search_table.itemAt(0)["name_id"]
+
+        # Shift click on the record
+        search_widget.nameSelected.emit(name_id, 0)
+        QTest.qWait(300)
+
+        # Get HTML Doc
+        # remember there are now two
+        self.web_view = self.get_web_view(1)
+        self.html_doc = self.web_view.page().mainFrame().documentElement().document()
+        # Get the feature Id for the feature opened via the search table
+        feat_id_to = self.parse_id(
+            self.html_doc.findFirst('div[class="idblock"]').toPlainText().strip(" ")
+        )[1]
+
+        # Click the edit button
+        self.html_doc.findFirst("input[name=Edit]").evaluateJavaScript("this.click()")
+        QTest.qWait(500)
+
+        # Click the Create new association href"
+        self.html_doc.findAll("div a")[14].evaluateJavaScript("this.click()")
+
+        # Check the select value is not - "FAST_R_SBRB" (we will change it to this)
+        with CaptureStdOut() as stdout:
+            self.html_doc.findFirst('select[name="assoc_type"]').evaluateJavaScript(
+                "console.log(this.value)"
+            )
+
+        self.assertNotEqual(self.format_console_log(stdout[0]), "FAST_R_SBRB")
+
+        # Get an mapping of select item's text and index
+        xmlstring = self.html_doc.findFirst('select[name="assoc_type"]').toOuterXml()
+        select_index = self.xml_to_select_index(xmlstring)
+
+        # using the index value to change the features annotation_type to LDIS
+        update_index_value = select_index["This feature has suburb"]["index"]
+
+        js_update_index = f"this.selectedIndex={update_index_value}; this.dispatchEvent(new Event('change'))"
+
+        # Perform selectedIndex update
+        self.html_doc.findFirst('select[name="assoc_type"]').evaluateJavaScript(
+            js_update_index
+        )
+
+        # Check the select changed
+        with CaptureStdOut() as stdout:
+            self.html_doc.findFirst('select[name="assoc_type"]').evaluateJavaScript(
+                "console.log(this.value)"
+            )
+
+        self.assertEqual(self.format_console_log(stdout[0]), "FAST_R_SBRB")
+
+        # Get an mapping of name_id_to select item's text and index
+        xmlstring = self.html_doc.findFirst('select[name="name_id_to"]').toOuterXml()
+        select_index_name_id_to = self.xml_to_select_index(xmlstring)
+
+        # Check the name_id_to select is as expected
+        with CaptureStdOut() as stdout:
+            self.html_doc.findFirst('select[name="name_id_to"]').evaluateJavaScript(
+                "console.log(this.value)"
+            )
+        print(select_index_name_id_to)
+        self.assertEqual(
+            select_index_name_id_to["Ashburton Folks"]["value"],
+            self.format_console_log(stdout[0]),
+        )
+
+        # Click Save
+        self.html_doc.findFirst("input[name=Save]").evaluateJavaScript("this.click()")
+        QTest.qWait(700)
+
+        # Get Ref to the new HTML doc in the new webview
+        self.web_view = self.get_web_view(1)
+        self.html_doc = self.web_view.page().mainFrame().documentElement().document()
+
+        # Check for that "This feature is a suburb of ... \n"
+        self.assertEqual(
+            self.html_doc.findFirst('div[class="editable-item can-delete"]')
+            .findFirst("p")
+            .toPlainText(),
+            "This feature has suburb Ashburton Folks",
+        )
+
+        # Check the database reflects this relationship
+        db_feat_association_record = self.data_handler.get_feat_association_by_id(
+            feat_id_from
+        )
+        self.assertEqual(db_feat_association_record[0][1], feat_id_from)
+        self.assertEqual(db_feat_association_record[0][2], feat_id_to)
+        self.assertEqual(db_feat_association_record[0][3], "SBRB")
