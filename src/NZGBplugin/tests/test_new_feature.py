@@ -88,6 +88,8 @@ class TestNewFeature(unittest.TestCase):
         """
         Runs before each test.
         """
+        cls.default_lat = -41.555556
+        cls.default_lon = 174.555556
         cls.html_doc = None
         cls.web_view = None
         cls.feat_id = None
@@ -99,15 +101,21 @@ class TestNewFeature(unittest.TestCase):
         pass
 
     def init_feature(
-        self,
-        feature_name="Ashburton Folks",
-        feature_x=169.8269,
-        feature_y=-44.2000,
-        enable_edit=True,
+        self, feature_name="Ashburton Folks", lat=None, lon=None, enable_edit=True
     ):
+        """
+        As well as clicking on the mapcanvas and filling out
+        the new feature form the method also gets reference to the
+        new feature HTML and can trigger its edit mode
+        """
+
+        if lat is None:
+            lat = self.default_lat
+        if lon is None:
+            lon = self.default_lon
 
         self.name_id, self.feat_id = None, None
-        self.trigger_new_feature_dlg(feature_x, feature_y)
+        self.trigger_new_feature_dlg(lat, lon)
         iface.dlg_create_new.uFeatName.setText(feature_name)
         iface.dlg_create_new.accept()
         QTest.qWait(300)
@@ -126,7 +134,29 @@ class TestNewFeature(unittest.TestCase):
             self.html_doc.findFirst("input[name=Edit]").evaluateJavaScript(
                 "this.click()"
             )
-            QTest.qWait(500)
+            QTest.qWait(300)
+
+    def trigger_new_feature_dlg(self, lat, lon):
+        """
+        Clicks on the map canvas and triggers the new feature dlg
+        """
+
+        self.gazetteer_plugin._newfeat.trigger()
+        widget = iface.mapCanvas().viewport()
+        canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
+        QTest.mouseClick(
+            widget, Qt.LeftButton, pos=canvas_point(QgsPointXY(lon, lat)), delay=0
+        )
+        QTest.qWait(500)
+
+        # Hack. The toCanvasCoordinates method is causing rounding issues
+        # when the coords are translated from the QgsPoint to a QT QPoint
+        # and then back again. We are not setting out to test the QGIS
+        # click functionality but rather the plugin therefore this hack is
+        # acceptable to provide coords to the plugin functionality that we can
+        # consistently validate through plugin opperation
+        iface.dlg_create_new.uLongitude.setText(str(lon))
+        iface.dlg_create_new.uLatitude.setText(str(lat))
 
     def get_web_view(self, index=0):
         """
@@ -147,19 +177,6 @@ class TestNewFeature(unittest.TestCase):
         p = re.compile(r"(?P<name_id>[0-9]*)\/(?P<feat_id>[0-9]*)")
         m = p.search(id)
         return int(m.group("name_id")), int(m.group("feat_id"))
-
-    def trigger_new_feature_dlg(self, x=174.76318, y=-41.28338):
-        """
-        Clicks on the map canvas and triggers the new feature dlg
-        """
-
-        self.gazetteer_plugin._newfeat.trigger()
-        widget = iface.mapCanvas().viewport()
-        canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
-        QTest.mouseClick(
-            widget, Qt.LeftButton, pos=canvas_point(QgsPointXY(x, y)), delay=0
-        )
-        QTest.qWait(1000)
 
     def close_new_feature_dlg(self):
         """
@@ -196,7 +213,7 @@ class TestNewFeature(unittest.TestCase):
         """
 
         # Mimic user selecting new feature tool
-        self.trigger_new_feature_dlg()
+        self.trigger_new_feature_dlg(self.default_lat, self.default_lon)
         self.assertEquals(iface.dlg_create_new.uFeatName.text(), "")
         self.close_new_feature_dlg()
 
@@ -206,7 +223,7 @@ class TestNewFeature(unittest.TestCase):
         user when no name is provided
         """
 
-        self.trigger_new_feature_dlg()
+        self.trigger_new_feature_dlg(self.default_lat, self.default_lon)
         iface.dlg_create_new.accept()
         QTest.qWait(500)
 
@@ -224,7 +241,7 @@ class TestNewFeature(unittest.TestCase):
         Ensure error thrown when an invalid longitude is supplied
         """
 
-        self.trigger_new_feature_dlg()
+        self.trigger_new_feature_dlg(self.default_lat, self.default_lon)
 
         # Set new feature values
         iface.dlg_create_new.uFeatName.setText("test123")
@@ -266,11 +283,9 @@ class TestNewFeature(unittest.TestCase):
 
         # The New Feature to use for the test
         feature_name = "Ashburton Folks"
-        feature_x = 169.82699229328563
-        feature_y = -44.200093724057346
 
         # Trigger the new feature dlg and populated it
-        self.trigger_new_feature_dlg(feature_x, feature_y)
+        self.init_feature(enable_edit=False)
         iface.dlg_create_new.uFeatName.setText(feature_name)
         iface.dlg_create_new.accept()
         QTest.qWait(500)
@@ -328,20 +343,16 @@ class TestNewFeature(unittest.TestCase):
         description = data_div_paragraphs[7].toPlainText()
         self.assertEqual(description, "Description:")
 
-        # To do// Must be investigated
-        # These lat/long values are not mapped
-        # through to the form consistently
-        # See - https://github.com/linz/gazetteer/issues/149
-        # # Check lat_lon value
-        # lat_lon = data_div_paragraphs[8].toPlainText()
-        # self.assertEqual(
-        #     lat_lon,
-        #     "Longitude/latitude: 169 49 37.9E 44 11 59.7S (169.827208 -44.199921)",
-        # )
+        # Check lat_lon value
+        lat_lon = data_div_paragraphs[8].toPlainText()
+        self.assertEqual(
+            lat_lon,
+            f"Longitude/latitude: 174 33 20.0E 41 33 20.0S ({self.default_lon} {self.default_lat})",
+        )
 
-        # # Check NZTM value
-        # nztm = data_div_paragraphs[9].toPlainText()
-        # self.assertEqual(nztm, "NZTM: 1346435.5 5101010.0")
+        # Check NZTM value
+        nztm = data_div_paragraphs[9].toPlainText()
+        self.assertEqual(nztm, "NZTM: 1729721.9 5398399.7")
 
         # Check header (Feature information)
         subheader = subheaders[2].toPlainText()
