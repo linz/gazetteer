@@ -1,7 +1,6 @@
 import os
 import json
 
-
 from .database import Database
 
 
@@ -36,7 +35,14 @@ class TestDataHandler:
         """
 
         for codes in self.data[self.table_sys_code]:
-            insert_statement = f"INSERT INTO {self.table_sys_code} VALUES ('{codes['code_group']}', '{codes['code']}','{codes['category']}', '{codes['value']}', '{codes['description']}', '{codes['updated_by']}', '{codes['update_date']}')"
+            insert_statement = f"""INSERT INTO {self.table_sys_code}
+                                    VALUES ('{codes['code_group']}',
+                                    '{codes['code']}',
+                                    '{codes['category']}',
+                                    '{codes['value']}',
+                                    '{codes['description']}',
+                                    '{codes['updated_by']}',
+                                    '{codes['update_date']}')"""
             self.db.execute(insert_statement)
 
     def delete_sys_codes(self):
@@ -55,19 +61,25 @@ class TestDataHandler:
 
             self.db.execute(delete_statement)
 
-    def last_added_feature(self):
+    def get_last_added_name(self):
         """
         Using the PK get the last featured add to the DB
         """
 
-        last_added_feature_statement = f"""
-            SELECT name_id, feat_id, name, process, status, updated_by, update_date
+        last_added_name_statement = f"""
+            SELECT  name_id,
+                    feat_id,
+                    name,
+                    process,
+                    status,
+                    updated_by,
+                    update_date
             FROM gazetteer.name
-            ORDER BY feat_id DESC
+            ORDER BY name_id DESC
             LIMIT 1
             """
 
-        return self.db.select(last_added_feature_statement)
+        return self.db.select(last_added_name_statement)
 
     def get_name_by_id(self, name_id):
         """
@@ -75,7 +87,13 @@ class TestDataHandler:
         """
 
         names = f"""
-            SELECT name_id, feat_id, name, process, status, updated_by, update_date
+            SELECT  name_id,
+                    feat_id,
+                    name,
+                    process,
+                    status,
+                    updated_by,
+                    update_date
             FROM gazetteer.name
             WHERE name_id = '{name_id}'
             ORDER BY name_id DESC
@@ -89,7 +107,13 @@ class TestDataHandler:
         """
 
         features = f"""
-            SELECT feat_id, feat_type, status, description, updated_by, update_date,ref_point
+            SELECT  feat_id,
+                    feat_type,
+                    status,
+                    description,
+                    updated_by,
+                    update_date,
+                    ST_AsEWKT(ref_point)
             FROM gazetteer.feature
             WHERE feat_id = '{feat_id}'
             ORDER BY feat_id DESC
@@ -103,7 +127,12 @@ class TestDataHandler:
         """
 
         annotations = f"""
-        SELECT annot_id, feat_id, annotation_type, annotation, updated_by, update_date
+        SELECT  annot_id,
+                feat_id,
+                annotation_type,
+                annotation,
+                updated_by,
+                update_date
         FROM gazetteer.feature_annotation
         WHERE feat_id = '{feat_id}'
         ORDER BY  feat_id DESC
@@ -117,8 +146,15 @@ class TestDataHandler:
         """
 
         events = f"""
-        SELECT event_id, name_id, event_date, event_type, authority, event_reference,
-        notes, updated_by, update_date
+        SELECT  event_id,
+                name_id,
+                event_date,
+                event_type,
+                authority,
+                event_reference,
+                notes,
+                updated_by,
+                update_date
         FROM gazetteer.name_event
         WHERE name_id = '{name_id}'
         """
@@ -131,7 +167,12 @@ class TestDataHandler:
         """
 
         annotations = f"""
-        SELECT annot_id, name_id, annotation_type, annotation, updated_by, update_date
+        SELECT  annot_id,
+                name_id,
+                annotation_type,
+                annotation,
+                updated_by,
+                update_date
         FROM gazetteer.name_annotation
         WHERE name_id = '{name_id}'
         ORDER BY  name_id DESC
@@ -145,7 +186,12 @@ class TestDataHandler:
         """
 
         association = f"""
-        SELECT assoc_id, feat_id_from, feat_id_to, assoc_type, updated_by, update_date
+        SELECT  assoc_id,
+                feat_id_from,
+                feat_id_to,
+                assoc_type,
+                updated_by,
+                update_date
         FROM gazetteer.feature_association
         WHERE feat_id_from = '{feat_id}'
         ORDER BY  assoc_id DESC

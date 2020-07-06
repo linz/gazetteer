@@ -41,13 +41,16 @@ class TestNewFeature(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """
+        Runs before test suite exec
+        """
 
-        # insert required sys_codes to allow new feature creation
+        # Insert required sys_codes to allow new feature creation
         cls.data_handler = TestDataHandler()
         cls.data_handler.insert_sys_codes()
 
-        # when running in QGIS via the script assistant
-        # Plugin but setting a voluntary_wait > 0 the tester
+        # When running in QGIS via the script assistant
+        # Plugin by setting a voluntary_wait > 0 the tester
         # can see the tests run in a way that is visually followable.
         cls.voluntary_wait = 1000
 
@@ -61,7 +64,7 @@ class TestNewFeature(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         """
-        runs at TestCase teardown.
+        Runs after test suite exec
         """
         # Reset the plugin state so next tests start
         # With a plugin state
@@ -73,13 +76,13 @@ class TestNewFeature(unittest.TestCase):
         # As not to end up with duplicates when each suite run
         cls.gazetteer_plugin._editorDock.close()
 
-        # removed required sys_codes when finished
-        # cls.data_handler.delete_sys_codes() # TEMP Commented out
+        # Removed required sys_codes when finished
+        cls.data_handler.delete_sys_codes()
 
         # Remove all layers
         QgsProject.instance().removeAllMapLayers()
 
-        # And groups
+        # And layer groups
         root = QgsProject.instance().layerTreeRoot()
         for group in [child for child in root.children() if child.nodeType() == 0]:
             root.removeChildNode(group)
@@ -88,6 +91,8 @@ class TestNewFeature(unittest.TestCase):
         """
         Runs before each test.
         """
+
+        # Set generic test values
         cls.default_lat = -41.555556
         cls.default_lon = 174.555556
         cls.html_doc = None
@@ -138,7 +143,7 @@ class TestNewFeature(unittest.TestCase):
 
     def trigger_new_feature_dlg(self, lat, lon):
         """
-        Clicks on the map canvas and triggers the new feature dlg
+        Click on the map canvas and triggers the new feature dlg
         """
 
         self.gazetteer_plugin._newfeat.trigger()
@@ -155,6 +160,7 @@ class TestNewFeature(unittest.TestCase):
         # click functionality but rather the plugin therefore this hack is
         # acceptable to provide coords to the plugin functionality that we can
         # consistently validate through plugin opperation
+        # - Zooming in closer prior will resolve some of the inaccuracies
         iface.dlg_create_new.uLongitude.setText(str(lon))
         iface.dlg_create_new.uLatitude.setText(str(lat))
 
@@ -187,6 +193,10 @@ class TestNewFeature(unittest.TestCase):
         iface.dlg_create_new.close()
 
     def xml_to_select_index(self, xmlstring):
+        """
+        Takes an HTML select and returns an index for the options
+        returns: {<option text>: {index: <position>, value <option_vaule>}}
+        """
 
         root = ET.fromstring(xmlstring)
         select_index = {}
@@ -390,13 +400,9 @@ class TestNewFeature(unittest.TestCase):
         )
 
         # Check the database record exists for the id
-        newest_feat = self.data_handler.last_added_feature()
-        self.assertEqual(
-            newest_feat[0][2], feature_name
-        )  # [first record][feature_name column]
-        self.assertEqual(
-            newest_feat[0][0], name_id
-        )  # [first record][feature_id column]
+        newest_feat = self.data_handler.get_last_added_name()
+        self.assertEqual(newest_feat[0][2], feature_name)
+        self.assertEqual(newest_feat[0][0], name_id)
 
         # Check the edit elements are not visible to the QWebView
         self.assertFalse(self.web_view.findText("Edit name"))
@@ -430,6 +436,7 @@ class TestNewFeature(unittest.TestCase):
             self.assertTrue(
                 self.web_view.findText(text, QWebPage.HighlightAllOccurrences)
             )
+
             # Just for visual output when monitoring live in QGIS
             QTest.qWait(self.voluntary_wait)
 
@@ -496,7 +503,7 @@ class TestNewFeature(unittest.TestCase):
         db_feature_record = self.data_handler.get_name_by_id(self.name_id)
         self.assertEqual(db_feature_record[0][3], "FATR")
 
-        # Part-2: Check and edit that name status in this same test
+        # Part-2: Check and edit the name status in this same test
         # as status is tied to process type
         self.web_view = self.get_web_view()
         self.html_doc = self.web_view.page().mainFrame().documentElement().document()
@@ -586,8 +593,7 @@ class TestNewFeature(unittest.TestCase):
 
         self.init_feature()
 
-        # Click "Create new name for this feature" Btn (there must be a better
-        # way to reference this)
+        # Click "Create new name for this feature" Btn
         self.html_doc.findAll("a")[6].evaluateJavaScript("this.click()")
 
         # add new name
@@ -595,13 +601,10 @@ class TestNewFeature(unittest.TestCase):
             """this.value = 'Something Else'; this.dispatchEvent(new Event('change'))"""
         )
 
-        # save
-        self.html_doc.findFirst('input[id="other_name"]').evaluateJavaScript(
-            "this.blur()"
-        )
+        # save the edit
         self.html_doc.findFirst("input[name=Save]").evaluateJavaScript("this.click()")
 
-        # Check it is displayed
+        # Check the new "other" record is displayed
         # Get the HTML document
         self.web_view = self.get_web_view()
         self.html_doc = self.web_view.page().mainFrame().documentElement().document()
@@ -610,7 +613,14 @@ class TestNewFeature(unittest.TestCase):
             self.html_doc.findAll("p")[4].toPlainText(), "Something Else (Proposed)"
         )
 
+        # Check the database record exists
+        newest_feat = self.data_handler.get_last_added_name()
+        self.assertEqual(newest_feat[0][2], "Something Else")
+
     def test_J_edit_description(self):
+        """
+        Edit the features description
+        """
 
         self.init_feature()
 
@@ -692,23 +702,61 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(db_feature_record[0][1], "FORD")
         self.assertEqual(db_feature_record[0][3], "A new water feature")
 
-    # def test_K_edit_coordinates(self):
+    def test_K_edit_coordinates(self):
+        """
+        Edit the features coordinates
+        """
 
-    #     self.init_feature()
+        self.init_feature()
 
-    #     # Click description edit btn
-    #     html_doc.findAll("div a")[10].evaluateJavaScript("this.click()")
+        # Check the coords are as expected - We will soon check they change
+        self.assertEqual(
+            self.html_doc.findAll("div p")[8].toPlainText(),
+            "Longitude/latitude: 174 33 20.0E 41 33 20.0S (174.555556 -41.555556)",
+        )
 
-    #     # Add new cords
-    #     html_doc.findFirst(
-    #         f"""input[id="Feature_{feat_id}.setLocation"]"""
-    #     ).evaluateJavaScript(
-    #         """this.value = '1343461.3 5098601.0'; this.dispatchEvent(new Event('change'))"""
-    #     )
+        self.assertEqual(
+            self.html_doc.findAll("div p")[9].toPlainText(), "NZTM: 1729721.9 5398399.7"
+        )
 
-    #     # TODO// FAILING see - https://github.com/linz/gazetteer/issues/151
+        # Click edit coords btn
+        self.html_doc.findAll("div a")[10].evaluateJavaScript("this.click()")
+
+        # Add new cords
+        self.html_doc.findFirst(
+            f"""input[id="Feature_{self.feat_id}.setLocation"]"""
+        ).evaluateJavaScript(
+            """this.value = '174.66666666 -41.6666666'; this.dispatchEvent(new Event('change'))"""
+        )
+
+        # Click Save
+        self.html_doc.findFirst("input[name=Save]").evaluateJavaScript("this.click()")
+        QTest.qWait(700)
+
+        # Test the HTML updated
+        self.web_view = self.get_web_view()
+        self.html_doc = self.web_view.page().mainFrame().documentElement().document()
+
+        # Check the coords updated in the HTML
+        self.assertEqual(
+            self.html_doc.findAll("div p")[8].toPlainText(),
+            "Longitude/latitude: 174 39 60.0E 41 39 60.0S (174.666667 -41.666667)",
+        )
+
+        self.assertEqual(
+            self.html_doc.findAll("div p")[9].toPlainText(), "NZTM: 1738749.7 5385890.5"
+        )
+
+        # Check the DB value
+        db_feature_record = self.data_handler.get_feature_by_id(self.feat_id)
+        self.assertEqual(
+            db_feature_record[0][6], "SRID=4167;POINT(174.66666666 -41.6666666)"
+        )
 
     def test_L_edit_feature_annotation(self):
+        """
+        Edit the feature annotation
+        """
         self.init_feature()
 
         # Click annotations edit btn
@@ -766,9 +814,13 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(db_annotation_record[0][3], "An annotation")
 
     def test_M_edit_event(self):
+        """
+        Edit the features event
+        """
+
         self.init_feature()
 
-        # Click annotations edit btn
+        # Click event edit btn
         self.html_doc.findAll("div a")[12].evaluateJavaScript("this.click()")
 
         # Check value is not already "NZGB/New Zealand Geographic Board"
@@ -882,8 +934,7 @@ class TestNewFeature(unittest.TestCase):
             "",
         )
 
-        # A notes
-
+        # Edit event notes
         self.html_doc.findFirst(f"""textarea[name="notes"]""").evaluateJavaScript(
             """this.value = 'A New Note'; this.dispatchEvent(new Event('change'))"""
         )
@@ -915,6 +966,10 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(db_event_record[0][6], "A New Note")
 
     def test_N_edit_name_annotation(self):
+        """
+        Edit the features name annotation
+        """
+
         self.init_feature()
 
         # Click annotations edit btn
@@ -994,6 +1049,10 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(db_annotation_record[0][3], "Yes")
 
     def test_O_edit_associations(self):
+        """
+        Create a name association
+        """
+
         # Create the feature we will associated with
         self.init_feature(feature_name="Ashburton", enable_edit=False)
 
