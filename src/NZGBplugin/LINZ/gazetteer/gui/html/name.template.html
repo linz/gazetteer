@@ -59,13 +59,13 @@
     <!--(end)-->
     <div class="edit-new-template object-type" id="new_name_template" object_type="Name">
         <p>To create a new name for this feature enter the name below and save the edits.  You can then select the name and update its status, events, and annotations.</p>
-        <input type="hidden" name="_item_type_name" value="name for this feature" />
+        <input type="hidden" name="_item_type_name" value="name for this feature" id="new_name"/>
         <input type="hidden" class="edit-value" name="feat_id" value="@!name.feature.feat_id!@" />
         <input type="hidden" class="edit-value" name="status" value="UNEW" />
         <div class="form_row">
             <span class="form_label">Name: </span>
             <div class="form_row_input">
-                <input type="text" name="name" class="edit-value fill" />
+                <input type="text" name="name" class="edit-value fill" id="other_name" />
             </div>
         </div>
      </div>

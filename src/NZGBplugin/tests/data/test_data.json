@@ -1,0 +1,197 @@
+{
+  "gazetteer.system_code": [
+    {
+      "code_group": "FCLS",
+      "code": "PLAC",
+      "category": "",
+      "value": "NZ - Place",
+      "description": "",
+      "updated_by": "gazdba",
+      "update_date": "2013-04-15 07:23:05.693"
+    },
+    {
+      "code_group": "FTYP",
+      "code": "LCLT",
+      "category": "PLAC",
+      "value": "Locality",
+      "description": "",
+      "updated_by": "gazdba",
+      "update_date": "2013-04-15 07:23:05.693"
+    },
+    {
+      "code_group": "FCLS",
+      "code": "WATR",
+      "category": "",
+      "value": "NZ - Water",
+      "description": "",
+      "updated_by": "ccrook-u",
+      "update_date": "2013-04-15 07:23:05.693"
+    },
+    {
+      "code_group": "FTYP",
+      "code": "FORD",
+      "category": "WATR",
+      "value": "Ford",
+      "description": "",
+      "updated_by": "ccrook-u",
+      "update_date": "2013-04-15 07:23:05.693"
+    },
+    {
+      "code_group": "NPRO",
+      "code": "FATR",
+      "category": "",
+      "value": "Fast Track Recorded",
+      "description": "NZGB Act 2008 ss.24, 21",
+      "updated_by": "gazetteer_admin",
+      "update_date": "  2013-04-15 07:23:06.068"
+    },
+    {
+      "code_group": "NPRO",
+      "code": "VAAN",
+      "category": "",
+      "value": "Validation Antarctica",
+      "description": "NZGB Act 2008 s.35",
+      "updated_by": "blah",
+      "update_date": "  2013-04-15 07:23:06.068"
+    },
+    {
+      "code_group": "NPRO",
+      "code": "STUN",
+      "category": "",
+      "value": "Standard Undersea",
+      "description": "NZGB Act 2008 ss.15-21",
+      "updated_by": "gazetteer_admin",
+      "update_date": "  2013-04-15 07:23:06.068"
+    },
+    {
+      "code_group": "NPRO",
+      "code": "UNAN",
+      "category": "",
+      "value": "Undersea Adopted NZ",
+      "description": "NZGB Act 2008 ss.26",
+      "updated_by": "gazetteer_admin",
+      "update_date": "  2013-04-15 07:23:06.068"
+    },
+    {
+      "code_group": "CODE",
+      "code": "NPRO",
+      "category": "PLAC",
+      "value": "Locality",
+      "description": "",
+      "updated_by": "gazdba",
+      "update_date": "2013-04-15 07:23:05.693"
+    },
+    {
+      "code_group": "NSTS",
+      "code": "UNEW",
+      "category": "NPUB",
+      "value": "Proposed",
+      "description": "",
+      "updated_by": "wshaw",
+      "update_date": "2013-11-06 16:20:06.831"
+    },
+    {
+      "code_group": "CODE",
+      "code": "NSTS",
+      "category": "USER",
+      "value": "Name status - see also NSTO code group",
+      "description": "",
+      "updated_by": "wshaw",
+      "update_date": "2013-11-06 16:20:06.831"
+    },
+    {
+      "code_group": "CUSG",
+      "code": "NPRO",
+      "category": "USER",
+      "value": "Name process - legislation/process under which name is managed",
+      "description": "",
+      "updated_by": "wshaw",
+      "update_date": "2013-11-06 16:20:06.831"
+    },
+    {
+      "code_group": "NSTS",
+      "code": "MRNM",
+      "category": "NPUB",
+      "value": "Minimum Requirements Not Met",
+      "description": "Minimum Requirements Not Met",
+      "updated_by": "lunderhill-sem",
+      "update_date": "2013-06-17 11:11:46.559"
+    },
+    {
+      "code_group": "NSTS",
+      "code": "UDIS",
+      "category": "UOFC",
+      "value": "Discontinued",
+      "description": "Discontinued",
+      "updated_by": "gazetteer_admin",
+      "update_date": "2013-04-15 07:23:06.115"
+    },
+    {
+      "code_group": "NSTS",
+      "code": "UREC",
+      "category": "UOFC",
+      "value": "Recorded",
+      "description": "Recorded",
+      "updated_by": "gazetteer_admin",
+      "update_date": "2013-04-15 07:23:06.115"
+    },
+    {
+      "code_group": "NSTS",
+      "code": "OAPP",
+      "category": "OFFC",
+      "value": "Approved",
+      "description": "Approved",
+      "updated_by": "gazetteer_admin",
+      "update_date": "2013-04-15 07:23:06.115"
+    },
+    {
+      "code_group": "CODE",
+      "code": "NPST",
+      "category": "USER",
+      "value": "Valid status values for each process",
+      "description": "",
+      "updated_by": "wshaw",
+      "update_date": "2013-11-06 16:20:06.831"
+    },
+    {
+      "code_group": "NPST",
+      "code": "UREP",
+      "category": "UOFC",
+      "value": "Replaced",
+      "description": "Replaced",
+      "updated_by": "wshaw",
+      "update_date": "2014-08-08 15:16:54.91"
+    },
+    {
+      "code_group": "NPST",
+      "code": "FATR",
+      "category": "",
+      "value": "OAPP UDIS MRNM UREC UREP",
+      "description": "Valid statuses for process Fast Track Recorded",
+      "updated_by": "wshaw",
+      "update_date": "2014-08-08 15:16:54.91"
+    }
+  ],
+  "gazetteer.place_names": [
+    {
+      "name": "A Hill",
+      "code": "PLAC",
+      "geom": "POINT(174.85193754181844 -37.796524856134)"
+    },
+    {
+      "name": "A Islands",
+      "code": "ISLD",
+      "geom": "POINT(174.85193754181844 -37.796524856134)"
+    },
+    {
+      "name": "A Lake",
+      "code": "LAKE",
+      "geom": "POINT(174.85193754181844 -37.796524856134)"
+    },
+    {
+      "name": "A Glacier",
+      "code": "GLCR",
+      "geom": "POINT(174.85193754181844 -37.796524856134)"
+    }
+  ]
+}

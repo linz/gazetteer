@@ -13,8 +13,8 @@
 from builtins import str
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from qgis.core import *
 from PyQt5.QtWidgets import *
+from qgis.core import *
 
 
 from .LINZ.gazetteer.gui.Controller import Controller
@@ -25,15 +25,15 @@ from .Ui_NewFeatureDialog import Ui_NewFeatureDialog
 
 class NewFeatureDialog(QDialog, Ui_NewFeatureDialog):
     @staticmethod
-    def createNewFeature(lon, lat, controller):
-        dlg = NewFeatureDialog()
-        dlg.setLocation(lon, lat)
-        if dlg.exec_() == QDialog.Accepted:
-            pointwkt = dlg.getLocationWkt()
-            controller.createNewFeature(dlg.featureName(), dlg.featureType(), pointwkt)
+    def createNewFeature(lon, lat, controller, iface):
+        iface.dlg_create_new = NewFeatureDialog(iface, controller)
+        iface.dlg_create_new.setLocation(lon, lat)
+        iface.dlg_create_new.show()
 
-    def __init__(self, parent=None):
+    def __init__(self, iface, controller, parent=None):
         QDialog.__init__(self, parent)
+        self.iface = iface
+        self.controller = controller
         self._featname = ""
         self.setupUi(self)
         self.uFeatTypeClass.currentIndexChanged.connect(
@@ -88,7 +88,18 @@ class NewFeatureDialog(QDialog, Ui_NewFeatureDialog):
             errors.append("The latitude must be a number")
 
         if errors:
-            QMessageBox.information(self, "New feature errors", "\n".join(errors))
+            self.iface.messageBar().pushMessage(
+                "New feature errors",
+                "\n".join(errors),
+                level=Qgis.Critical,
+                duration=10,
+            )
+
         else:
-            # feat_type.show()
-            QDialog.accept(self)
+            pointwkt = self.iface.dlg_create_new.getLocationWkt()
+            self.controller.createNewFeature(
+                self.iface.dlg_create_new.featureName(),
+                self.iface.dlg_create_new.featureType(),
+                pointwkt,
+            )
+            self.iface.dlg_create_new.close()

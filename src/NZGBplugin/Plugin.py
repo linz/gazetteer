@@ -18,6 +18,7 @@ import configparser
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from qgis.core import *
 
 from qgis.gui import QgsMapToolEmitPoint
 
@@ -341,15 +342,19 @@ class Plugin(object):
         if point.x() < 0:
             point.setX(point.x() + 360)
         if point.x() > 360 or point.y() < -90 or point.y() > 90:
-            QMessageBox.warning(
-                self._iface.mainWindow(),
+            self._iface.messageBar().pushMessage(
                 "Gazetter location error",
                 "The location selected for the new feature is not at a valid latitude and longitude",
+                level=Qgis.Critical,
+                duration=10,
             )
             return
+
         from .NewFeatureDialog import NewFeatureDialog
 
-        NewFeatureDialog.createNewFeature(point.x(), point.y(), self._controller)
+        NewFeatureDialog.createNewFeature(
+            point.x(), point.y(), self._controller, self._iface
+        )
 
     def _showInfo(self):
         about = [
