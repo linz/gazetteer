@@ -1,12 +1,20 @@
 
 # Contributing to the NZGB Gazetteer App
-To contribute to the project certain standards are enforced and must be follow.
+
+To contribute to the project certain standards are enforced and must
+be follow.
 
 ## Formatting
 
 Formatting is handled by `black`.
 
-[Black](https://github.com/psf/black) is an uncompromising Python code formatting tool. It takes a Python file as an input, and provides a reformatted Python file as an output, using rules that are a strict subset of PEP 8. It offers very little in the way of configuration (line length being the main exception) in order to achieve formatting consistency. It is deterministic - it will always produce the same output from the same inputs.
+[Black](https://github.com/psf/black) is an uncompromising Python3 code
+formatting tool. It takes a Python file as an input, and provides a
+reformatted Python file as an output, using rules that are a strict
+subset of PEP 8. It offers very little in the way of configuration
+(line length being the main exception) in order to achieve formatting
+consistency. It is deterministic - it will always produce the same output
+from the same inputs.
 
 The line length configuration is stored in pyproject.toml.
 
@@ -15,7 +23,8 @@ The line length configuration is stored in pyproject.toml.
 Linting is handled by `pylint`.
 
 [Pylint](https://www.pylint.org/) checks Python files in order to detect
-syntax errors and potential bugs (unreachable code / unused variables), provide refactoring help,
+syntax errors and potential bugs (unreachable code / unused variables),
+provide refactoring help,
 
 The configuration is stored in .pylintrc.
 
@@ -50,7 +59,9 @@ This has the benefit of running git commit-msg checks locally for each commit.
 This ensures that CI does not fail unexpectedly due to commit message formatting.
 
 
-1. [gitlint](https://jorisroovers.com/gitlint/) is required to run git-msg checks locally on every commit.
-`pip install gitlint`
-2. gitlint will use the [.gitlint](.gitlint) configuration settings found in the top level directory of this project.
-3. run `gitlint install-hook` to install the git-hook based on the [.gitlint](.gitlint) configuration
+1. [gitlint](https://jorisroovers.com/gitlint/) is required to run
+   git-msg checks locally on every commit. `pip3 install gitlint`
+2. gitlint will use the [.gitlint](.gitlint) configuration settings
+   found in the top level directory of this project.
+3. run `make gitlint-hook` to install the git-hook based on the
+   [.gitlint](.gitlint) configuration
