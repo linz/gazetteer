@@ -21,8 +21,6 @@ os.environ["PGHOST"] = "db"
 os.environ["PGPORT"] = "5432"
 os.environ["PGDATABASE"] = "gazetteer"
 os.environ["PGSCHEMA"] = "gazetteer"
-os.environ["PGUSER"] = "gazadmin"
-os.environ["PGPASSWORD"] = "gazadmin"
 
 utils.showException = _showException
 utils.open_stack_dialog = _open_stack_dialog
