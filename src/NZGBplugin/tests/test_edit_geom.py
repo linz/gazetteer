@@ -45,23 +45,23 @@ class TestNewFeature(unittest.TestCase):
         # Reset the plugin state so next tests start
         # With a plugin state
 
-        # Reload
-        reloadPlugin("NZGBplugin")
+        # # Reload
+        # reloadPlugin("NZGBplugin")
 
-        # Reload leaves a detached _editorDock - Remove it
-        # As not to end up with duplicates when each suite run
-        cls.gazetteer_plugin._editorDock.close()
+        # # Reload leaves a detached _editorDock - Remove it
+        # # As not to end up with duplicates when each suite run
+        # cls.gazetteer_plugin._editorDock.close()
 
-        # Removed required sys_codes when finished
-        # cls.data_handler.delete_sys_codes()
+        # # Removed required sys_codes when finished
+        # # cls.data_handler.delete_sys_codes()
 
-        # Remove all layers
-        QgsProject.instance().removeAllMapLayers()
+        # # Remove all layers
+        # QgsProject.instance().removeAllMapLayers()
 
-        # And layer groups
-        root = QgsProject.instance().layerTreeRoot()
-        for group in [child for child in root.children() if child.nodeType() == 0]:
-            root.removeChildNode(group)
+        # # And layer groups
+        # root = QgsProject.instance().layerTreeRoot()
+        # for group in [child for child in root.children() if child.nodeType() == 0]:
+        #     root.removeChildNode(group)
 
     def setUp(cls):
         """
@@ -93,12 +93,6 @@ class TestNewFeature(unittest.TestCase):
         iface.dlg_create_new.accept()
         QTest.qWait(1000)
 
-    def get_feature_coords(self):
-        layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
-        iter = layer.getFeatures()
-        feature = next(iter)
-        print(feature.geometry())
-
     def move_point(self, x, y):
 
         widget = iface.mapCanvas().viewport()
@@ -114,29 +108,41 @@ class TestNewFeature(unittest.TestCase):
     def save_geom(self):
         self.gazetteer_plugin._editsave.trigger()
 
-    def test_A_geom_tools_enabled(self):
-        """
-        When a plugin is select in the UI form geom edit button should be enabled
-        The name of the feature should also be shown in the menu bar line edit
-        """
+    @staticmethod
+    def activeModalWindowAccept():
 
-        # Add a feature to test the geom tools against
-        self.init_feature()
+        window = QApplication.instance().activeModalWidget()
+        window.reject()
 
-        # Should be disabled
-        self.assertEquals(self.gazetteer_plugin._editcancel.isEnabled(), False)
-        self.assertEquals(self.gazetteer_plugin._editsave.isEnabled(), False)
-        self.assertEquals(self.gazetteer_plugin._ptraction.isEnabled(), False)
+    @staticmethod
+    def activeModalWindowReject():
 
-        # True
-        self.assertEquals(self.gazetteer_plugin._delselaction.isEnabled(), True)
-        self.assertEquals(self.gazetteer_plugin._addselaction.isEnabled(), True)
-        self.assertEquals(self.gazetteer_plugin._editnew.isEnabled(), True)
-        self.assertEquals(self.gazetteer_plugin._editnodes.isEnabled(), True)
-        self.assertEquals(self.gazetteer_plugin._editshift.isEnabled(), True)
+        window = QApplication.instance().activeModalWidget()
+        window.reject()
 
-        # And check the Qline edit has the feature name populated
-        self.assertEquals(self.gazetteer_plugin._currNameLabel.text(), "Geom_test")
+    # def test_A_geom_tools_enabled(self):
+    #     """
+    #     When a plugin is select in the UI form geom edit button should be enabled
+    #     The name of the feature should also be shown in the menu bar line edit
+    #     """
+
+    #     # Add a feature to test the geom tools against
+    #     self.init_feature()
+
+    #     # Should be disabled
+    #     self.assertEquals(self.gazetteer_plugin._editcancel.isEnabled(), False)
+    #     self.assertEquals(self.gazetteer_plugin._editsave.isEnabled(), False)
+    #     self.assertEquals(self.gazetteer_plugin._ptraction.isEnabled(), False)
+
+    #     # True
+    #     self.assertEquals(self.gazetteer_plugin._delselaction.isEnabled(), True)
+    #     self.assertEquals(self.gazetteer_plugin._addselaction.isEnabled(), True)
+    #     self.assertEquals(self.gazetteer_plugin._editnew.isEnabled(), True)
+    #     self.assertEquals(self.gazetteer_plugin._editnodes.isEnabled(), True)
+    #     self.assertEquals(self.gazetteer_plugin._editshift.isEnabled(), True)
+
+    #     # And check the Qline edit has the feature name populated
+    #     self.assertEquals(self.gazetteer_plugin._currNameLabel.text(), "Geom_test")
 
     def test_B_move_feature(self):
         """
@@ -157,6 +163,13 @@ class TestNewFeature(unittest.TestCase):
         canvas.refresh()
 
         QTest.qWait(500)
+
+        # Test the feature is where expected
+        layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
+        iter = layer.getFeatures()
+        feature = next(iter)
+        self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.55556, places=3)
+        self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.55556, places=3)
 
         widget = iface.mapCanvas().viewport()
         canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
@@ -184,40 +197,96 @@ class TestNewFeature(unittest.TestCase):
         )
         QTest.qWait(1000)
 
-        # The below is non modal and blocking
-        # self.gazetteer_plugin._editsave.trigger()
+        # Test the feature has been moved
+        layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
+        iter = layer.getFeatures()
+        feature = next(iter)
+        self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.56666, places=3)
+        self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.56666, places=3)
 
-    def test_move_feature_and_discard(self):
-        """
-        Move a feature and then discard the edit
-        """
-        # Add a feature to test the geom tools against
-        pass
+        QTimer.singleShot(1000, self.activeModalWindowAccept)
+        self.gazetteer_plugin._editsave.trigger()
 
-    def test_move_feature_and_discard(self):
-        """
-        Move a feature and then discard the edit
-        """
-        pass
+    # def test_C_move_feature_and_discard(self):
+    #     """
+    #     Move a feature and then discard the edit
+    #     """
 
-    def test_move_feature_nodes(self):
-        """
-        Move a features node
-        """
-        pass
+    #     layer = QgsProject.instance().mapLayersByName("Gazetteer feature line")[0]
+    #     iface.setActiveLayer(layer)
 
-    def test_error_capture_point(self):
-        """
-        With no layers selected select the new feature geom tool
-        """
-        pass
+    #     gazetteer_plugin = plugins.get("NZGBplugin")
 
-    def test_add_new_geom_cancel(self):
-        pass
+    #     # start new geom tool
+    #     gazetteer_plugin._editnew.trigger()
 
-    def test_add_new_geom_save(self):
-        pass
+    #     # zoom to test location
+    #     canvas = iface.mapCanvas()
+    #     zoom_rectangle = QgsRectangle(
+    #         174.55264656290535,
+    #         -41.55387872892347,
+    #         174.5714208819715,
+    #         -41.570869649805445,
+    #     )
+    #     canvas.setExtent(zoom_rectangle)
+    #     canvas.refresh()
+    #     QTest.qWait(500)
 
-    def test_add_new_geom_(self):
-        pass
+    #     # Start Clicking
+    #     widget = iface.mapCanvas().viewport()
+    #     canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
+
+    #     QTest.mouseClick(
+    #         widget,
+    #         Qt.LeftButton,
+    #         pos=canvas_point(QgsPointXY(174.54379956, -41.56390752)),
+    #         delay=200,
+    #     )
+    #     QTest.mouseClick(
+    #         widget,
+    #         Qt.LeftButton,
+    #         pos=canvas_point(QgsPointXY(174.56282111, -41.56113095)),
+    #         delay=200,
+    #     )
+    #     QTest.mouseClick(
+    #         widget,
+    #         Qt.LeftButton,
+    #         pos=canvas_point(QgsPointXY(174.58026788, -41.55843727)),
+    #         delay=500,
+    #     )
+    #     QTest.mouseClick(
+    #         widget,
+    #         Qt.RightButton,
+    #         pos=canvas_point(QgsPointXY(174.58026788, -41.55843727)),
+    #         delay=500,
+    #     )
+
+    #     # Need click ok on Gazetter Feature Line dlg
+
+    # def test_move_feature_and_discard(self):
+    #     """
+    #     Move a feature and then discard the edit
+    #     """
+    #     pass
+
+    # def test_move_feature_nodes(self):
+    #     """
+    #     Move a features node
+    #     """
+    #     pass
+
+    # def test_error_capture_point(self):
+    #     """
+    #     With no layers selected select the new feature geom tool
+    #     """
+    #     pass
+
+    # def test_add_new_geom_cancel(self):
+    #     pass
+
+    # def test_add_new_geom_save(self):
+    #     pass
+
+    # def test_add_new_geom_(self):
+    #     pass
 
