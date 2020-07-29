@@ -67,6 +67,8 @@ class TestNewFeature(unittest.TestCase):
         """
         Runs before each test.
         """
+        cls.widget = iface.mapCanvas().viewport()
+        cls.canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
 
     def tearDown(cls):
         """
@@ -81,10 +83,13 @@ class TestNewFeature(unittest.TestCase):
 
         # Click on map canvas
         self.gazetteer_plugin._newfeat.trigger()
-        widget = iface.mapCanvas().viewport()
-        canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
+        # widget = iface.mapCanvas().viewport()
+        # canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
         QTest.mouseClick(
-            widget, Qt.LeftButton, pos=canvas_point(QgsPointXY(lon, lat)), delay=0
+            self.widget,
+            Qt.LeftButton,
+            pos=self.canvas_point(QgsPointXY(lon, lat)),
+            delay=0,
         )
         QTest.qWait(500)
 
@@ -93,17 +98,40 @@ class TestNewFeature(unittest.TestCase):
         iface.dlg_create_new.accept()
         QTest.qWait(1000)
 
-    def move_point(self, x, y):
-
-        widget = iface.mapCanvas().viewport()
-        canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
-        print("move to new pos")
-        QTest.mouseMove(widget, pos=canvas_point(QgsPointXY(x, y)), delay=1)
-        print("click new pos")
+    def click_point(self, x, y):
+        # widget = iface.mapCanvas().viewport()
+        # canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
+        QTest.mouseMove(self.widget, pos=self.canvas_point(QgsPointXY(x, y)), delay=15)
 
         QTest.mouseClick(
-            widget, Qt.LeftButton, pos=canvas_point(QgsPointXY(x, y)), delay=1
+            self.widget,
+            Qt.LeftButton,
+            pos=self.canvas_point(QgsPointXY(x, y)),
+            delay=15,
         )
+
+    def move_point(self, from_x, from_y, to_x, to_y):
+        QTimer.singleShot(100, lambda: self.click_point(to_x, to_y))
+
+        QTest.mouseMove(
+            self.widget, pos=self.canvas_point(QgsPointXY(from_x, from_y)), delay=0
+        )
+
+        QTest.mouseClick(
+            self.widget,
+            Qt.LeftButton,
+            pos=self.canvas_point(QgsPointXY(from_x, from_y)),
+            delay=10,
+        )
+
+    def zoom_to_tests_area(self, x_min, y_min, x_max, y_max):
+
+        canvas = iface.mapCanvas()
+        zoom_rectangle = QgsRectangle(x_min, y_min, x_max, y_max)
+        canvas.setExtent(zoom_rectangle)
+        canvas.refresh()
+
+        QTest.qWait(500)
 
     def save_geom(self):
         self.gazetteer_plugin._editsave.trigger()
@@ -118,7 +146,7 @@ class TestNewFeature(unittest.TestCase):
     def activeModalWindowReject():
 
         window = QApplication.instance().activeModalWidget()
-        window.reject()
+        window.button(QMessageBox.No).click()
 
     # def test_A_geom_tools_enabled(self):
     #     """
@@ -144,25 +172,21 @@ class TestNewFeature(unittest.TestCase):
     #     # And check the Qline edit has the feature name populated
     #     self.assertEquals(self.gazetteer_plugin._currNameLabel.text(), "Geom_test")
 
-    def test_B_move_feature(self):
+    def test_B_move_feature_and_discard(self):
         """
-        Move a feature
+        Move a feature and save it to the DB
         """
 
+        # Create a new feature we will then edit
         self.init_feature("Geom_test")
 
         # zoom to test location
-        canvas = iface.mapCanvas()
-        zoom_rectangle = QgsRectangle(
+        self.zoom_to_tests_area(
             174.55264656290535,
             -41.55387872892347,
             174.5714208819715,
             -41.570869649805445,
         )
-        canvas.setExtent(zoom_rectangle)
-        canvas.refresh()
-
-        QTest.qWait(500)
 
         # Test the feature is where expected
         layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
@@ -172,7 +196,64 @@ class TestNewFeature(unittest.TestCase):
         self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.55556, places=3)
         self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.55556, places=3)
 
-        # Check the database point is as expect
+        # "to" "from" references for the move
+        self.widget = iface.mapCanvas().viewport()
+        from_x = 174.55556
+        from_y = -41.55556
+        to_x = 174.566666
+        to_y = -41.566666
+
+        # Enable the move tool
+        self.gazetteer_plugin._editshift.trigger()
+        QTest.qWait(500)
+        self.assertEquals(self.gazetteer_plugin._editshift.isEnabled(), True)
+
+        # Move the point
+        self.move_point(from_x, from_y, to_x, to_y)
+        QTest.qWait(500)
+
+        # Test the feature has been moved - QGIS Layer
+        layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
+        iter = layer.getFeatures()
+        feature = next(iter)
+        self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.56666, places=3)
+        self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.56666, places=3)
+        # Also prove the gaz feat layer has a point associated to it.
+        self.assertEqual(layer.featureCount(), 1)
+
+        # Cancel Edits
+        self.gazetteer_plugin._editcancel.trigger()
+
+        QTest.qWait(1500)
+
+        # Assure the point has been removed
+        self.assertEqual(layer.featureCount(), 1)
+
+    def test_C_move_feature_and_save_ok(self):
+        """
+        Move a feature and save it to the DB
+        """
+
+        # Create a new feature we will then edit
+        self.init_feature("Geom_test")
+
+        # zoom to test location
+        self.zoom_to_tests_area(
+            174.55264656290535,
+            -41.55387872892347,
+            174.5714208819715,
+            -41.570869649805445,
+        )
+
+        # Test the feature is where expected
+        layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
+        iter = layer.getFeatures()
+        feature = next(iter)
+        feat_id = feature.attributes()[0]
+        self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.55556, places=3)
+        self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.55556, places=3)
+
+        # Check the point was inserted to the database as expect
         db_feature_record = self.data_handler.get_feature_by_id(feat_id)
         ewkt = db_feature_record[0][6]
         wkt = ewkt.split(";")[1]
@@ -180,51 +261,47 @@ class TestNewFeature(unittest.TestCase):
         self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.55556, places=3)
         self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.55556, places=3)
 
-        widget = iface.mapCanvas().viewport()
-        canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates
+        # "to" "from" references for the move
         from_x = 174.55556
         from_y = -41.55556
         to_x = 174.566666
         to_y = -41.566666
 
+        # Enable the move tool
         self.gazetteer_plugin._editshift.trigger()
         QTest.qWait(500)
         self.assertEquals(self.gazetteer_plugin._editshift.isEnabled(), True)
 
-        QTimer.singleShot(300, lambda: self.move_point(to_x, to_y))
-        print("move to select point")
+        # Move the point
+        self.move_point(from_x, from_y, to_x, to_y)
+        QTest.qWait(500)
 
-        QTest.mouseMove(widget, pos=canvas_point(QgsPointXY(from_x, from_y)), delay=1)
-
-        print("left click to select point")
-
-        QTest.mouseClick(
-            widget,
-            Qt.LeftButton,
-            pos=canvas_point(QgsPointXY(from_x, from_y)),
-            delay=20,
-        )
-        QTest.qWait(1000)
-
-        # Test the feature has been moved
+        # Test the feature has been moved - QGIS Layer
         layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
         iter = layer.getFeatures()
         feature = next(iter)
         self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.56666, places=3)
         self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.56666, places=3)
 
+        # Save to DB
         QTimer.singleShot(1000, self.activeModalWindowAccept)
         self.gazetteer_plugin._editsave.trigger()
 
         QTest.qWait(1500)
 
-        # Check the database has updated
+        # Test the feature has been moved - Database
         db_feature_record = self.data_handler.get_feature_by_id(feat_id)
         ewkt = db_feature_record[0][6]
         wkt = ewkt.split(";")[1]
         point = QgsGeometry.fromWkt(wkt).asPoint()
         self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.56666, places=3)
         self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.56666, places=3)
+
+    def test_D_add_new_point_cancel(self):
+
+        # Select layer in ToC
+        layer = QgsProject.instance().mapLayersByName("Gazetteer feature point")[0]
+        iface.layerTreeView().setCurrentLayer(layer)
 
     # def test_C_move_feature_and_discard(self):
     #     """
