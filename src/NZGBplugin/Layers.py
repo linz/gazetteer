@@ -12,6 +12,7 @@
 
 from builtins import str
 import os.path
+import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -279,9 +280,16 @@ class Layers(QObject):
                 editFormConfig = layer.editFormConfig()
                 editFormConfig.setUiForm(os.path.join(self._formdir, ldef["form"]))
                 editFormConfig.setLayout(editFormConfig.UiFileLayout)
+
                 if "init" in ldef:
-                    editFormConfig.setInitFunction(self.initModule + "." + ldef["init"])
+                    editFormConfig.setInitCodeSource(1)
+                    editFormConfig.setInitFilePath(
+                        os.path.join(os.path.dirname(__file__), "GazEditForms.py")
+                    )
+                    editFormConfig.setInitFunction(ldef["init"])
+
                 layer.setEditFormConfig(editFormConfig)
+
             else:
                 layer.setReadOnly()
 
