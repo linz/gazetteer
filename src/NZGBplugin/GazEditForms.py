@@ -13,9 +13,11 @@ from builtins import str
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from qgis.core import *
+from PyQt5.QtWidgets import *
 
-from .LINZ.gazetteer import Model
-from .LINZ.gazetteer.gui import FormUtils
+
+from LINZ.gazetteer import Model
+from LINZ.gazetteer.gui import FormUtils
 
 # def getFeatureAttributes( layerId, featureId ):
 #     attribs = {}
@@ -92,10 +94,10 @@ def openFeatGeomForm(dlg, lyr, feature):
         # SJ: QString method changed
         feat_id.setText(ss[8:])
     layer = QgsProject.instance().mapLayer(layerId)
-    type = layer.QgsVectorLayer()
-    if type == QGis.Point:
+    type = layer.wkbType()
+    if type == QgsWkbTypes.MultiPoint:
         stype = "point"
-    elif type == QGis.Line:
+    elif type == QgsWkbTypes.MultiLineString:
         stype = "line"
     else:
         stype = "polygon"
