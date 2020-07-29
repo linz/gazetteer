@@ -23,16 +23,20 @@ SELECT
 from
     gazetteer.feature;
 
-CREATE RULE feature_ref_point_ins AS ON INSERT TO feature_ref_point
+CREATE OR REPLACE RULE feature_ref_point_ins AS ON INSERT TO feature_ref_point
 DO INSTEAD
    (
    INSERT INTO feature (feat_type, status, description, ref_point )
    VALUES (NEW.feat_type, 'CURR', '', NEW.ref_point );
    INSERT INTO name (feat_id, name, status )
    VALUES (lastval(), NEW.name, 'UNEW' )
-   );
+   RETURNING
+     feat_id,
+     gaz_preferredName(feat_id) as name,
+     (SELECT f.feat_type FROM feature f WHERE f.feat_id = feat_id),
+     (SELECT f.ref_point FROM feature f WHERE f.feat_id  = feat_id));
 
-CREATE RULE feature_ref_point_upd AS ON UPDATE TO feature_ref_point
+CREATE OR REPLACE RULE feature_ref_point_upd AS ON UPDATE TO feature_ref_point
 DO INSTEAD
    UPDATE gazetteer.feature
    SET
@@ -78,7 +82,7 @@ FROM
 WHERE
     geom_type='P';
 
-CREATE RULE feature_point_ins AS ON INSERT TO feature_point
+CREATE OR REPLACE RULE feature_point_ins AS ON INSERT TO feature_point
 DO INSTEAD
    INSERT INTO gazetteer.feature_geometry(
         feat_id,
@@ -93,45 +97,14 @@ DO INSTEAD
         WHEN GeometryType( NEW.SHAPE) like '%POLYGON' THEN 'P'
         END,
         NEW.shape
-        );
-
-CREATE RULE feature_point_upd AS ON UPDATE TO feature_point
-DO INSTEAD
-   UPDATE gazetteer.feature_geometry
-   SET
-     feat_id = NEW.feat_id,
-     geom_type =
-        CASE
-        WHEN GeometryType( NEW.SHAPE) like '%POINT' THEN 'X'
-        WHEN GeometryType( NEW.SHAPE) like '%LINESTRING' THEN 'L'
-        WHEN GeometryType( NEW.SHAPE) like '%POLYGON' THEN 'P'
-        END,
-     shape =  NEW.shape
-   WHERE geom_id =  NEW.geom_id;
-
-CREATE RULE feature_point_del AS ON DELETE TO feature_point
-DO INSTEAD
-   DELETE FROM gazetteer.feature_geometry
-   WHERE geom_id =  OLD.geom_id;
-
-CREATE RULE feature_line_ins AS ON INSERT TO feature_line
-DO INSTEAD
-   INSERT INTO gazetteer.feature_geometry(
-        feat_id,
-        geom_type,
-        shape
         )
-   VALUES (
-        NEW.feat_id,
-        CASE
-        WHEN GeometryType( NEW.SHAPE) like '%POINT' THEN 'X'
-        WHEN GeometryType( NEW.SHAPE) like '%LINESTRING' THEN 'L'
-        WHEN GeometryType( NEW.SHAPE) like '%POLYGON' THEN 'P'
-        END,
-        NEW.shape
-        );
+    RETURNING
+        (SELECT g.geom_id FROM feature_geometry g WHERE g.feat_id = feat_id),
+        feat_id,
+        gaz_preferredName(feat_id) as name,
+        shape;
 
-CREATE RULE feature_line_upd AS ON UPDATE TO feature_line
+CREATE OR REPLACE RULE feature_point_upd AS ON UPDATE TO feature_point
 DO INSTEAD
    UPDATE gazetteer.feature_geometry
    SET
@@ -145,13 +118,13 @@ DO INSTEAD
      shape =  NEW.shape
    WHERE geom_id =  NEW.geom_id;
 
-CREATE RULE feature_line_del AS ON DELETE TO feature_line
+CREATE OR REPLACE RULE feature_point_del AS ON DELETE TO feature_point
 DO INSTEAD
    DELETE FROM gazetteer.feature_geometry
    WHERE geom_id =  OLD.geom_id;
 
 
-CREATE RULE feature_polygon_ins AS ON INSERT TO feature_polygon
+CREATE OR REPLACE RULE feature_line_ins AS ON INSERT TO feature_line
 DO INSTEAD
    INSERT INTO gazetteer.feature_geometry(
         feat_id,
@@ -166,9 +139,14 @@ DO INSTEAD
         WHEN GeometryType( NEW.SHAPE) like '%POLYGON' THEN 'P'
         END,
         NEW.shape
-        );
+        )
+    RETURNING
+        (SELECT g.geom_id FROM feature_geometry g WHERE g.feat_id = feat_id),
+        feat_id,
+        gaz_preferredName(feat_id) as name,
+        shape;
 
-CREATE RULE feature_polygon_upd AS ON UPDATE TO feature_polygon
+CREATE OR REPLACE RULE feature_line_upd AS ON UPDATE TO feature_line
 DO INSTEAD
    UPDATE gazetteer.feature_geometry
    SET
@@ -182,7 +160,49 @@ DO INSTEAD
      shape =  NEW.shape
    WHERE geom_id =  NEW.geom_id;
 
-CREATE RULE feature_polygon_del AS ON DELETE TO feature_polygon
+CREATE OR REPLACE RULE feature_line_del AS ON DELETE TO feature_line
+DO INSTEAD
+   DELETE FROM gazetteer.feature_geometry
+   WHERE geom_id =  OLD.geom_id;
+
+
+CREATE OR REPLACE RULE feature_polygon_ins AS ON INSERT TO feature_polygon
+DO INSTEAD
+   INSERT INTO gazetteer.feature_geometry(
+        feat_id,
+        geom_type,
+        shape
+        )
+   VALUES (
+        NEW.feat_id,
+        CASE
+        WHEN GeometryType( NEW.SHAPE) like '%POINT' THEN 'X'
+        WHEN GeometryType( NEW.SHAPE) like '%LINESTRING' THEN 'L'
+        WHEN GeometryType( NEW.SHAPE) like '%POLYGON' THEN 'P'
+        END,
+        NEW.shape
+        )
+    RETURNING
+        (SELECT g.geom_id FROM feature_geometry g WHERE g.feat_id = feat_id),
+        feat_id,
+        gaz_preferredName(feat_id) as name,
+        shape;;
+
+CREATE OR REPLACE RULE feature_polygon_upd AS ON UPDATE TO feature_polygon
+DO INSTEAD
+   UPDATE gazetteer.feature_geometry
+   SET
+     feat_id = NEW.feat_id,
+     geom_type =
+        CASE
+        WHEN GeometryType( NEW.SHAPE) like '%POINT' THEN 'X'
+        WHEN GeometryType( NEW.SHAPE) like '%LINESTRING' THEN 'L'
+        WHEN GeometryType( NEW.SHAPE) like '%POLYGON' THEN 'P'
+        END,
+     shape =  NEW.shape
+   WHERE geom_id =  NEW.geom_id;
+
+CREATE OR REPLACE RULE feature_polygon_del AS ON DELETE TO feature_polygon
 DO INSTEAD
    DELETE FROM gazetteer.feature_geometry
    WHERE geom_id =  OLD.geom_id;
@@ -197,6 +217,3 @@ VALUES
   ('', 'gazetteer', 'feature_point', 'shape', 2, 4167, 'POINT'),
   ('', 'gazetteer', 'feature_line', 'shape', 2, 4167, 'LINESTRING'),
   ('', 'gazetteer', 'feature_polygon', 'shape', 2, 4167, 'POLYGON');
-
-
-

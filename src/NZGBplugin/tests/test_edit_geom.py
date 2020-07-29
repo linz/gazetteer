@@ -4,7 +4,7 @@ import unittest
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from qgis.core import QgsProject, QgsPointXY, QgsRectangle
+from qgis.core import QgsProject, QgsPointXY, QgsRectangle, QgsGeometry
 from qgis.utils import plugins, iface, reloadPlugin
 from PyQt5.QtTest import QTest
 from qgis.gui import QgsMapTool
@@ -112,7 +112,7 @@ class TestNewFeature(unittest.TestCase):
     def activeModalWindowAccept():
 
         window = QApplication.instance().activeModalWidget()
-        window.reject()
+        window.button(QMessageBox.Yes).click()
 
     @staticmethod
     def activeModalWindowReject():
@@ -168,6 +168,15 @@ class TestNewFeature(unittest.TestCase):
         layer = QgsProject.instance().mapLayersByName("Gazetteer feature refpt")[0]
         iter = layer.getFeatures()
         feature = next(iter)
+        feat_id = feature.attributes()[0]
+        self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.55556, places=3)
+        self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.55556, places=3)
+
+        # Check the database point is as expect
+        db_feature_record = self.data_handler.get_feature_by_id(feat_id)
+        ewkt = db_feature_record[0][6]
+        wkt = ewkt.split(";")[1]
+        point = QgsGeometry.fromWkt(wkt).asPoint()
         self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.55556, places=3)
         self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.55556, places=3)
 
@@ -206,6 +215,16 @@ class TestNewFeature(unittest.TestCase):
 
         QTimer.singleShot(1000, self.activeModalWindowAccept)
         self.gazetteer_plugin._editsave.trigger()
+
+        QTest.qWait(1500)
+
+        # Check the database has updated
+        db_feature_record = self.data_handler.get_feature_by_id(feat_id)
+        ewkt = db_feature_record[0][6]
+        wkt = ewkt.split(";")[1]
+        point = QgsGeometry.fromWkt(wkt).asPoint()
+        self.assertAlmostEqual(feature.geometry().asPoint()[0], 174.56666, places=3)
+        self.assertAlmostEqual(feature.geometry().asPoint()[1], -41.56666, places=3)
 
     # def test_C_move_feature_and_discard(self):
     #     """
