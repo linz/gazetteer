@@ -309,6 +309,8 @@ class Layers(QObject):
         # add layer to group
         for lyr in self.layers(group):
             group_ref.addLayer(lyr)
+            # Remove the layer from
+            root.removeLayer(lyr)
 
     # Return layer defs in defined order
     def layerDefs(self):
