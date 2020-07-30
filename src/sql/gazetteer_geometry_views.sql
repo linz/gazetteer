@@ -31,24 +31,15 @@ DO INSTEAD
     INSERT INTO name (feat_id, name, status )
     VALUES (lastval(), NEW.name, 'UNEW' )
     RETURNING
-       	(SELECT feat_id
-		FROM gazetteer.feature
-		ORDER BY feat_id DESC
-		LIMIT 1),
-
-  		(SELECT gazetteer.gaz_preferredname(feat_id)
-		FROM gazetteer.feature_geometry
-		ORDER BY feat_id DESC
-		LIMIT 1),
-
+        feat_id,
+        gaz_preferredname(feat_id),
        	(SELECT feat_type
 		FROM gazetteer.feature
 		ORDER BY feat_id DESC
 		LIMIT 1),
-
-  		(SELECT ref_point
-		FROM gazetteer.feature
-		ORDER BY feat_id DESC
+  		(SELECT shape
+		FROM gazetteer.feature_geometry
+		ORDER BY geom_id DESC
 		LIMIT 1)
 	);
 
@@ -119,21 +110,9 @@ DO INSTEAD
 		FROM gazetteer.feature_geometry
 		ORDER BY geom_id DESC
 		LIMIT 1),
-
-  		(SELECT feat_id
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1),
-
-  		(SELECT gazetteer.gaz_preferredname(feat_id)
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1),
-
-  		(SELECT shape
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1);
+        feat_id,
+        gaz_preferredname(feat_id),
+        shape;
 
 CREATE OR REPLACE RULE feature_point_upd AS ON UPDATE TO feature_point
 DO INSTEAD
@@ -172,25 +151,13 @@ DO INSTEAD
         NEW.shape
         )
     RETURNING
-        (SELECT geom_id
+  		(SELECT geom_id
 		FROM gazetteer.feature_geometry
 		ORDER BY geom_id DESC
 		LIMIT 1),
-
-  		(SELECT feat_id
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1),
-
-  		(SELECT gazetteer.gaz_preferredname(feat_id)
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1),
-
-  		(SELECT shape
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1);
+        feat_id,
+        gaz_preferredname(feat_id),
+        shape;
 
 CREATE OR REPLACE RULE feature_line_upd AS ON UPDATE TO feature_line
 DO INSTEAD
@@ -229,25 +196,13 @@ DO INSTEAD
         NEW.shape
         )
     RETURNING
-        (SELECT geom_id
+  		(SELECT geom_id
 		FROM gazetteer.feature_geometry
 		ORDER BY geom_id DESC
 		LIMIT 1),
-
-  		(SELECT feat_id
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1),
-
-  		(SELECT gazetteer.gaz_preferredname(feat_id)
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1),
-
-  		(SELECT shape
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
-		LIMIT 1);
+        feat_id,
+        gaz_preferredname(feat_id),
+        shape;
 
 CREATE OR REPLACE RULE feature_polygon_upd AS ON UPDATE TO feature_polygon
 DO INSTEAD
