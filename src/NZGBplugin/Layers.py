@@ -299,7 +299,7 @@ class Layers(QObject):
             self.moveLayersIntoGroup("search", "Gazetteer search results")
             self.moveLayersIntoGroup("feature", "Gazetteer feature")
 
-        # Find the group
+        # Find the groupMultiCurveM
         self._layersOk = ok
 
     def moveLayersIntoGroup(self, group, title):
@@ -533,13 +533,15 @@ class Layers(QObject):
                 continue
             if layer.id() in gazlayers:
                 continue
-            geomlist = [f.geometryAndOwnership() for f in layer.selectedFeatures()]
+            geomlist = [f.geometry() for f in layer.selectedFeatures()]
             if geomlist:
                 if layer.crs() != self._dbCrs:
-                    ct = QgsCoordinateTransform(layer.crs(), self._dbCrs)
+                    ct = QgsCoordinateTransform(
+                        layer.crs(), self._dbCrs, QgsProject.instance()
+                    )
                     for g in geomlist:
                         g.transform(ct)
-                gtype = layer.geometryType()
+                gtype = layer.wkbType()
                 if gtype not in geometries:
                     geometries[gtype] = []
                 geometries[gtype].extend(geomlist)
@@ -553,9 +555,9 @@ class Layers(QObject):
             return
 
         gtypes = (
-            (QGis.Point, "point", "fpoint"),
-            (QGis.Line, "line", "fline"),
-            (QGis.Polygon, "polygon", "fpoly"),
+            (QgsWkbTypes.Point, "point", "fpoint"),
+            (QgsWkbTypes.LineString, "line", "fline"),
+            (QgsWkbTypes.Polygon, "polygon", "fpoly"),
         )
         summary = []
         for gtype in gtypes:
@@ -576,7 +578,7 @@ class Layers(QObject):
                 continue
             geomlist = geometries[gtype[0]]
             layer = self._layers[gtype[2]]["layer"]
-            fields = layer.pendingFields()
+            fields = layer.fields()
             editable = layer.isEditable()
             if not editable:
                 layer.startEditing()
@@ -619,9 +621,9 @@ class Layers(QObject):
             return
 
         gtypes = (
-            (QGis.Point, "point", "fpoint"),
-            (QGis.Line, "line", "fline"),
-            (QGis.Polygon, "polygon", "fpoly"),
+            (QgsWkbTypes.Point, "point", "fpoint"),
+            (QgsWkbTypes.LineString, "line", "fline"),
+            (QgsWkbTypes.Polygon, "polygon", "fpoly"),
         )
         summary = []
         for gtype in gtypes:
@@ -641,7 +643,7 @@ class Layers(QObject):
             editable = layer.isEditable()
             if not editable:
                 layer.startEditing()
-            for id in layer.selectedFeaturesIds():
+            for id in layer.selectedFeatureIds():
                 layer.deleteFeature(id)
             if not editable:
                 layer.commitChanges()
