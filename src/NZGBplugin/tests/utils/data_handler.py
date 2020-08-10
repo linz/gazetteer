@@ -121,6 +121,26 @@ class TestDataHandler:
 
         return self.db.select(features)
 
+    def get_feature_geom_by_id(self, feat_id):
+        """
+        Get database feature_geometry by geom
+        """
+
+        features = f"""
+            SELECT
+                    geom_id,
+                    feat_id,
+                    geom_type,
+                    ST_AsEWKT(shape)
+                    updated_by,
+                    update_date
+            FROM gazetteer.feature_geometry
+            WHERE feat_id = '{feat_id}'
+            ORDER BY geom_id DESC
+            """
+
+        return self.db.select(features)
+
     def get_feat_annotation_by_id(self, feat_id):
         """
         Get database feature by name
