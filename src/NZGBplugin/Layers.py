@@ -12,7 +12,6 @@
 
 from builtins import str
 import os.path
-import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -299,7 +298,7 @@ class Layers(QObject):
             self.moveLayersIntoGroup("search", "Gazetteer search results")
             self.moveLayersIntoGroup("feature", "Gazetteer feature")
 
-        # Find the groupMultiCurveM
+        # Find the MultiCurveM
         self._layersOk = ok
 
     def moveLayersIntoGroup(self, group, title):
