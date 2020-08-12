@@ -37,9 +37,9 @@ DO INSTEAD
 		FROM gazetteer.feature
 		ORDER BY feat_id DESC
 		LIMIT 1),
-  		(SELECT shape
-		FROM gazetteer.feature_geometry
-		ORDER BY geom_id DESC
+  		(SELECT ref_point
+		FROM gazetteer.feature
+		ORDER BY feat_id DESC
 		LIMIT 1)
 	);
 
