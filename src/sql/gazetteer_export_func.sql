@@ -14,7 +14,7 @@
 set search_path=gazetteer_export, gazetteer, public;
 SET client_min_messages=WARNING;
 
-CREATE OR REPLACE FUNCTION gaz_update_export_database()
+CREATE OR REPLACE FUNCTION gazetteer.gaz_update_export_database()
   RETURNS integer AS
 $BODY$
 DECLARE
