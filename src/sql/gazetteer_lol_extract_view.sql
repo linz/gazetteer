@@ -9,7 +9,9 @@
 --
 -- ################################################################################
 
-﻿CREATE OR REPLACE VIEW gazetteer.name_export_for_lol AS
+SET search_path=gazetteer, public;
+
+CREATE OR REPLACE VIEW gazetteer.name_export_for_lol AS
 SELECT
 	name_id,
 	name,
@@ -26,5 +28,3 @@ FROM name_export
 	feat_type_code IN ('RYST','HSTE','PLAC','SITE','SBRB','TOWN','VLLG','CITY','AREA','LCLT')
 	AND ST_Y(ref_point) > -53 -- ***-53 is south of Campbell Island***
 	;
-
-
