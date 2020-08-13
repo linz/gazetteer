@@ -134,7 +134,7 @@ class Plugin(object):
         )
         self._editnodes.setEnabled(False)
         self._editnodes.triggered.connect(
-            lambda: self._editGeometries(False, iface.actionNodeTool())
+            lambda: self._editGeometries(False, iface.actionVertexTool())
         )
 
         self._editnew = QAction(
