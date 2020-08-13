@@ -6,8 +6,9 @@ services:
     build: src/sql/
     ports:
       - "5432"
-    # This helps ensure that the data persists even if the Postgres container is deleted.
-    #volumes:
+    volumes:
+      - ./src/sql/test/:/sql/test/
+      # This helps ensure that the data persists even if the Postgres container is deleted.
       #- ./data:/var/lib/postgresql/data
     #environment:
       #POSTGRES_DB: github_ci_test

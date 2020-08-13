@@ -67,3 +67,12 @@ RUN pg_ctlcluster 8.4 main start && \
     su postgres -c psql && \
     echo "create user gazdba IN ROLE gazetteer_admin, gazetteer_dba password 'gazdba'" | \
     su postgres -c psql
+
+ADD test/pgtap_load /pgtap_load
+
+RUN pg_ctlcluster 8.4 main start && \
+    cd /tmp && \
+    su postgres -c 'sh /pgtap_load gazetteer'
+
+RUN apt-get update && apt-get install -y \
+    libtap-parser-sourcehandler-pgtap-perl

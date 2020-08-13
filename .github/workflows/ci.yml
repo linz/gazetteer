@@ -76,3 +76,7 @@ jobs:
     - name: Run python tests
       run: |
         make docker-qgis-test
+
+    - name: Run db tests
+      run: |
+        make docker-db-test
