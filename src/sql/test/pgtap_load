@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Download and load pgtap in a PostgreSQL database
+
+test -n "$1" || {
+  echo "Usage: $0 <dbname>"
+  exit 1
+} >&2
+
+export PGDATABASE="$1"
+
+##################################################
+# 1. Get pgtap
+##################################################
+
+# Make sure to be able to build for the target PostgreSQL version
+VER=`psql -XAtc 'show server_version' | sed 's/ .*$//;s/\.[^\.]*$//'`
+PATH=/usr/lib/postgresql/${VER}/bin/:$PATH
+pg_config --version | grep -F "PostgreSQL ${VER}" || {
+  echo "ERROR: missing dev package for target db version '${VER}'" >&2
+  echo "HINT: make sure 'postgresql-server-dev-${VER}' is installed" >&2
+  exit 1
+}
+
+VER=1.0.0
+URL=https://github.com/theory/pgtap/archive/v${VER}.tar.gz
+echo "Downloading pgtap from ${URL}"
+curl -LfSs "${URL}" -o pgtap-${VER}.tgz || exit 1
+tar xzf pgtap-${VER}.tgz || exit 1
+rm -f pgtap && ln -Lfs pgtap-${VER} pgtap || exit 1
+cd pgtap && make && cd - || exit 1
+
+##################################################
+# 2. Install pgtap in database
+##################################################
+
+# Uninstall first, in case it was already installed
+psql \
+  --set ON_ERROR_STOP=0 \
+  -Xo /dev/null \
+  -f pgtap/sql/uninstall_pgtap.sql \
+  || exit 1
+
+psql \
+  --set ON_ERROR_STOP=0 \
+  -Xo /dev/null \
+  -f pgtap/sql/pgtap.sql \
+  || exit 1
+
+

@@ -38,6 +38,11 @@ docker-qgis-test: docker-up ## Run python tests against QGIS isntance
 docker-db-connect: docker-up ## Connect to the containerized db using psql
 	docker-compose exec db su postgres -c 'psql gazetteer'
 
+.PHONY: docker-db-test
+docker-db-test: docker-up ## Connect to the containerized db using psql
+	docker-compose exec -T db su postgres -c 'pg_prove -d gazetteer /sql/test/schema/*.sql'
+	#docker-compose exec db su postgres -c 'sh /sql/test/run_tests.sh gazetteer'
+
 .PHONY: docker-db-shell
 docker-db-shell: docker-up ## Start a shell to the containerized db
 	docker-compose exec db bash
