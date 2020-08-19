@@ -1,4 +1,6 @@
 from qgis import utils
+from PyQt5.QtCore import QSettings
+
 import traceback
 import os
 
@@ -27,3 +29,6 @@ os.environ["PGPASSWORD"] = "gazadmin"
 utils.showException = _showException
 utils.open_stack_dialog = _open_stack_dialog
 
+# Allow the use of python macros
+s = QSettings()
+s.setValue("qgis/enableMacros", "Always")
