@@ -348,7 +348,7 @@ class ListModelConnector(QAbstractTableModel):
             return
         key = self._columns[self._sortColumn]
         keyfunc = lambda x: str(self._getItemAttribute(self._list[x], key))
-        self._index.sort(None, keyfunc, self._sortReverse)
+        self._index.sort(key=keyfunc, reverse=self._sortReverse)
         self._lookup = None
 
     def updateItem(self, index):
