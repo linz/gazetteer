@@ -31,4 +31,4 @@ jobs:
 
       - name: Format (black)
         run: |
-          black src/NZGBplugin/ --check --diff
+          black src/NZGBplugin/ --check --diff --exclude=src/NZGBplugin/geoalchemy2

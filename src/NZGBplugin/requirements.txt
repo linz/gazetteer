@@ -1,2 +1,0 @@
-geoalchemy2
-sqlalchemy<0.9

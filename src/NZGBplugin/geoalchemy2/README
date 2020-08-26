@@ -1,0 +1,4 @@
+This application requires the geoalchemy2 extension to sqlalchemy.  This can be installed from
+https://github.com/geoalchemy/geoalchemy2/tree/master/geoalchemy2 into this folder, or
+geoalchemy2 can be installed directly.
+
