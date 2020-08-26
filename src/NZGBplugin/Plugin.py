@@ -296,8 +296,8 @@ class Plugin(object):
             return
         from .LINZ.gazetteer.gui.AdminWidget import AdminDialog
 
-        dlg = AdminDialog(self._iface.mainWindow())
-        dlg.exec_()
+        self.adminDlg = AdminDialog(self._iface.mainWindow())
+        self.adminDlg.show()
 
     def _searchResultsUpdated(self, idString):
         self._ptraction.setEnabled(idString != "")

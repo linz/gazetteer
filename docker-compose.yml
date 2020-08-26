@@ -27,6 +27,6 @@ services:
     command: /scripts/docker-entry.sh
     environment:
       PGHOST: db
-      PGPASSWORD: gazadmin
-      PGUSER: gazadmin
+      PGPASSWORD: gazdba
+      PGUSER: gazdba
       PGDATABASE: gazetteer
