@@ -1,82 +1,170 @@
-name: CI
-
-on: [push, pull_request]
+---
+name: Style
+on: [push,  pull_request]
 
 jobs:
-
-  test_schema:
-
-    name: DB schema
-    runs-on: ubuntu-18.04
-    strategy:
-        matrix:
-            pg: [ '10' ]
-            pgis: [ '2.5' ]
-    env:
-      # Make apt non-interactive by default, and not showing progress
-      APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
-      # Avoid warnings on apt-key usage
-      APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+  linter:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Install dependencies
-      run: |
-        sudo ${APT} -qq purge \
-            libpq5 \
-            libpq-dev \
-            *php* \
-            postgresql \
-            postgresql-client-common \
-            postgresql-common
-        sudo rm -rf /var/lib/postgresql
-        sudo ${APT} install curl ca-certificates gnupg
-        distro=`lsb_release -cs`
-        # Enable fetching packages from apt.postgresql repository
-        curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-        echo "deb http://apt.postgresql.org/pub/repos/apt/ ${distro}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
-        # Install postgresql server
-        sudo ${APT} -qq update
-        sudo ${APT} -qq install \
-            postgresql-client-${{ matrix.pg }} \
-            postgresql-${{ matrix.pg }} \
-            postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
-            postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
+      - name: Use Python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
 
-    - name: Setup PostgreSQL user
-      run: |
-        sudo -u postgres createuser -s "$USER"
+      - name: Install Required Python Modules
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
 
-    - name: Install gazetteer db schema
-      run: |
-        createdb gazetteer
-        cd src/sql
-        psql -f gazetteer_roles.sql gazetteer
-        psql -c 'create extension postgis' gazetteer
-        ./install.sh drop
+      - name: Check files have no trailing blanks
+        run: |
+          ! find . -type f | \
+                  grep -v '\.git/' | \
+                  grep -v '\.png$' | \
+                  xargs grep -n '[[:space:]]$'
 
-    - name: Install gazetteer web db schema
-      run: |
-        cd src/sql
-        ./install_web.sh drop
+      # - name: Commit Lint
+      #   run: |
+      #     gitlint --commits origin/master
+
+      - name: Format (black)
+        run: |
+          black src/NZGBplugin/ --check --diff
 
 
-  test_docker:
+  # test_schema:
 
+  #   name: DB schema
+  #   runs-on: ubuntu-18.04
+  #   strategy:
+  #       matrix:
+  #           pg: [ '10' ]
+  #           pgis: [ '2.5' ]
+  #   env:
+  #     # Make apt non-interactive by default, and not showing progress
+  #     APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
+  #     # Avoid warnings on apt-key usage
+  #     APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+  #   steps:
+  #   - uses: actions/checkout@v1
+
+  #   - name: Install dependencies
+  #     run: |
+  #       sudo ${APT} -qq purge \
+  #           libpq5 \
+  #           libpq-dev \
+  #           *php* \
+  #           postgresql \
+  #           postgresql-client-common \
+  #           postgresql-common
+  #       sudo rm -rf /var/lib/postgresql
+  #       sudo ${APT} install curl ca-certificates gnupg
+  #       distro=`lsb_release -cs`
+  #       # Enable fetching packages from apt.postgresql repository
+  #       curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+  #       echo "deb http://apt.postgresql.org/pub/repos/apt/ ${distro}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+  #       # Install postgresql server
+  #       sudo ${APT} -qq update
+  #       sudo ${APT} -qq install \
+  #           postgresql-client-${{ matrix.pg }} \
+  #           postgresql-${{ matrix.pg }} \
+  #           postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
+  #           postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
+
+  #   - name: Setup PostgreSQL user
+  #     run: |
+  #       sudo -u postgres createuser -s "$USER"
+
+  #   - name: Install gazetteer db schema
+  #     run: |
+  #       createdb gazetteer
+  #       cd src/sql
+  #       psql -f gazetteer_roles.sql gazetteer
+  #       psql -c 'create extension postgis' gazetteer
+  #       ./install.sh drop
+
+  #   - name: Install gazetteer web db schema
+  #     run: |
+  #       cd src/sql
+  #       ./install_web.sh drop
+
+
+  # test_docker:
+
+  #   runs-on: ubuntu-18.04
+  #   env:
+  #     DOCKER_COMPOSE_VERSION: 1.7.1
+  #   steps:
+  #   - uses: actions/checkout@v1
+
+  #   - name: Build and start docker containers for plugin test
+  #     run: |
+  #       make docker-up
+
+  #   - name: Run python tests
+  #     run: |
+  #       make docker-qgis-test
+
+  #   - name: Run db tests
+  #     run: |
+  #       make docker-db-test
+
+
+  deploy:
+    name: deploy
+    if: startswith(github.ref, 'refs/tags/v')
+    needs: [linter] #, test_schema, test_docker]
     runs-on: ubuntu-18.04
-    env:
-      DOCKER_COMPOSE_VERSION: 1.7.1
     steps:
-    - uses: actions/checkout@v1
+      - name: Checkout Code
+        uses: actions/checkout@v2-beta
+        with:
+          ref: ${{ github.ref }}
+      - name: Build project
+        run: |
+          echo ${{ github.repository }}
 
-    - name: Build and start docker containers for plugin test
-      run: |
-        make docker-up
+          # download geoalchemy2 dependency for inclusion
+          wget https://github.com/geoalchemy/geoalchemy2/archive/0.8.4.zip
+          unzip 0.8.4.zip
+          cp -r geoalchemy2-0.8.4/geoalchemy2/ src/NZGBplugin/
 
-    - name: Run python tests
-      run: |
-        make docker-qgis-test
+          # download sqlalchemy dependency for inclusion
+          wget https://github.com/sqlalchemy/sqlalchemy/archive/rel_1_3_12.zip
+          unzip rel_1_3_12.zip
+          cp -r sqlalchemy-rel_1_3_12/lib/sqlalchemy/ src/NZGBplugin/
 
-    - name: Run db tests
-      run: |
-        make docker-db-test
+          (cd src; zip -r NZGBplugin.zip  NZGBplugin/*)
+          mv src/NZGBplugin.zip .
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            ${{ github.ref }}]
+          draft: true
+          prerelease: true
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./NZGBplugin.zip
+          asset_name: NZGBplugin.zip
+          asset_content_type: application/zip
+      - name: Upload To LINZ DEV QGIS Plugin Repository in AWS
+        if: endswith(github.ref, 'UAT')
+        run: |
+          curl -X POST -H 'Content-Type: application/octet-stream' -H "authorization: bearer ${{ secrets.DEV_PLUGIN_REPO_AUTH }}" --data-binary @NZGBplugin.zip https://plugins.qgis.linz.govt.nz/v1/plugin/NZGBplugin?stage=dev
+      - name: Upload To LINZ PRD QGIS Plugin Repository in AWS
+        if: false ==  endswith(github.ref, 'UAT')
+        run: |
+          curl -X POST -H 'Content-Type: application/octet-stream' -H "authorization: bearer ${{ secrets.PRD_PLUGIN_REPO_AUTH }}" --data-binary @NZGBplugin.zip https://plugins.qgis.linz.govt.nz/v1/plugin/NZGBplugin
