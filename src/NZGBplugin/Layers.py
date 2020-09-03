@@ -31,24 +31,14 @@ class Layers(QObject):
 
     _layerDefs = [
         {
-            "id": "fpoly",
+            "id": "frefpt",
             "group": "feature",
-            "table": "feature_polygon",
-            "geom": "shape",
-            "key": "geom_id",
-            "form": "featgeom.ui",
-            "init": "openFeatGeomForm",
-            "wkbtype": QgsWkbTypes.MultiPolygon,
-        },
-        {
-            "id": "fline",
-            "group": "feature",
-            "table": "feature_line",
-            "geom": "shape",
-            "key": "geom_id",
-            "form": "featgeom.ui",
-            "init": "openFeatGeomForm",
-            "wkbtype": QgsWkbTypes.MultiLineString,
+            "table": "feature_ref_point",
+            "geom": "ref_point",
+            "key": "feat_id",
+            "form": "featrefpt.ui",
+            "init": "openFeatRefPointForm",
+            "wkbtype": QgsWkbTypes.Point,
         },
         {
             "id": "fpoint",
@@ -61,30 +51,33 @@ class Layers(QObject):
             "wkbtype": QgsWkbTypes.MultiPoint,
         },
         {
-            "id": "frefpt",
+            "id": "fline",
             "group": "feature",
-            "table": "feature_ref_point",
-            "geom": "ref_point",
-            "key": "feat_id",
-            "form": "featrefpt.ui",
-            "init": "openFeatRefPointForm",
-            "wkbtype": QgsWkbTypes.Point,
-        },
-        {
-            "id": "spoly",
-            "group": "search",
-            "table": "feature_polygon",
-            "geom": "shape",
-            "key": "geom_id",
-            "wkbtype": QgsWkbTypes.MultiPolygon,
-        },
-        {
-            "id": "sline",
-            "group": "search",
             "table": "feature_line",
             "geom": "shape",
             "key": "geom_id",
+            "form": "featgeom.ui",
+            "init": "openFeatGeomForm",
             "wkbtype": QgsWkbTypes.MultiLineString,
+        },
+        {
+            "id": "fpoly",
+            "group": "feature",
+            "table": "feature_polygon",
+            "geom": "shape",
+            "key": "geom_id",
+            "form": "featgeom.ui",
+            "init": "openFeatGeomForm",
+            "wkbtype": QgsWkbTypes.MultiPolygon,
+        },
+        {
+            "id": "srefpt",
+            "group": "search",
+            "table": "feature_ref_point",
+            "geom": "ref_point",
+            "key": "feat_id",
+            "init": "openFeatRefPointForm",
+            "wkbtype": QgsWkbTypes.Point,
         },
         {
             "id": "spoint",
@@ -95,13 +88,20 @@ class Layers(QObject):
             "wkbtype": QgsWkbTypes.MultiPoint,
         },
         {
-            "id": "srefpt",
+            "id": "sline",
             "group": "search",
-            "table": "feature_ref_point",
-            "geom": "ref_point",
-            "key": "feat_id",
-            "init": "openFeatRefPointForm",
-            "wkbtype": QgsWkbTypes.Point,
+            "table": "feature_line",
+            "geom": "shape",
+            "key": "geom_id",
+            "wkbtype": QgsWkbTypes.MultiLineString,
+        },
+        {
+            "id": "spoly",
+            "group": "search",
+            "table": "feature_polygon",
+            "geom": "shape",
+            "key": "geom_id",
+            "wkbtype": QgsWkbTypes.MultiPolygon,
         },
     ]
 
@@ -296,8 +296,8 @@ class Layers(QObject):
         # If updated, then add layers to group...
 
         if updated:
-            self.moveLayersIntoGroup("search", "Gazetteer search results")
             self.moveLayersIntoGroup("feature", "Gazetteer feature")
+            self.moveLayersIntoGroup("search", "Gazetteer search results")
 
         # Find the MultiCurveM
         self._layersOk = ok
