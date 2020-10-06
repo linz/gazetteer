@@ -555,6 +555,9 @@ class Layers(QObject):
             return
 
         gtypes = (
+            (QgsWkbTypes.MultiPoint, "point", "fpoint"),
+            (QgsWkbTypes.MultiLineString, "line", "fline"),
+            (QgsWkbTypes.MultiPolygon, "polygon", "fpoly"),
             (QgsWkbTypes.Point, "point", "fpoint"),
             (QgsWkbTypes.LineString, "line", "fline"),
             (QgsWkbTypes.Polygon, "polygon", "fpoly"),
@@ -607,7 +610,7 @@ class Layers(QObject):
             ndel = layer.selectedFeatureCount()
             if ndel == 0:
                 continue
-            gtype = layer.geometryType()
+            gtype = layer.wkbType()
             if gtype not in geometries:
                 geometries[gtype] = 0
             geometries[gtype] += ndel
@@ -621,9 +624,9 @@ class Layers(QObject):
             return
 
         gtypes = (
-            (QgsWkbTypes.Point, "point", "fpoint"),
-            (QgsWkbTypes.LineString, "line", "fline"),
-            (QgsWkbTypes.Polygon, "polygon", "fpoly"),
+            (QgsWkbTypes.MultiPoint, "point", "fpoint"),
+            (QgsWkbTypes.MultiLineString, "line", "fline"),
+            (QgsWkbTypes.MultiPolygon, "polygon", "fpoly"),
         )
         summary = []
         for gtype in gtypes:
