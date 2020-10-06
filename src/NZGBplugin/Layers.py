@@ -352,8 +352,25 @@ class Layers(QObject):
         self.selectEditLayer(addNew)
         self.startEdit.emit()
 
+    def isEditableByAPP(self, currentLayer):
+        if not currentLayer:
+            return False
+
+        if currentLayer.name() not in [
+            "Gazetteer feature refpt",
+            "Gazetteer feature point",
+            "Gazetteer feature line",
+            "Gazetteer feature poly",
+        ]:
+            return False
+        return True
+
     def selectEditLayer(self, addNew=False):
-        currentLayer = self._iface.mapCanvas().currentLayer()
+        currentLayer = self._iface.activeLayer()
+        editable = self.isEditableByAPP(currentLayer)
+        if not editable:
+            return None
+
         nfeat = -1
         editlayer = None
         for glayer in self.layerDefs():
