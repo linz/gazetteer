@@ -10,7 +10,7 @@
 ################################################################################
 
 
-from builtins import str
+import os
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -22,13 +22,18 @@ from .LINZ.gazetteer.gui import FormUtils
 
 from .Ui_NewFeatureDialog import Ui_NewFeatureDialog
 
+# Set window to modal for better UX.
+# Can also be set to "show" so that the
+# modal window does not block tests
+MODALITY = os.environ.get("MODALITY", "exec_")
+
 
 class NewFeatureDialog(QDialog, Ui_NewFeatureDialog):
     @staticmethod
     def createNewFeature(lon, lat, controller, iface):
         iface.dlg_create_new = NewFeatureDialog(iface, controller)
         iface.dlg_create_new.setLocation(lon, lat)
-        iface.dlg_create_new.show()
+        getattr(iface.dlg_create_new, MODALITY)()
 
     def __init__(self, iface, controller, parent=None):
         QDialog.__init__(self, parent)
@@ -94,7 +99,6 @@ class NewFeatureDialog(QDialog, Ui_NewFeatureDialog):
                 level=Qgis.Critical,
                 duration=10,
             )
-
         else:
             pointwkt = self.iface.dlg_create_new.getLocationWkt()
             self.controller.createNewFeature(

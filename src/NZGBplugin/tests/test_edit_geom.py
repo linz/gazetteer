@@ -1,4 +1,5 @@
 import unittest
+import os
 
 
 from PyQt5.QtCore import *
@@ -45,6 +46,8 @@ class TestNewFeature(unittest.TestCase):
         else:
             cls.gazetteer_plugin = plugins.get("NZGBplugin")
             cls.gazetteer_plugin._runaction.trigger()
+
+        os.environ["MODALITY"] = "show"
 
     @classmethod
     def tearDownClass(cls):
