@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'Ui_NewFeatureDialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -12,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_NewFeatureDialog(object):
     def setupUi(self, NewFeatureDialog):
         NewFeatureDialog.setObjectName("NewFeatureDialog")
-        NewFeatureDialog.setWindowModality(QtCore.Qt.WindowModal)
+        NewFeatureDialog.setWindowModality(QtCore.Qt.ApplicationModal)
         NewFeatureDialog.resize(517, 223)
         NewFeatureDialog.setModal(True)
         self.verticalLayout = QtWidgets.QVBoxLayout(NewFeatureDialog)
