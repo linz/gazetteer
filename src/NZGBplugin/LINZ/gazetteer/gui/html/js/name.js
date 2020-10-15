@@ -485,6 +485,7 @@ gazetteer.setupNameLink = function()
     link.click( function( event )
     {
         if( window.qcontroller ) window.qcontroller.showNameId( name_id, event.ctrlKey );
+        return false;
     });
 }
 
