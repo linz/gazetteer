@@ -214,7 +214,7 @@ class Feature(base):
 
     def setLocation(self, xy, srid=4167):
         wkt = Database.scalar(
-            "select astext(st_transform(st_setsrid(st_point(:x,:y),:srid),4167))",
+            "select st_astext(st_transform(st_setsrid(st_point(:x,:y),:srid),4167))",
             x=xy[0],
             y=xy[1],
             srid=srid,
