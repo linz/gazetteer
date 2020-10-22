@@ -219,7 +219,7 @@ class Feature(base):
             y=xy[1],
             srid=srid,
         )
-        self.ref_point = ga.WKTElement(wkt, srid=srid)
+        self.ref_point = ga.WKTElement(wkt, 4167)
 
     def __str__(self):
         return "Feature<" + str(self.feat_id) + ">"
