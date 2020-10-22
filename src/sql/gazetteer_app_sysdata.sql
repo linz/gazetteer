@@ -19,7 +19,7 @@ DELETE FROM system_code WHERE code_group='CODE' AND code='APSD';
 
 INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('CODE','APSD','USER','Application data',NULL),
-('APSD','VRSN',NULL,'2.0.2-UAT','Current application version'),
+('APSD','VRSN',NULL,'2.0.3-UAT','Current application version'),
 ('APSD','NAOR',NULL,'NPUB HORM FLRF NNOT CPAL SCID SCRB SCHT UFGT UFAC UFRG UFAD UFGP NTDC NTAR DOCC DOCR MGRS','Order in which to display name annotations'),
 ('APSD','FAOR',NULL,'NPUB LDIS ISLD FNOT','Order in which to display feature annotations');
 
