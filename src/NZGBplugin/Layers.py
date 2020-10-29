@@ -238,7 +238,7 @@ class Layers(QObject):
             # data source.
             uri = QgsDataSourceUri(maplayer.dataProvider().dataSourceUri())
             uri.setSql("feat_id=-1")
-            if uri.uri() == glayer["uri"]:
+            if uri.uri().replace("checkPrimaryKeyUnicity='1' ", "") == glayer["uri"]:
                 glayer["layer"] = maplayer
                 glayer["layerid"] = maplayer.id()
             else:
@@ -264,7 +264,6 @@ class Layers(QObject):
                     ok = False
                     continue
                 layer.setSubsetString("feat_id=-1")
-                layer.setCustomProperty(Layers.idProperty, glayer["id"])
                 glayer["layer"] = layer
                 glayer["layerid"] = layer.id()
                 qml = os.path.join(self._qmldir, glayer["id"] + ".qml")
@@ -273,6 +272,7 @@ class Layers(QObject):
                         layer.loadNamedStyle(qml)
                     except:
                         pass
+                layer.setCustomProperty(Layers.idProperty, glayer["id"])
                 QgsProject.instance().addMapLayer(layer)
                 updated = True
             if "form" in ldef:
