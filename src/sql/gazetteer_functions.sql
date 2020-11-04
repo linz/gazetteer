@@ -280,22 +280,25 @@ SELECT
     ,4167)
 )
 SELECT
-    -- Want to expand buffer by border in metres. If in region of NZ then convert to NZTM
-    -- and buffer
-    CASE WHEN ST_Contains(ST_SetSRID(ST_MakeBox2D(ST_Point(140,-60),ST_Point(210,-20)),4167),geom)
-    THEN
-    ST_Transform(
-        ST_Expand(
-            ST_Transform(geom,2193)
-       ,$2),
-    4167)
-    -- Otherwise buffer in degrees (divide metres by 100000 as very approximate conversion!)
-    ELSE
-      ST_Intersection(
-       ST_SetSRID(ST_MakeBox2D(ST_Point(-10,-90),ST_Point(270,90)),4167),
-       ST_Expand(geom,$2/100000.0)
-       )
-    END
+    ST_Intersection(
+      -- Want to expand buffer by border in metres. If in region of NZ then convert to NZTM
+      -- and buffer
+      CASE WHEN ST_Contains(ST_SetSRID(ST_MakeBox2D(ST_Point(140,-60),ST_Point(210,-20)),4167),geom)
+      THEN
+      ST_Transform(
+          ST_Expand(
+              ST_Transform(geom,2193)
+         ,$2),
+      4167)
+      -- Otherwise buffer in degrees (divide metres by 100000 as very approximate conversion!)
+      ELSE
+        ST_Intersection(
+         ST_SetSRID(ST_MakeBox2D(ST_Point(-10,-90),ST_Point(270,90)),4167),
+         ST_Expand(geom,$2/100000.0)
+         )
+      END,
+      ST_Transform(ST_SetSRID(ST_MakeBox2D(ST_Point(-180,-90),ST_Point(180,90)),4126), 4167)
+    )
     FROM
        g;
 $body$
