@@ -3,6 +3,7 @@ FROM debian:jessie
 # Pass via env, like: docker build --build-arg PGSQL_VERSION=12 ...
 ARG  PGSQL_VERSION=8.4
 ARG  PGIS_VERSION=1.5.8
+ARG  GEOS_VERSION=3.8.1
 
 # Install postgresql.org APT source
 RUN apt-get update && apt-get install -y \
@@ -23,7 +24,14 @@ RUN apt-get update && apt-get install -y \
   xsltproc docbook-xsl docbook-mathml \
   libproj-dev libjson0-dev libxml2-dev \
   flex bison unzip imagemagick \
-  libgeos-dev && apt-get clean
+  && apt-get clean
+
+# Install GEOS from source
+RUN curl -s -L \
+  https://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 | \
+  tar xj && cd geos-${GEOS_VERSION} && \
+  ./configure && make && make install && \
+  cd .. && rm geos-${GEOS_VERSION} -rf
 
 # Install PostGIS ${PGIS_VERSION} from source
 RUN curl -s -L \
