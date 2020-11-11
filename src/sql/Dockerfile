@@ -1,5 +1,9 @@
 FROM debian:jessie
 
+# Pass via env, like: docker build --build-arg PGSQL_VERSION=12 ...
+ARG  PGSQL_VERSION=8.4
+ARG  PGIS_VERSION=1.5.8
+
 # Install postgresql.org APT source
 RUN apt-get update && apt-get install -y \
   ca-certificates \
@@ -13,50 +17,51 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg ma
 # Install PostgreSQL and packages needed to build
 # PostGIS from source
 RUN apt-get update && apt-get install -y \
-  postgresql-8.4 \
-  postgresql-server-dev-8.4 \
+  postgresql-${PGSQL_VERSION} \
+  postgresql-server-dev-${PGSQL_VERSION} \
   build-essential autoconf libtool libcunit1-dev \
   xsltproc docbook-xsl docbook-mathml \
   libproj-dev libjson0-dev libxml2-dev \
   flex bison unzip imagemagick \
   libgeos-dev && apt-get clean
 
-# Install PostGIS 1.5.8 from source
+# Install PostGIS ${PGIS_VERSION} from source
 RUN curl -s -L \
-  https://ftp.osuosl.org/pub/osgeo/download/postgis/source/postgis-1.5.8.tar.gz | \
-  tar xz && cd postgis-1.5.8 && \
+  https://ftp.osuosl.org/pub/osgeo/download/postgis/source/postgis-${PGIS_VERSION}.tar.gz | \
+  tar xz && cd postgis-${PGIS_VERSION} && \
   ./configure && make && make install && \
-  cd .. && rm postgis-1.5.8 -rf
+  cd .. && rm postgis-${PGIS_VERSION} -rf
 
 # Install gazeteer schema
 ADD *.sql build_gazetteer_export.py install.sh /sql/
 RUN touch /sql/gazetteer_export.sql && \
     chown postgres /sql/gazetteer_export.sql
 
-RUN pg_ctlcluster 8.4 main start && \
+RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
+    PGDIR=$('ls' -d /usr/share/postgresql/${PGSQL_VERSION}/contrib/postgis-* | head -1) && \
     su postgres -c 'createdb gazetteer' && \
     su postgres -c 'psql -f /sql/gazetteer_roles.sql gazetteer' && \
     su postgres -c 'createlang plpgsql gazetteer' && \
-    su postgres -c 'psql -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql gazetteer' && \
-    su postgres -c 'psql -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql gazetteer' && \
+    su postgres -c 'psql -f ${PGDIR}/postgis.sql gazetteer' && \
+    su postgres -c 'psql -f ${PGDIR}/spatial_ref_sys.sql gazetteer' && \
     su postgres -c 'cd /sql; ./install.sh drop'
 
 ADD install_web.sh /sql/
-RUN pg_ctlcluster 8.4 main start && \
+RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     su postgres -c 'cd /sql; ./install_web.sh drop'
 
-RUN echo "host all all 172.0.0.0/8 md5" >> /etc/postgresql/8.4/main/pg_hba.conf
-RUN echo "host all all 192.168.0.0/16 md5" >> /etc/postgresql/8.4/main/pg_hba.conf
+RUN echo "host all all 172.0.0.0/8 md5" >> /etc/postgresql/${PGSQL_VERSION}/main/pg_hba.conf
+RUN echo "host all all 192.168.0.0/16 md5" >> /etc/postgresql/${PGSQL_VERSION}/main/pg_hba.conf
 
 #EXPOSE 5432
 #COPY docker_entrypoint.sh /
-ENTRYPOINT su - postgres -c "/usr/lib/postgresql/8.4/bin/postgres \
-  -D /var/lib/postgresql/8.4/ \
-  -c config_file=/etc/postgresql/8.4/main/postgresql.conf \
+ENTRYPOINT su - postgres -c "/usr/lib/postgresql/${PGSQL_VERSION}/bin/postgres \
+  -D /var/lib/postgresql/${PGSQL_VERSION}/ \
+  -c config_file=/etc/postgresql/${PGSQL_VERSION}/main/postgresql.conf \
   -c listen_addresses='*' \
   "
 
-RUN pg_ctlcluster 8.4 main start && \
+RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     echo "create user gazowner IN ROLE gaz_owner password 'gazowner'" | \
     su postgres -c psql && \
     echo "create user gazexport IN ROLE gazetteer_export password 'gazexport'" | \
@@ -70,7 +75,7 @@ RUN pg_ctlcluster 8.4 main start && \
 
 ADD test/pgtap_load /pgtap_load
 
-RUN pg_ctlcluster 8.4 main start && \
+RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     cd /tmp && \
     su postgres -c 'sh /pgtap_load gazetteer'
 
