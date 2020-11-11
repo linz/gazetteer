@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
         matrix:
-            pg: [ '10' ]
+            pg: [ '10', '12' ]
             pgis: [ '2.5' ]
     env:
       # Make apt non-interactive by default, and not showing progress
