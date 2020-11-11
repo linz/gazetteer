@@ -1,4 +1,4 @@
-version: "2"
+version: "2.1"
 
 services:
   db:
@@ -16,8 +16,11 @@ services:
       #POSTGRES_PASSWORD: postgres
 
   qgis:
-    image: linz-gazetteer-qgis:3.10
-    build: src/NZGBplugin
+    image: "linz-gazetteer-qgis:${QGIS_TAG:-3.10}"
+    build:
+      context: src/NZGBplugin
+      args:
+        - UPSTREAM_TAG=${QGIS_TAG:-3.10}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./src/NZGBplugin:/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin
