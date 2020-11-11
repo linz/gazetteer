@@ -17,6 +17,7 @@ services:
 
   qgis:
     image: "linz-gazetteer-qgis:${QGIS_TAG:-3.10}"
+    tty: true
     build:
       context: src/NZGBplugin
       args:
