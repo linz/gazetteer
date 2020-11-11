@@ -37,7 +37,7 @@ docker-qgis-start-dba: docker-up ## Start the containerized qgis
 
 .PHONY: docker-qgis-test
 docker-qgis-test: docker-up ## Run python tests against QGIS instance (version QGIS_TAG)
-	docker-compose exec -T qgis sh -c "/usr/bin/xvfb-run --server-args=-screen\ 0\ 1920x1200x24 -- qgis_testrunner.sh tests_directory.run_tests.run_test_modules"
+	docker-compose exec qgis sh -c "/usr/bin/xvfb-run --server-args=-screen\ 0\ 1920x1200x24 -- qgis_testrunner.sh tests_directory.run_tests.run_test_modules"
 
 .PHONY: docker-db-connect
 docker-db-connect: docker-up ## Connect to the containerized db using psql
@@ -45,7 +45,7 @@ docker-db-connect: docker-up ## Connect to the containerized db using psql
 
 .PHONY: docker-db-test
 docker-db-test: docker-up ## Connect to the containerized db using psql
-	docker-compose exec -T db su postgres -c 'pg_prove -d gazetteer /sql/test/schema/*.sql'
+	docker-compose exec db su postgres -c 'pg_prove -d gazetteer /sql/test/schema/*.sql'
 	#docker-compose exec db su postgres -c 'sh /sql/test/run_tests.sh gazetteer'
 
 .PHONY: docker-db-shell
