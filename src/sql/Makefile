@@ -3,7 +3,7 @@ DOCKERNAME = linz-gazetteer
 .PHONY: help
 help:
 	@echo "Available targets:"
-	@grep -E '^[$$() a-zA-Z_0-9-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+	@grep -E '^[.$$() a-zA-Z_0-9-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		sed 's/$$(IMAGES)/$(IMAGES)/' | \
 		sed 's/$$(IMAGES_PUSH)/$(IMAGES_PUSH)/' | \
 		awk \
