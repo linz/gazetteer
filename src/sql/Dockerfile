@@ -52,10 +52,7 @@ RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     su -m postgres -c 'echo "PGDIR(postgres)=${PGDIR}"' && \
     su postgres -c 'createdb gazetteer' && \
     su postgres -c 'psql -f /sql/gazetteer_roles.sql gazetteer' && \
-    if test -e /usr/share/postgresql/${PGSQL_VERSION}/bin/createlang; \
-    then \
-      su postgres -c 'createlang plpgsql gazetteer'; \
-    fi && \
+    ( su postgres -c 'createlang plpgsql gazetteer' || true; ) && \
     su -m postgres -c 'psql -f ${PGDIR}/postgis.sql gazetteer' && \
     su -m postgres -c 'psql -f ${PGDIR}/spatial_ref_sys.sql gazetteer' && \
     su postgres -c 'cd /sql; ./install.sh drop'
