@@ -64,14 +64,6 @@ RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
 RUN echo "host all all 172.0.0.0/8 md5" >> /etc/postgresql/${PGSQL_VERSION}/main/pg_hba.conf
 RUN echo "host all all 192.168.0.0/16 md5" >> /etc/postgresql/${PGSQL_VERSION}/main/pg_hba.conf
 
-#EXPOSE 5432
-#COPY docker_entrypoint.sh /
-ENTRYPOINT su - postgres -c "/usr/lib/postgresql/${PGSQL_VERSION}/bin/postgres \
-  -D /var/lib/postgresql/${PGSQL_VERSION}/ \
-  -c config_file=/etc/postgresql/${PGSQL_VERSION}/main/postgresql.conf \
-  -c listen_addresses='*' \
-  "
-
 RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     echo "create user gazowner IN ROLE gaz_owner password 'gazowner'" | \
     su postgres -c psql && \
@@ -92,3 +84,14 @@ RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
 
 RUN apt-get update && apt-get install -y \
     libtap-parser-sourcehandler-pgtap-perl
+
+ENV PGSQL_VERSION=${PGSQL_VERSION}
+
+#EXPOSE 5432
+#COPY docker_entrypoint.sh /
+ENTRYPOINT su -m - postgres -c "/usr/lib/postgresql/${PGSQL_VERSION}/bin/postgres \
+  -D /var/lib/postgresql/${PGSQL_VERSION}/ \
+  -c config_file=/etc/postgresql/${PGSQL_VERSION}/main/postgresql.conf \
+  -c listen_addresses='*' \
+  "
+
