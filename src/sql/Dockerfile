@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
   xsltproc docbook-xsl docbook-mathml \
   libproj-dev libjson0-dev libxml2-dev \
   flex bison unzip imagemagick \
+  libgdal-dev \
   && apt-get clean
 
 # Install GEOS from source
