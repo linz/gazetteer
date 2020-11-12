@@ -47,6 +47,8 @@ RUN touch /sql/gazetteer_export.sql && \
 
 RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     export PGDIR=$('ls' -d /usr/share/postgresql/${PGSQL_VERSION}/contrib/postgis-* | head -1) && \
+    echo "PGDIR=${PGDIR}" && \
+    su -m postgres -c 'echo "PGDIR(postgres)=${PGDIR}"' && \
     su postgres -c 'createdb gazetteer' && \
     su postgres -c 'psql -f /sql/gazetteer_roles.sql gazetteer' && \
     su postgres -c 'createlang plpgsql gazetteer' && \
