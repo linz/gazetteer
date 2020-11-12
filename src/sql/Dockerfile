@@ -31,7 +31,7 @@ RUN curl -s -L \
   https://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 | \
   tar xj && cd geos-${GEOS_VERSION} && \
   ./configure && make && make install && \
-  cd .. && rm geos-${GEOS_VERSION} -rf
+  ldconfig -v && cd .. && rm geos-${GEOS_VERSION} -rf
 
 # Install PostGIS ${PGIS_VERSION} from source
 RUN curl -s -L \
