@@ -46,12 +46,12 @@ RUN touch /sql/gazetteer_export.sql && \
     chown postgres /sql/gazetteer_export.sql
 
 RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
-    PGDIR=$('ls' -d /usr/share/postgresql/${PGSQL_VERSION}/contrib/postgis-* | head -1) && \
+    export PGDIR=$('ls' -d /usr/share/postgresql/${PGSQL_VERSION}/contrib/postgis-* | head -1) && \
     su postgres -c 'createdb gazetteer' && \
     su postgres -c 'psql -f /sql/gazetteer_roles.sql gazetteer' && \
     su postgres -c 'createlang plpgsql gazetteer' && \
-    su postgres -c 'psql -f ${PGDIR}/postgis.sql gazetteer' && \
-    su postgres -c 'psql -f ${PGDIR}/spatial_ref_sys.sql gazetteer' && \
+    su -m postgres -c 'psql -f ${PGDIR}/postgis.sql gazetteer' && \
+    su -m postgres -c 'psql -f ${PGDIR}/spatial_ref_sys.sql gazetteer' && \
     su postgres -c 'cd /sql; ./install.sh drop'
 
 ADD install_web.sh /sql/
