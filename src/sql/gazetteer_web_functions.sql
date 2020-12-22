@@ -41,7 +41,15 @@ $body$
        replace(
        replace(
        replace(
+       replace(
+       replace(
+       replace(
+       replace(
             $1,
+            'ó','o'),
+            'Ó','O'),
+            'ø','o'),
+            'Ø','O'),
             'ā','a'),
             'ē','e'),
             'ī','i'),
