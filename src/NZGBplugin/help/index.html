@@ -9,7 +9,7 @@
         <h1>Gazetteer administration application help</h1>
         <h2>Starting the gazetteer application</h2>
         <p>
-        The gazetteer application is started by either running from the Plugin menu (Plugins | Gazetteer editor | Open the gazetteer editor) or by clicking the <img class="icon"src="../icon.png" /> gazetteer icon.  
+        The gazetteer application is started by either running from the Plugin menu (Plugins | Gazetteer editor | Open the gazetteer editor) or by clicking the <img class="icon"src="../icon.png" /> gazetteer icon.
         </p>
         <p>
         This will open the Gazetteer editor window and add the gazetteer map layers to the map.  The editor window is a dockable window - it can be dragged off the main QGIS window.
@@ -27,7 +27,7 @@
         </ul>
         <h2>Finding names</h2>
         <p>
-        You can find names by entering the name into the search box (on the search tab of the editor) and clicking the search button. 
+        You can find names by entering the name into the search box (on the search tab of the editor) and clicking the search button.
         Names will be found that contain every complete word in the search string.  Diacritical marks and case (upper/lower case) are ignored in matching words.
         There are a couple of useful shortcuts in searching for names:
         <ul>
@@ -41,17 +41,17 @@
         you can restrict the search in a number of ways..
         <ul>
             <li>By feature class/type (feature class is a broad grouping of feature types)</li>
-            <li>By name status.  This includes groupings of official status's, unofficial status's and 
+            <li>By name status.  This includes groupings of official status's, unofficial status's and
             unpublished status's.  (Unpublished status's are new and deleted).</li>
             <li>By limiting the search to the area currently viewed on the map</li>
         </ul>
         </p>
         <p>You can also used the advanced search box to increase the maximum number of names that can be
-        returned.  
+        returned.
         </p>
         <p>If too many names match the search criteria then you will get an error message &quot;Query not specific enough&quot;.  You can make the search more specific to reduce the number of matches, or use the advanced search option to increase the maximum permitted.
         </p>
-        <p>Once a name is found you can click the name in the results list to see all of its details.  
+        <p>Once a name is found you can click the name in the results list to see all of its details.
         The matched names are also displayed on the map, and you can use the identify search tool to select a name to display from the map.  Start the identify search tool by clicking <img class="icon"src="../searchpointer.png" />.  Then hover over a search result on the map to see its name displayed in the status bar on the bottom of the map window, or click it to view its details.
         </p>
         <p>Normally when you click a name in the list its details will replace those of the last name viewed.  However you can display the name in a new window by holding down the shift key when clicking.
@@ -64,7 +64,7 @@
         </p>
         <h2>Editing names</h2>
         <p>The details of a name are displayed in a window by clicking a name in the search results or
-        clicking a search result on the map. 
+        clicking a search result on the map.
         The name details window can be dragged off (undocked from) the search window, and several names detail can be viewed at once.
         </p>
         <p>
@@ -77,7 +77,7 @@
         When you click the edit button you put the name into &quot;edit mode&quot;.  Here you can edit all details of the name and feature, and add new events, annotations, and associated names.
         </p>
         <p>
-        To edit an item click its the corresponding &quot;edit&quot; link, and then make the required changes.  Click the save button at the top to save the changes, or the Cancel button to undo all changes to the name.  
+        To edit an item click its the corresponding &quot;edit&quot; link, and then make the required changes.  Click the save button at the top to save the changes, or the Cancel button to undo all changes to the name.
         </p>
         <p>Note that to associate a name with another name (which is not a name for teh same feature), you must first open the other name in a name window (ie search for it and click the result).  You can then select that name in the "Create new assocation" window"
         </p>
@@ -101,8 +101,8 @@
         not published, and will not show in the administration application unless you explicitely search for deleted names.
         </p>
         <h2>Editing feature geometries (spatial definition)</h2>
-        <p>To edit a feature you must first select it so that it is shown in the &quot;gazetteer feature&quot; layers on the map.  You can then select one of the layers (refpoint, point, line, polygon) to edit or create spatial objects in that layer.  After making spatial edits, click the 
-<img class="icon"src="../editsave.png" /> icon to save the changes, or 
+        <p>To edit a feature you must first select it so that it is shown in the &quot;gazetteer feature&quot; layers on the map.  You can then select one of the layers (refpoint, point, line, polygon) to edit or create spatial objects in that layer.  After making spatial edits, click the
+<img class="icon"src="../editsave.png" /> icon to save the changes, or
 <img class="icon"src="../editcancel.png" /> to cancel them.
 </p>
 
@@ -130,19 +130,19 @@ Import geometries selected in other layers into the feature.  To use this first 
 </td></tr>
         </table>
         <h2>Publishing data</h2>
-        <p>Periodically the gazetteer data used by the web application and LINZ data service needs to be  updated, in order to publish new names. 
-        Note that some names are not published.  Any name with a status of &quot;New name&quot; or &quot;Deleted name&quot; is not published.  
+        <p>Periodically the gazetteer data used by the web application and LINZ data service needs to be  updated, in order to publish new names.
+        Note that some names are not published.  Any name with a status of &quot;New name&quot; or &quot;Deleted name&quot; is not published.
         Also any name with a &quot;Not published&quot; annotation of either the name or the feature it refers to will not be published.
         You can check which names are not published using the advanced search options.
         </p>
-        
+
         <p>To publish data to the web database and LINZ data service (not yet implemented)
-        open the Administration function dialog, 
+        open the Administration function dialog,
         accessed from the <span class="menu">Plugins | Gazetteer editor | Administration functions</span> menu.  Only gazetteer administrators can use these functions. This opens the administration dialog.
         </p>
         <p>
-        Open the &quot;Publish gazetteer data&quot; tab and 
-        click the &quot;Publish data&quot; button, to start the update. 
+        Open the &quot;Publish gazetteer data&quot; tab and
+        click the &quot;Publish data&quot; button, to start the update.
         The update may take several minutes to run.  During this time the online
         application may not be able to access the data.
         </p>
@@ -152,7 +152,7 @@ Import geometries selected in other layers into the feature.  To use this first 
         data, add and remove users, and update lists such as feature type and name
         status lists.
         </p>
-        <p>All users must have LINZ logins - they are identified by their network 
+        <p>All users must have LINZ logins - they are identified by their network
         login in the gazetteer database.
         </p>
         <p>
@@ -161,10 +161,10 @@ Import geometries selected in other layers into the feature.  To use this first 
         accessed from the <span class="menu">Plugins | Gazetteer editor | Administration functions</span> menu.  Only gazetteer administrators can use these functions. This opens the administration dialog.
         </p>
         <p>
-        Select the &quot;Users&quot; tab.  This will display a list of users.  
+        Select the &quot;Users&quot; tab.  This will display a list of users.
         </p>
         <p>
-        To add a new user, click enter their network userid in the User name box and click the &quot;Add&quot; button.  
+        To add a new user, click enter their network userid in the User name box and click the &quot;Add&quot; button.
         </p>
         <p>To remove a user, select them from the drop down list and click the &quot;Remove&quot; button.
         </p>
@@ -173,8 +173,8 @@ Import geometries selected in other layers into the feature.  To use this first 
         <p>Note that you cannot change any settings for yourself!</p>
 
         <h2>Updating system codes</h2>
-        <p>Updating system codes should generally be done with great care!  This 
-        function is only available to administrators, and updating some system codes 
+        <p>Updating system codes should generally be done with great care!  This
+        function is only available to administrators, and updating some system codes
         can stop the application operating correctly
         </p>
         <p>
@@ -189,15 +189,15 @@ Import geometries selected in other layers into the feature.  To use this first 
             </ul>
             </li>
             <li>Defining feature types not to be exported. Add an entry in the
-            XNPV system code group defining the feature type code not to be 
-            published.  The value is ignored, but sensibly will describe the 
+            XNPV system code group defining the feature type code not to be
+            published.  The value is ignored, but sensibly will describe the
             the feature type, and the description will indicate why it is not
             being published
             </li>
         </ul>
         <h2>Installing/updating the application</h2>
         <p>
-        The gazetteer application is installed from the LINZ Customer services plugin repository.  The plugin is installed using the <span class="menu">Plugins | Fetch Python plugins</span> menu item. 
+        The gazetteer application is installed from the LINZ Customer services plugin repository.  The plugin is installed using the <span class="menu">Plugins | Fetch Python plugins</span> menu item.
         </p>
         <p>If the plugin is already installed, but is not showing then it may need to be enabled.  Use the <span class="menu">Plugins | Manage plugins</span> menu item to open the plugins dialog, and click the checkbox for the Gazetteer editor plugin.
         </p>

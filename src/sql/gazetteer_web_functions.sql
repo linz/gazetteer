@@ -1,13 +1,13 @@
-﻿-- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 set search_path=gazetteer_web, public;
 
@@ -17,7 +17,7 @@ CREATE OR REPLACE FUNCTION gaz_plainText( string TEXT )
 RETURNS TEXT
 AS
 $body$
-    SELECT 
+    SELECT
        replace(
        replace(
        replace(
@@ -84,13 +84,13 @@ CREATE OR REPLACE FUNCTION gaz_plainText2( string TEXT )
 RETURNS TEXT
 AS
 $body$
-     SELECT 
+     SELECT
        regexp_replace(
        regexp_replace(
        regexp_replace(
        lower(gaz_plaintext($1)),
          E'[\\'']','','g'),  -- Characters to delete
-         E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g'), -- Alternative separators 
+         E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g'), -- Alternative separators
          E'^\\s+','') -- Leading spaces
 $body$
 LANGUAGE sql IMMUTABLE
@@ -121,7 +121,7 @@ CREATE OR REPLACE FUNCTION gaz_name_in_view( name_id int, view geometry )
 RETURNS boolean
 AS
 $body$
-   SELECT 
+   SELECT
       $2 ~ extents OR
       ($2 && extents AND
          EXISTS (SELECT id FROM gaz_shape WHERE feat_id=gaz_name.feat_id AND ST_Intersects($2,shape)))
@@ -145,9 +145,9 @@ $body$
    ),
    pts(p) AS
    (
-     SELECT 
+     SELECT
        ST_Transform(
-          ST_SetSrid( 
+          ST_SetSrid(
              ST_Point($1*f1.x+$2*(1-f1.x),$3*f2.x+$4*(1-f2.x)),
              $5),
              $6)
@@ -175,11 +175,11 @@ CREATE OR REPLACE FUNCTION gaz_dropdown_name1( search_word text, prefix text )
 RETURNS TABLE (word text)
 AS
 $body$
-SELECT 
+SELECT
    distinct ($2 || substring(word from length($1)+1))
 FROM
    gaz_word
-WHERE 
+WHERE
    word like $1 || '%'
 ORDER BY
    1;
@@ -194,11 +194,11 @@ CREATE OR REPLACE FUNCTION gaz_dropdown_name1s( search_word text, prefix text, v
 RETURNS TABLE (word text)
 AS
 $body$
-SELECT 
+SELECT
    distinct ($2 || substring(word from length($1)+1))
 FROM
    gaz_word
-WHERE 
+WHERE
    word like $1 || '%' AND
    gaz_name_in_view(name_id,$3)
 ORDER BY
@@ -222,12 +222,12 @@ FROM
 WHERE
    word = $1
 )
-SELECT 
+SELECT
    distinct ($3 || substring(word from length($2)+1))
 FROM
    gaz_word g
-   JOIN fw ON g.name_id = fw.name_id AND g.nword <> fw.nword 
-WHERE 
+   JOIN fw ON g.name_id = fw.name_id AND g.nword <> fw.nword
+WHERE
    word like $2 || '%'
    AND ($4 IS NULL OR gaz_name_in_view( g.name_id, $4 ))
 ORDER BY
@@ -253,12 +253,12 @@ WHERE
    w1.word = $1 and
    w2.word = $2
 )
-SELECT 
+SELECT
    distinct ($4 || substring(g.word FROM length($3)+1))
 FROM
    gaz_word g
    JOIN fw ON g.name_id = fw.name_id AND g.nword <> fw.nword1 and g.nword <> fw.nword2
-WHERE 
+WHERE
    word like $3 || '%' AND
    ($5 is null OR gaz_name_in_view(g.name_id,$5))
 ORDER BY
@@ -310,14 +310,14 @@ BEGIN
      RETURN QUERY SELECT * FROM gaz_dropdown_name2s( search_words[1], search_words[2], search_string, l_view );
   ELSEIF nsearch = 3 THEN
      RETURN QUERY SELECT * FROM gaz_dropdown_name3s( search_words[1], search_words[2], search_words[3], search_string, l_view );
-  ELSIF nsearch > 3 THEN 
+  ELSIF nsearch > 3 THEN
 
     match_where = 'w0.word like ' || quote_literal(search_words[nsearch] || '%') ;
     match_from = 'gaz_word w0';
     match_diff = 'w%.nword <> w0.nword';
     FOR iword IN 1..nsearch-1 LOOP
        iwordc = iword::varchar;
-       match_from = match_from || ' join gaz_word w' || iwordc || 
+       match_from = match_from || ' join gaz_word w' || iwordc ||
                                     ' on w' || iwordc || '.name_id = w0.name_id and ' ||
                                     replace(match_diff,'%',iwordc)
                                     ;
@@ -326,7 +326,7 @@ BEGIN
     END LOOP;
     iwordc = (length(search_words[nsearch])+1)::varchar;
     match_where = match_where || ' and ($1 is null or gaz_name_in_view(w0.name_id,$1))';
-    match_sql = 'SELECT distinct(' || quote_literal(search_string) || ' || substring(w0.word from ' || iwordc || 
+    match_sql = 'SELECT distinct(' || quote_literal(search_string) || ' || substring(w0.word from ' || iwordc ||
                 ')) from ' || match_from || ' where ' || match_where || ' order by 1';
     -- RAISE NOTICE 'SQL: %', match_sql;
     RETURN QUERY EXECUTE match_sql USING l_view;
@@ -365,7 +365,7 @@ BEGIN
     match_diff = 'w%.nword <> w0.nword';
     FOR iword IN 1..nsearch-1 LOOP
        iwordc = iword::varchar;
-       match_from = match_from || ' join gaz_word w' || iwordc || 
+       match_from = match_from || ' join gaz_word w' || iwordc ||
                                     ' on w' || iwordc || '.name_id = w0.name_id and ' ||
                                     replace(match_diff,'%',iwordc)
                                     ;
@@ -413,7 +413,7 @@ BEGIN
   match_diff = 'w%.nword <> w0.nword';
   FOR iword IN 1..nsearch-1 LOOP
        iwordc = iword::varchar;
-       match_from = match_from || ' join gaz_word w' || iwordc || 
+       match_from = match_from || ' join gaz_word w' || iwordc ||
                                     ' on w' || iwordc || '.name_id = w0.name_id and ' ||
                                     replace(match_diff,'%',iwordc)
                                     ;
@@ -445,7 +445,7 @@ END;
 $body$
    LANGUAGE 'plpgsql' IMMUTABLE STRICT
    COST 100;
-  
+
 ALTER FUNCTION gaz_transform_null(geometry, integer) OWNER TO gaz_owner;
 GRANT EXECUTE ON FUNCTION gaz_transform_null(geometry, integer) TO gaz_web_reader;
-GRANT EXECUTE ON FUNCTION gaz_transform_null(geometry, integer) TO gazetteer_user; 
+GRANT EXECUTE ON FUNCTION gaz_transform_null(geometry, integer) TO gazetteer_user;

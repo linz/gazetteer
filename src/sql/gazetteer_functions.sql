@@ -1,13 +1,13 @@
-﻿-- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 SET search_path=gazetteer, public;
 SET search_path=gazetteer, public;
@@ -16,7 +16,7 @@ CREATE OR REPLACE FUNCTION gaz_plainText( string TEXT )
 RETURNS TEXT
 AS
 $body$
-    SELECT 
+    SELECT
        replace(
        replace(
        replace(
@@ -92,7 +92,7 @@ $body$
        regexp_replace(
        lower(gaz_plaintext($1)),
          E'[\\'']','','g'),  -- Characters to delete
-         E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g') -- Alternative separators 
+         E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g') -- Alternative separators
          )
 $body$
 LANGUAGE sql IMMUTABLE
@@ -124,7 +124,7 @@ BEGIN
      END IF;
      -- If this is being used as a category definition for a code then it can't be deleted
      IF EXISTS(
-        SELECT 
+        SELECT
            *
         FROM
            system_code sc1
@@ -134,7 +134,7 @@ BEGIN
            sc1.category=p_code
         ) THEN
         RETURN FALSE;
-     END IF; 
+     END IF;
      -- If this is being used for a column and there is only one code in this group, then it can't
      -- be deleted
      IF EXISTS (SELECT * FROM system_code WHERE code_group='CUSG' AND code=p_code_group) THEN
@@ -142,16 +142,16 @@ BEGIN
            RETURN FALSE;
         END IF;
      END IF;
-     
+
      -- If this is used in a database column and it is used in that column then it can't be deleted
      FOR v_column IN SELECT unnest(regexp_split_to_array(value,E'\\s+')) FROM system_code WHERE code_group='CUSG' AND code=p_code_group LOOP
        BEGIN
-      
+
          v_table = split_part(v_column,'.',1);
          v_field = split_part(v_column,'.',2);
          v_sql = 'SELECT COUNT(*) FROM ' || quote_ident(v_table) || ' WHERE ' || quote_ident(v_field) || ' = ''' || replace(p_code,'''','''''') || '''';
          RAISE NOTICE 'SQL: %', v_sql;
-         EXECUTE v_sql INTO v_count; 
+         EXECUTE v_sql INTO v_count;
          IF v_count > 0 THEN
             RETURN FALSE;
          END IF;
@@ -159,9 +159,9 @@ BEGIN
          -- Silently ignore errors
        END;
      END LOOP;
-     
+
      RETURN TRUE;
-     
+
 END
 $body$
 LANGUAGE plpgsql STABLE
@@ -189,12 +189,12 @@ CREATE OR REPLACE FUNCTION gaz_preferredNameId( p_feat_id  INT )
 RETURNS INT
 AS
 $body$
-   SELECT 
+   SELECT
        n.name_id
-   FROM 
+   FROM
        name n
        LEFT OUTER JOIN system_code sc ON sc.code_group='NSTO' AND sc.code=n.status
-   WHERE 
+   WHERE
        n.feat_id=$1
    ORDER BY
        coalesce(sc.value,'ZZZZ')
@@ -207,12 +207,12 @@ CREATE OR REPLACE FUNCTION gaz_preferredName( p_feat_id  INT )
 RETURNS varchar
 AS
 $body$
-   SELECT 
+   SELECT
        n.name
-   FROM 
+   FROM
        name n
        LEFT OUTER JOIN system_code sc ON sc.code_group='NSTO' AND sc.code=n.status
-   WHERE 
+   WHERE
        n.feat_id=$1
    ORDER BY
        coalesce(sc.value,'ZZZZ')
@@ -235,14 +235,14 @@ RETURNS varchar
 AS
 $body$
 DECLARE
-    
+
     l_sign INT;
     l_secfmt VARCHAR;
     l_deg INT;
     l_min INT;
     l_sec FLOAT;
     l_offset FLOAT;
-    
+
 BEGIN
     l_sign := 1;
     l_sec := p_angle;
@@ -288,7 +288,7 @@ SELECT
     ,4167)
 )
 SELECT
-    -- Want to expand buffer by border in metres. If in region of NZ then convert to NZTM 
+    -- Want to expand buffer by border in metres. If in region of NZ then convert to NZTM
     -- and buffer
     CASE WHEN ST_Contains(ST_SetSRID(ST_MakeBox2D(ST_Point(140,-60),ST_Point(210,-20)),4167),geom)
     THEN
@@ -298,10 +298,10 @@ SELECT
        ,$2),
     4167)
     -- Otherwise buffer in degrees (divide metres by 100000 as very approximate conversion!)
-    ELSE 
+    ELSE
       ST_Intersection(
        ST_SetSRID(ST_MakeBox2D(ST_Point(-10,-90),ST_Point(270,90)),4167),
-       ST_Expand(geom,$2/100000.0) 
+       ST_Expand(geom,$2/100000.0)
        )
     END
     FROM
@@ -310,10 +310,10 @@ $body$
 LANGUAGE sql STABLE
 SET search_path FROM CURRENT;
 
-CREATE OR REPLACE FUNCTION gaz_createNewFeature( 
+CREATE OR REPLACE FUNCTION gaz_createNewFeature(
     p_name VARCHAR,
     p_type VARCHAR,
-    p_pointwkt VARCHAR ) 
+    p_pointwkt VARCHAR )
 RETURNS INTEGER
 AS
 $body$

@@ -1,14 +1,24 @@
-These are pointers rather than complete notes on installation.  
+These are pointers rather than complete notes on installation.
 
-The installation requires that the sqlalchemy and geoalchemy modules are installed into 
-python.  
+# Requirements
 
-The install.sh and similar scripts in the src/sql folder assist installing the 
-PostGresql database.
+Use of the QGIS (2.x) plugin requires that sqlalchemy
+(<0.9) and geoalchemy python modules are installed.
+You can use `pip install -r src/NZGBplugin/requirements.txt`
+to install both.
 
-Several files need updating to include database strings etc.  These include:
+The install.sh and similar scripts in the src/sql folder assist
+installing the PostgreSQL database (8.4 minimum version supported).
 
-src/NZGBplugin/Plugin.py <server> is url of the web server from which the plugin is delivered
-src/gazetteer/gazetteer_roles.sql  '*******' is a password by the "web application" 
-   (not part of this repository)
-src/setenv.sh Install the credentials for dev, uat, and prod databases
+Several files need updating to include database strings etc.
+These include:
+
+  - src/NZGBplugin/Plugin.py <server>
+    is url of the web server from which the plugin is delivered
+
+  - src/sql/gazetteer_roles.sql
+    '********' is a password by the "web application"
+    (not part of this repository)
+
+  - src/setenv.sh
+    Install the credentials for dev, uat, and prod databases

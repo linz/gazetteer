@@ -1,13 +1,13 @@
-﻿-- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 SET search_path=gazetteer, public;
 
@@ -26,7 +26,7 @@ BEGIN
     NEW.updated_by=current_user;
     NEW.update_date=current_timestamp;
     RETURN NEW;
-END        
+END
 $TRIGGER$ LANGUAGE plpgsql SECURITY DEFINER SET search_path FROM CURRENT;
     $template$;
 
@@ -36,7 +36,7 @@ $TRIGGER$ LANGUAGE plpgsql SECURITY DEFINER SET search_path FROM CURRENT;
     EXECUTE 'DROP TRIGGER IF EXISTS trg_' || p_tabname || '_update ON ' || p_tabname;
     EXECUTE 'CREATE TRIGGER trg_'  || p_tabname || '_update BEFORE UPDATE OR INSERT ON ' ||  p_tabname ||
         ' FOR EACH ROW EXECUTE PROCEDURE trgfunc_' || p_tabname || '_update()';
-    
+
     RETURN TRUE;
 END;
 $BODY$

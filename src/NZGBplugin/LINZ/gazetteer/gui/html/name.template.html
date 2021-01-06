@@ -102,7 +102,7 @@
         <p>Enter new coordinates.  Coordinates can either be latitude and longitude
         in a geocentric datum (eg NZGD2000, RSRGD2000, WGS84), or NZTM.  Latitudes
         and longitudes can be either as degrees (eg.&nbsp;40.3S&nbsp;171.5E),
-        degrees and minutes (eg.&nbsp;40&nbsp;03.25S&nbps;171&nbsp;35.2E) or 
+        degrees and minutes (eg.&nbsp;40&nbsp;03.25S&nbps;171&nbsp;35.2E) or
         degrees, minutes, and seconds (eg.&nbsp;40&nbsp;03&nbsp;15.2S&nbsp;170&nbsp;35&nbsp;06.9E).
         These can be latitude/longitude or longitude/latitude.
         </p>
@@ -194,7 +194,7 @@
     <!--(end)-->
     <!--(for event in sortEvents(name.events))-->
         <div id="@!id(event)!@" class="editable-item can-delete">
-        <p class="event"><span class="infotype">@!lookup('NEVT',event.event_type)!@</span> 
+        <p class="event"><span class="infotype">@!lookup('NEVT',event.event_type)!@</span>
         <span class="eventdate">(@!dateFormat(event.event_date)!@)</span>:
         @!event.event_reference!@
         <span class="author">(@!event.updated_by!@: @!dateFormat(event.update_date)!@)</span>
@@ -296,7 +296,7 @@
     <!--(for assoc in getAssociations())-->
     <div id="@!id(assoc.association)!@" class="editable-item can-delete">
         <p>
-        @!assoc.text!@ 
+        @!assoc.text!@
         <a class="name_link" href="?id=@!assoc.name.name_id!@">@!assoc.name.name!@</a>
         <span class="author">(@!assoc.association.updated_by!@: @!dateFormat(assoc.association.update_date)!@)</span>
         </p>

@@ -25,8 +25,8 @@
         </p>
         <h2>The javascript interface</h2>
         <p>
-        The javascript communicates with the Python using JSON.  All objects and object attributes are 
-        given a unique id, which is managed by some mapping functions in the Model.py module.  The 
+        The javascript communicates with the Python using JSON.  All objects and object attributes are
+        given a unique id, which is managed by some mapping functions in the Model.py module.  The
         interface is by a qcontroller object inserted into the javascript window object by the Qt WebView API.
         </p>
         <p>
@@ -65,7 +65,7 @@
             The links for editing and cancelling editing the block are created, if they do not already exist (if they exist the must have an id matching the block id with &quot;_edit_link&quot; or &quot;_unedit_link&quot; appended.  These are inserted after and at the end of the block, respectively.  They are given class enable-edit and cancel-edit-link.
             </li>
             <li>
-            Each div with editable-item and can-delete classes is given a delete and undelete link.  The delete item has class 
+            Each div with editable-item and can-delete classes is given a delete and undelete link.  The delete item has class
             </li>
             <li>
             Each item with edit-new-template is set up to allow creating new items using it as a template.
@@ -87,10 +87,10 @@
         <p>
         </p>
         <p>
-        Field validation is via the name_validator.js code, which has a map of validators indexed on the 
+        Field validation is via the name_validator.js code, which has a map of validators indexed on the
         object type and attribute name as &quot;validate_<i>type</i>[_<i>attribute</i>]&quot;.  When field
         validation is set up the code looks for an enclosing div with an object_type attribute to determine
-        the object type.  
+        the object type.
         </p>
         <p>Validators are set up on edit blocks (typically defining an object).  The setupValidators function creates div with class errors for the block to hold the validator output for each validator registered in the block, which inserts a p.validator-error item into the errors div.
         </p>
@@ -100,7 +100,7 @@
         The configuration module can also be run in standalone mode to configure the database connection (for example to connect to a development server).
         </p>
         <p>
-        By default the configuration points to the gazetteer database on the *production* server, logging in using the current 
+        By default the configuration points to the gazetteer database on the *production* server, logging in using the current
         user (getpass.getuser()).  You can check the configuration in Quantum GIS from the menu at the Plugins | Gazetteer editor | About gazetteer application.
         </p>
         <h2>User roles and security</h2>
@@ -110,7 +110,7 @@
         <table>
             <tr>
                 <td>gazetteer_user</td>
-                <td>Read only access to the database - no one has this role as 
+                <td>Read only access to the database - no one has this role as
                 anyone looking at it is also authorised to edit it</td>
             </tr>
             <tr>
@@ -159,8 +159,8 @@
             <tr>
                 <td>gazetteer_history</td>
                 <td>Retains historical records of the data.  This is maintained by insert/update/delete
-                    triggers on the gazetteer schema tables.  Note that all updates to the database 
-                    include the user id and update date. Any data being changed is copied to the history 
+                    triggers on the gazetteer schema tables.  Note that all updates to the database
+                    include the user id and update date. Any data being changed is copied to the history
                     tables before being overwritten/deleted.
                 </td>
             </tr>
@@ -174,32 +174,32 @@
                 <td>gazetteer_export</td>
                 <td>
                     Contains tables for updating published data in LDS and in CSV files on the LINZ
-                    website.  These are also updated by the publish data function.  LDS will automatically 
-                    update to reflect changes to these tables (within 24 hours?).  The CSV data must be 
+                    website.  These are also updated by the publish data function.  LDS will automatically
+                    update to reflect changes to these tables (within 24 hours?).  The CSV data must be
                     downloaded by NZGB staff and passed to the Comms team for uploading. <br />
-                    NOTE: This process could be replaced with a simple PHP script to access the 
+                    NOTE: This process could be replaced with a simple PHP script to access the
                     create a CSV file on the fly.
                 </td>
             </tr>
         </table>
 
         <h2>Maintaining published data sets</h2>
-        <p>Data is published from the NZGB admin database to two datasets, which are in the gazetteer_web 
-        and gazetteer_export schema. 
+        <p>Data is published from the NZGB admin database to two datasets, which are in the gazetteer_web
+        and gazetteer_export schema.
         </p>
         <p>
-        The gazetteer_web schema contains tables used by the online gazetteer application.  The data is 
-        generated by database stored procedures, and is updated by calling gweb_update_web_database() 
-        procedure.  Any changes to the process will require modifying these procedures. The update is 
+        The gazetteer_web schema contains tables used by the online gazetteer application.  The data is
+        generated by database stored procedures, and is updated by calling gweb_update_web_database()
+        procedure.  Any changes to the process will require modifying these procedures. The update is
         effective immediately the data is regenerated.
         </p>
         <p>
         The LDS and CSV file exports are generated in the gazetteer_export database by the gaz_update_export_database() procedure.
-        This is based on the name_export view and the gazetteer_export_tables view.  The name_export view 
-        defines the data that is available to be exported, and the gazetteer_export_tables view defines the 
+        This is based on the name_export view and the gazetteer_export_tables view.  The name_export view
+        defines the data that is available to be exported, and the gazetteer_export_tables view defines the
         data sets that will be generated by selecting columns and rows from the name_export view.  When the
-        data is published each data set populates a table in the gazetteer_export schema.  (Note that the 
-        output column names in the gazetteer_export_tables view are prefixed by 5 characters which sorted 
+        data is published each data set populates a table in the gazetteer_export schema.  (Note that the
+        output column names in the gazetteer_export_tables view are prefixed by 5 characters which sorted
         to define the order of the columns).
         </p>
         </p>
@@ -209,8 +209,8 @@
             <tr>
                 <td>XCOL</td>
                 <td>Defines columns that may be exported.  Each column has a code, which defines the order
-                    in which it is included in the export table, and a category, which is used to select it 
-                    into a data set.  Each data set defines a set of categories it will export, which implies 
+                    in which it is included in the export table, and a category, which is used to select it
+                    into a data set.  Each data set defines a set of categories it will export, which implies
                     a set of columns.
                 </td>
             </tr>
@@ -230,7 +230,7 @@
             </tr>
             <tr>
                 <td>XDSN</td>
-                <td>Defines an export data set.  The category defines the destination.  The value defines 
+                <td>Defines an export data set.  The category defines the destination.  The value defines
                     the name of the table
                 </td>
             </tr>
@@ -247,11 +247,11 @@
 
         <h2>QGIS plugin installation</h2>
         <p>
-        The QGIS plugin is packaged as a zip file NZGBplugin.zip, containing the 
+        The QGIS plugin is packaged as a zip file NZGBplugin.zip, containing the
         entire plugin directory (named NZGBplugin) from the source code.  This
         is installed to the LINZ QGIS plugin repository.
         Before uploading a new version the version number in Plugin.py should
-        be updated.  Once the file is upload the plugins.xml file in the 
+        be updated.  Once the file is upload the plugins.xml file in the
         repository needs to be updated to reflect the new version number.
         </p>
         <p>
@@ -269,8 +269,8 @@
         The database components include sql scripts to build and update the database, and bash shell scripts to run
         them.  There are two shell scripts, install.sh for the main (admin) database, and install_web.sh for the web
         database components.  They take command line options that are passed to the postgres command line utilities
-        (-h for host, -d for database, -U for userid), and an optional argument &quot;drop&quot;.  If the drop 
-        argument is specified, then the entire schema is dropped and reinstalled.  This will lose all data that was 
+        (-h for host, -d for database, -U for userid), and an optional argument &quot;drop&quot;.  If the drop
+        argument is specified, then the entire schema is dropped and reinstalled.  This will lose all data that was
         in the database!!!
         </p>
     </body>
