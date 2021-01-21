@@ -257,7 +257,7 @@ SELECT is(md5(p.prosrc), '62551b915db1b1020ec8f45757025ff5', 'Function gaz_namet
    AND proname = 'gaz_nameterritorialauthority'
    AND proargtypes::text = '23';
 
-SELECT is(md5(p.prosrc), '0d0194d69e0076d57da269f450946fe2', 'Function gaz_plaintext body should match checksum')
+SELECT is(md5(p.prosrc), 'd0a4014ca4b83cd984ff93533d942624', 'Function gaz_plaintext body should match checksum')
   FROM pg_catalog.pg_proc p
   JOIN pg_catalog.pg_namespace n ON p.pronamespace = n.oid
  WHERE n.nspname = 'gazetteer'
