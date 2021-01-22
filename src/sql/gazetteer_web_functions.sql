@@ -72,7 +72,7 @@ $body$
             'Ï','I'),
             'Ö','O'),
             'Ü','U'),
-            '’',$$'$$)
+            '’',$$'$$);
 $body$
 LANGUAGE sql IMMUTABLE;
 
@@ -91,7 +91,7 @@ $body$
        lower(gaz_plaintext($1)),
          E'[\\'']','','g'),  -- Characters to delete
          E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g'), -- Alternative separators
-         E'^\\s+','') -- Leading spaces
+         E'^\\s+',''); -- Leading spaces
 $body$
 LANGUAGE sql IMMUTABLE
 SET search_path FROM CURRENT;
@@ -107,7 +107,7 @@ $BODY$
         regexp_replace(
            gaz_plaintext2($1),
            CASE WHEN $2 THEN '$' ELSE E'\\s+$' END,''), -- Trailing spaces
-         E'\\s+')
+         E'\\s+');
 $BODY$
   LANGUAGE sql IMMUTABLE STRICT;
 ALTER FUNCTION gaz_plaintextwords(text, boolean) OWNER TO gaz_owner;

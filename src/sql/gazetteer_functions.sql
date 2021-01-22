@@ -71,7 +71,7 @@ $body$
             'Ï','I'),
             'Ö','O'),
             'Ü','U'),
-            '’',$$'$$)
+            '’',$$'$$);
 $body$
 LANGUAGE sql IMMUTABLE;
 
@@ -79,7 +79,7 @@ CREATE OR REPLACE FUNCTION gaz_textHasMacrons( string TEXT )
 RETURNS BOOLEAN
 AS
 $body$
-    SELECT $1 ~ '[āēīōūĀĒĪŌŪ]'
+    SELECT $1 ~ '[āēīōūĀĒĪŌŪ]';
 $body$
 LANGUAGE sql IMMUTABLE;
 
@@ -93,7 +93,7 @@ $body$
        lower(gaz_plaintext($1)),
          E'[\\'']','','g'),  -- Characters to delete
          E'[\\)\\(\\,\\.\\&\\;\\/\\-]',' ','g') -- Alternative separators
-         )
+         );
 $body$
 LANGUAGE sql IMMUTABLE
 SET search_path FROM CURRENT;
@@ -102,7 +102,7 @@ CREATE OR REPLACE FUNCTION gaz_plainTextWords( string TEXT )
 RETURNS text[]
 AS
 $body$
-      SELECT regexp_split_to_array( gaz_plaintext2( $1 ),E'\\s+')
+      SELECT regexp_split_to_array( gaz_plaintext2( $1 ),E'\\s+');
 $body$
 LANGUAGE sql IMMUTABLE
 SET search_path FROM CURRENT;
