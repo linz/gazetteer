@@ -71,7 +71,7 @@ $body$
             'Ï','I'),
             'Ö','O'),
             'Ü','U'),
-            '’','''')
+            '’',$$'$$)
 $body$
 LANGUAGE sql IMMUTABLE;
 
