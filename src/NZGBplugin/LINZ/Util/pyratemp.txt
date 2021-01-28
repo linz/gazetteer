@@ -1,4 +1,4 @@
-The pyratemp.py file is available at 
+The pyratemp.py file is available at
 
 http://www.simple-is-better.org/template/pyratemp.html
 

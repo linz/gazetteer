@@ -1,13 +1,13 @@
-﻿-- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 -- CREATE TEMP TABLE tmp_sql AS
 
@@ -15,7 +15,7 @@ CREATE OR REPLACE FUNCTION tmp_drop_all_triggers()
 RETURNS INT
 AS
 $body$
-DECLARE 
+DECLARE
     v_count INTEGER;
     v_sql RECORD;
 BEGIN
@@ -23,24 +23,24 @@ DROP TABLE IF EXISTS tmp_sql;
 CREATE TEMP TABLE tmp_sql AS
 WITH tab(oid,name) AS
 (
-SELECT 
+SELECT
     cl.oid,
     cl.relname
-FROM 
-    pg_class cl 
+FROM
+    pg_class cl
     JOIN pg_namespace ns ON cl.relnamespace = ns.oid
 WHERE
     ns.nspname='gazetteer' AND
     cl.relkind='r'
 )
-SELECT 
+SELECT
     'DROP TRIGGER IF EXISTS ' || tg.tgname || ' ON gazetteer.' || tab.name  AS sql
-FROM 
+FROM
     pg_trigger tg
     JOIN tab ON tg.tgrelid=tab.oid
-WHERE 
+WHERE
     tg.tgconstrrelid=0;
-v_count := 0;    
+v_count := 0;
 FOR v_sql IN SELECT sql FROM tmp_sql LOOP
    EXECUTE v_sql.sql;
    v_count := v_count + 1;

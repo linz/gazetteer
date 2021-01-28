@@ -59,13 +59,13 @@
     <!--(end)-->
     <div class="edit-new-template object-type" id="new_name_template" object_type="Name">
         <p>To create a new name for this feature enter the name below and save the edits.  You can then select the name and update its status, events, and annotations.</p>
-        <input type="hidden" name="_item_type_name" value="name for this feature" />
+        <input type="hidden" name="_item_type_name" value="name for this feature" id="new_name"/>
         <input type="hidden" class="edit-value" name="feat_id" value="@!name.feature.feat_id!@" />
         <input type="hidden" class="edit-value" name="status" value="UNEW" />
         <div class="form_row">
             <span class="form_label">Name: </span>
             <div class="form_row_input">
-                <input type="text" name="name" class="edit-value fill" />
+                <input type="text" name="name" class="edit-value fill" id="other_name" />
             </div>
         </div>
      </div>
@@ -102,7 +102,7 @@
         <p>Enter new coordinates.  Coordinates can either be latitude and longitude
         in a geocentric datum (eg NZGD2000, RSRGD2000, WGS84), or NZTM.  Latitudes
         and longitudes can be either as degrees (eg.&nbsp;40.3S&nbsp;171.5E),
-        degrees and minutes (eg.&nbsp;40&nbsp;03.25S&nbps;171&nbsp;35.2E) or 
+        degrees and minutes (eg.&nbsp;40&nbsp;03.25S&nbps;171&nbsp;35.2E) or
         degrees, minutes, and seconds (eg.&nbsp;40&nbsp;03&nbsp;15.2S&nbsp;170&nbsp;35&nbsp;06.9E).
         These can be latitude/longitude or longitude/latitude.
         </p>
@@ -194,7 +194,7 @@
     <!--(end)-->
     <!--(for event in sortEvents(name.events))-->
         <div id="@!id(event)!@" class="editable-item can-delete">
-        <p class="event"><span class="infotype">@!lookup('NEVT',event.event_type)!@</span> 
+        <p class="event"><span class="infotype">@!lookup('NEVT',event.event_type)!@</span>
         <span class="eventdate">(@!dateFormat(event.event_date)!@)</span>:
         @!event.event_reference!@
         <span class="author">(@!event.updated_by!@: @!dateFormat(event.update_date)!@)</span>
@@ -296,7 +296,7 @@
     <!--(for assoc in getAssociations())-->
     <div id="@!id(assoc.association)!@" class="editable-item can-delete">
         <p>
-        @!assoc.text!@ 
+        @!assoc.text!@
         <a class="name_link" href="?id=@!assoc.name.name_id!@">@!assoc.name.name!@</a>
         <span class="author">(@!assoc.association.updated_by!@: @!dateFormat(assoc.association.update_date)!@)</span>
         </p>

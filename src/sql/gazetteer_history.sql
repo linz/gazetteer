@@ -1,13 +1,13 @@
-﻿-- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 -- Create tables and triggers to support keeping a history of changes to tables.
 
@@ -40,7 +40,7 @@ BEGIN
     (
     SELECT quote_ident(attname) FROM pg_attribute where attrelid=p_tabname::regclass::oid and attnum>0
     )
-    select 
+    select
         array_to_string(array_agg(col),','),
         array_to_string(array_agg('OLD.' || col),','),
         array_to_string(array_agg(
@@ -48,8 +48,8 @@ BEGIN
            ), ' AND ')
         into v_cols, v_oldcols, v_comp
     from
-        c; 
-    
+        c;
+
     v_tabhist = 'gazetteer_history.' || p_tabname;
 
     -- Drop the history table..
@@ -85,7 +85,7 @@ CREATE TABLE %tabhist%
         v_sql = 'CREATE INDEX ' || v_idxname || ' ON ' || v_tabhist || '( ' || v_icols || ')';
         EXECUTE v_sql;
     END IF;
-    
+
     -- Permission on tables
 
     v_sql := 'GRANT SELECT, INSERT, UPDATE, DELETE ON  ' || v_tabhist || ' TO gazetteer_admin';
@@ -116,7 +116,7 @@ BEGIN
 		%oldcols%;
     END IF;
     RETURN NULL;
-END        
+END
 $TRIGGER$ LANGUAGE plpgsql SECURITY DEFINER SET search_path FROM CURRENT;
     $template$;
 
@@ -130,7 +130,7 @@ $TRIGGER$ LANGUAGE plpgsql SECURITY DEFINER SET search_path FROM CURRENT;
     EXECUTE 'DROP TRIGGER IF EXISTS trg_' || p_tabname || '_history ON ' || p_tabname;
     EXECUTE 'CREATE TRIGGER trg_'  || p_tabname || '_history AFTER UPDATE OR DELETE ON ' ||  p_tabname ||
         ' FOR EACH ROW EXECUTE PROCEDURE gazetteer.trgfunc_' || p_tabname || '_history()';
-    
+
     RETURN TRUE;
 END;
 $BODY$

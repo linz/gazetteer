@@ -21,7 +21,7 @@ gazetteer.isDirty = function()
             return false;
         }
     });
-    
+
     return dirty;
 }
 
@@ -119,14 +119,14 @@ gazetteer.getValidator = function( objtype, field )
     if(! gazetteer.validators ) { return undefined; }
     var func = gazetteer.validators[key];
     if(! func ) { return undefined; }
-    if( typeof(func) != "function") 
+    if( typeof(func) != "function")
     {
         return undefined;
     }
     return func;
 }
 
-// Get a function to retrieve the value of an item - 
+// Get a function to retrieve the value of an item -
 // either a string for an element, or an object for a block
 
 gazetteer.getValueFunction = function( item )
@@ -136,7 +136,7 @@ gazetteer.getValueFunction = function( item )
         return function(){
             var value = {};
             item.find('.edit-value').each( function()
-            { 
+            {
                 var field = $(this);
                 value[field.attr('name')] = field.val();
             });
@@ -172,14 +172,14 @@ gazetteer.createValidator = function( item, validator, errordiv )
         var result = value != null ? validator(value) : null;
         error.text(result);
         if( result )
-        { 
+        {
             item.addClass('invalid-data');
-            error.show(); 
+            error.show();
         }
-        else 
+        else
         {
             item.removeClass('invalid-data');
-            error.hide(); 
+            error.hide();
         }
         gazetteer.checkDirty();
     };
@@ -243,12 +243,12 @@ gazetteer.setupEditUpdate = function()
    var elink = $('#'+bid+'_edit_link')
    var nlink = $('#'+bid+'_unedit_link')
    if( ! elink.length )
-   { 
+   {
       elink=$('<a href="javascript:0" class="show-edit-update action-link">Edit</a>');
       elink.insertAfter(block);
    }
    if( ! nlink.length )
-   { 
+   {
       nlink=$('<a href="javascript:0" class="show-edit-update action-link">Cancel edit</a>');
       if( ! block.is('span') ) block.append('<br />');
       block.append(nlink);
@@ -275,8 +275,8 @@ gazetteer.setupEditUpdate = function()
    return true;
 }
 
-   
-// An edit-item with can-delete is a block relating to an object that can be 
+
+// An edit-item with can-delete is a block relating to an object that can be
 // deleted.  Add a delete link which when clicked hides the block, replacing it
 // with a link to undelete the block.
 
@@ -306,7 +306,7 @@ gazetteer.setupEditDelete = function()
    return true;
 }
 
-// edit-new-template are templates for new items that can be added.  
+// edit-new-template are templates for new items that can be added.
 // For each one create a link to open it.
 
 
@@ -348,7 +348,7 @@ gazetteer.setupEditNew = function()
 
    var nlink = $('#'+bid+'_link');
    if( ! nlink.length )
-   { 
+   {
       nlink=$('<a href="javascript:0" class="edit-new-link action-link">Create new '+eltype+'</a>');
       nlink.insertBefore(block);
    }
@@ -367,7 +367,7 @@ gazetteer.createFavouriteButton = function()
     try
     {
         var isfavourite = window.qcontroller.isFavourite;
-    
+
         var favicon = "img/fav.png";
         var notfavicon = "img/not_fav.png";
         var icon = isfavourite ? favicon : notfavicon;
@@ -446,7 +446,7 @@ gazetteer.setupEventAuthorities = function( block )
         for( var i=0; i<nl; i++ )
         {
             var auth = authorities[i];
-            if( auth.code == dbvalue || ! optlist || optlist.indexOf(auth.code) >=  0) 
+            if( auth.code == dbvalue || ! optlist || optlist.indexOf(auth.code) >=  0)
             {
                 var iscur = auth.code == curval;
                 authopt.append( new Option(auth.value, auth.code, iscur, iscur));
@@ -485,6 +485,7 @@ gazetteer.setupNameLink = function()
     link.click( function( event )
     {
         if( window.qcontroller ) window.qcontroller.showNameId( name_id, event.ctrlKey );
+        return false;
     });
 }
 
@@ -498,7 +499,7 @@ gazetteer.setupNameProcessHandler = function()
     var procstatus = gazetteer.getControllerData('processStatuses','',null,false);
     if( ! statuses || ! procstatus ) return;
 
-    
+
     var processUpdated = function()
     {
         var procval = null;

@@ -1,13 +1,13 @@
--- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 
 SET search_path=gazetteer, public;
@@ -19,7 +19,7 @@ DELETE FROM system_code WHERE code_group='CODE' AND code='APSD';
 
 INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('CODE','APSD','USER','Application data',NULL),
-('APSD','VRSN',NULL,'1.4','Current application version'),
+('APSD','VRSN',NULL,'2.0.4-UAT','Current application version'),
 ('APSD','NAOR',NULL,'NPUB HORM FLRF NNOT CPAL SCID SCRB SCHT UFGT UFAC UFRG UFAD UFGP NTDC NTAR DOCC DOCR MGRS','Order in which to display name annotations'),
 ('APSD','FAOR',NULL,'NPUB LDIS ISLD FNOT','Order in which to display feature annotations');
 
@@ -39,7 +39,7 @@ INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('APEV','TSLG',NULL,E'^Section\\s+\\d+\\s+\\S.*\\sAct\\s+(19|20)\\d\\d$','Treaty settlement references must be formatted as "Section 21 ... Act 2012"'),
 ('APEV','TSLR',NULL,E'^Section\\s+\\d+\\s+\\S.*\\sAct\\s+(19|20)\\d\\d$','Treaty settlement references must be formatted as "Section 21 ... Act 2012"');
 
--- Name annotation validation regular expressions for the annotation based 
+-- Name annotation validation regular expressions for the annotation based
 -- on the annotation type.
 -- Value is the regular expression
 -- Description is the error message if not validated
@@ -52,7 +52,7 @@ INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('APNV','SCAR',NULL,E'^Y$','Must be Y to include in report, otherwise delete the record'),
 ('APNV','SCUF',NULL,E'^Y$','Must be Y to include in report, otherwise delete the record');
 
--- Feature annotation validation regular expressions for the annotation based 
+-- Feature annotation validation regular expressions for the annotation based
 -- on the annotation type.
 -- Value is the regular expression
 -- Description is the error message if not validated

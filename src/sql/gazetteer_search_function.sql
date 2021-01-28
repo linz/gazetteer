@@ -1,13 +1,13 @@
-﻿-- ###############################################################################
--- 
---  Copyright 2015 Crown copyright (c)
---  Land Information New Zealand and the New Zealand Government.
---  All rights reserved
--- 
---  This program is released under the terms of the new BSD license. See the 
---  LICENSE file for more information.
--- 
--- ###############################################################################
+-- ################################################################################
+--
+--  New Zealand Geographic Board gazetteer application,
+--  Crown copyright (c) 2020, Land Information New Zealand on behalf of
+--  the New Zealand Government.
+--
+--  This file is released under the MIT licence. See the LICENCE file found
+--  in the top-level directory of this distribution for more information.
+--
+-- ################################################################################
 
 SET search_path=gazetteer, public;
 SET search_path=gazetteer, public;
@@ -30,7 +30,7 @@ RETURNS TABLE (
 AS
 $body$
 WITH q(query) AS (SELECT to_tsquery('gazetteer.gaz_tsc',$1))
-SELECT 
+SELECT
    name.name_id,
    feature.feat_id,
    name.name,
@@ -38,16 +38,16 @@ SELECT
    feature.feat_type,
    1.0
 FROM
-   name 
+   name
    JOIN feature ON name.feat_id = feature.feat_id
 WHERE
    name.name_id=(
-       CASE 
-       WHEN trim($1) ~ E'^\\d{1,7}$' THEN trim($1)::INT 
-       WHEN trim($1) ~ E'^id=\\d{1,7}$' THEN substring(trim($1) from 4)::INT 
+       CASE
+       WHEN trim($1) ~ E'^\\d{1,7}$' THEN trim($1)::INT
+       WHEN trim($1) ~ E'^id=\\d{1,7}$' THEN substring(trim($1) from 4)::INT
        ELSE NULL END)
 UNION
-SELECT 
+SELECT
    name.name_id,
    feature.feat_id,
    name.name,
@@ -55,12 +55,12 @@ SELECT
    feature.feat_type,
    1.0
 FROM
-   name 
+   name
    JOIN feature ON name.feat_id = feature.feat_id
 WHERE
    name.feat_id=(CASE WHEN trim($1) ~ E'^fid=\\d{1,7}$' THEN substring(trim($1) from 5)::INT ELSE NULL END)
 UNION
-SELECT 
+SELECT
    name.name_id,
    feature.feat_id,
    name.name,
@@ -68,7 +68,7 @@ SELECT
    feature.feat_type,
    ts_rank(to_tsvector('gazetteer.gaz_tsc',gaz_plainText2(name)),q.query) as rank
 FROM
-   name 
+   name
    JOIN feature ON name.feat_id = feature.feat_id,
    q
 WHERE
@@ -81,7 +81,7 @@ LIMIT
 $body$
 LANGUAGE sql STABLE
 SET search_path FROM CURRENT;
-    
+
 
 CREATE OR REPLACE FUNCTION gaz_searchName2(
     p_name_query VARCHAR,
@@ -113,7 +113,7 @@ BEGIN
     v_where = '';
     v_rank = '1.0::REAL';
 
-    IF COALESCE(p_name_query,'') ~ E'\\S' THEN 
+    IF COALESCE(p_name_query,'') ~ E'\\S' THEN
         IF trim(p_name_query) ~ E'^\\d{1,7}$' THEN
             v_where = v_where || 'name.name_id = '|| p_name_query || ' AND ';
         ELSIF trim(p_name_query) ~ E'^id=\\d{1,7}$' THEN
@@ -127,21 +127,21 @@ BEGIN
             v_rank = 'ts_rank(to_tsvector(''gazetteer.gaz_tsc'',gaz_plainText2(name)),q.query)';
         END IF;
     END IF;
- 
+
     IF p_not_published THEN
         v_sql = v_sql || $with$
            wnpub(name_id) as
            (
-           SELECT 
-              name_id 
-           FROM 
-              name_annotation 
+           SELECT
+              name_id
+           FROM
+              name_annotation
            WHERE
               annotation_type='NPUB'
            UNION
-           SELECT 
+           SELECT
               n.name_id
-           FROM 
+           FROM
               name n
               JOIN feature_annotation fa ON fa.feat_id=n.feat_id
            WHERE
@@ -154,7 +154,7 @@ BEGIN
 
     IF COALESCE(p_feat_type,'') ~ E'\\S' THEN
         IF p_feat_type ~ E'\\s' THEN
-            v_where = v_where || 'feature.feat_type IN (' || 
+            v_where = v_where || 'feature.feat_type IN (' ||
                 (SELECT array_to_string(array_agg(quote_literal(word)),', ')
                 FROM regexp_split_to_table(p_feat_type,E'\\s+') AS word
                 WHERE word != '')
@@ -166,7 +166,7 @@ BEGIN
 
     IF COALESCE(p_name_status,'') ~ E'\\S' THEN
         IF p_name_status ~ E'\\s' THEN
-            v_where = v_where || 'name.status IN (' || 
+            v_where = v_where || 'name.status IN (' ||
                 (SELECT array_to_string(array_agg(quote_literal(word)),', ')
                 FROM regexp_split_to_table(p_name_status,E'\\s+') AS word
                 WHERE word != '')
@@ -196,7 +196,7 @@ BEGIN
     IF v_sql ~ E'\\S' THEN
         v_sql = 'WITH ' || regexp_replace(v_sql,E'\\,\\s+$',' ');
     END IF;
-    
+
     v_where = regexp_replace( v_where, E'\\s*AND\\s+$','');
     IF v_where = '' THEN
         v_where = 'FALSE';
@@ -210,7 +210,7 @@ BEGIN
                name.status,
                feature.feat_type,
                $sql$ || v_rank || ' AS rank  FROM ' || v_src;
-   
+
     v_sql = v_sql || ' WHERE ' || v_where ||
         ' ORDER BY lower(gaz_plainText(name.name))' ||
         ' LIMIT ' || COALESCE(p_limit,1000000)::VARCHAR;
@@ -221,6 +221,6 @@ END
 $body$
 LANGUAGE plpgsql STABLE
 SET search_path FROM CURRENT;
-    
-GRANT EXECUTE ON FUNCTION gaz_searchName( varchar, varchar, varchar, int ) TO gazetteer_user; 
-GRANT EXECUTE ON FUNCTION gaz_searchName2( varchar, varchar, varchar, varchar, boolean, int ) TO gazetteer_user; 
+
+GRANT EXECUTE ON FUNCTION gaz_searchName( varchar, varchar, varchar, int ) TO gazetteer_user;
+GRANT EXECUTE ON FUNCTION gaz_searchName2( varchar, varchar, varchar, varchar, boolean, int ) TO gazetteer_user;

@@ -23,7 +23,7 @@ if [ "$hostd" = local ] ; then
 	hostd=/var/run/postgresql
 fi
 
-params="$params -d $gdb -h $hostd"
+params="$params -d $gdb -h $hostd --set ON_ERROR_STOP=1"
 psql="psql $params"
 
 echo "host: $host"
@@ -34,30 +34,34 @@ export PGCLIENTENCODING=UTF8
 
 if [ "$1" = drop ]; then
 	echo "Dropping existing gazetter schema"
-	$psql -c 'drop schema gazetteer_history cascade'
-	$psql -c 'drop schema gazetteer cascade'
+	$psql -c 'drop schema IF EXISTS gazetteer_history cascade' || exit 1
+	$psql -c 'drop schema IF EXISTS gazetteer cascade' || exit 1
 	echo "Creating the gazetteer schema"
 	echo "Assumes that the gazetteer database and roles have already been created"
-	$psql -f gazetteer_schema.sql 
-	$psql -f gazetteer_app_schema.sql 
-	$psql -f gazetteer_sysdata_init.sql 
-        $psql -f gazetteer_history.sql 
-        $psql -f gazetteer_sysdata.sql 
-        $psql -f gazetteer_export_schema.sql 
+	$psql -f gazetteer_schema.sql  || exit 1
+	$psql -f gazetteer_app_schema.sql  || exit 1
+	$psql -f gazetteer_sysdata_init.sql  || exit 1
+        $psql -f gazetteer_history.sql  || exit 1
+        $psql -f gazetteer_sysdata.sql  || exit 1
+        $psql -f gazetteer_export_schema.sql  || exit 1
 fi
 
-$psql -f gazetteer_functions.sql 
-$psql -f gazetteer_geometry_views.sql 
-$psql -f gazetteer_text_search.sql 
-$psql -f gazetteer_search_function.sql 
-$psql -f gazetteer_add_user.sql
-$psql -f gazetteer_app_funcs.sql 
-$psql -f gazetteer_app_sysdata.sql 
-$psql -f gazetteer_triggers.sql 
+$psql -f gazetteer_functions.sql  || exit 1
+$psql -f gazetteer_geometry_views.sql  || exit 1
+$psql -f gazetteer_text_search.sql  || exit 1
+$psql -f gazetteer_search_function.sql  || exit 1
+$psql -f gazetteer_add_user.sql || exit 1
+$psql -f gazetteer_app_funcs.sql  || exit 1
+$psql -f gazetteer_app_sysdata.sql  || exit 1
+$psql -f gazetteer_triggers.sql  || exit 1
 
-python build_gazetteer_export.py
-$psql -f gazetteer_export.sql
-$psql -f gazetteer_export_func.sql
+python build_gazetteer_export.py || exit 1
+$psql -f gazetteer_export.sql || exit 1
+$psql -f gazetteer_lol_extract_view.sql || exit 1
+$psql -f gazetteer_export_func.sql || exit 1
+
 # Cannot run this till after gazetteer_web schema installed
-# $psql -f gazetteer_reload_web.sql 
-$psql -f gazetteer_grant.sql 
+# $psql -f gazetteer_reload_web.sql
+
+# Cannot run this till after gazetteer_web schema installed
+#$psql -f gazetteer_grant.sql  || exit 1

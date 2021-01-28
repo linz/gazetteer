@@ -1,0 +1,32 @@
+version: "2"
+
+services:
+  db:
+    image: linz-gazetteer-db:8.4
+    build: src/sql/
+    ports:
+      - "5432"
+    volumes:
+      - ./src/sql/test/:/sql/test/
+      # This helps ensure that the data persists even if the Postgres container is deleted.
+      #- ./data:/var/lib/postgresql/data
+    #environment:
+      #POSTGRES_DB: github_ci_test
+      #POSTGRES_USER: postgres
+      #POSTGRES_PASSWORD: postgres
+
+  qgis:
+    image: linz-gazetteer-qgis:3.10
+    build: src/NZGBplugin
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./src/NZGBplugin:/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/NZGBplugin
+      - ./.docker/qgis/scripts:/scripts
+    depends_on:
+      - db
+    command: /scripts/docker-entry.sh
+    environment:
+      PGHOST: db
+      PGPASSWORD: gazdba
+      PGUSER: gazdba
+      PGDATABASE: gazetteer

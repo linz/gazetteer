@@ -2,8 +2,13 @@
 name=NZGBplugin
 icon=icon.png
 email=ccrook@linz.govt.nz
+about=QGIS plugin that allows the Geographic board to manage official
+    and unofficial names. It keeps a record of decisions about names,
+    events that have affected their status, and identifies the physical l
+    ocations associated with those names.
 author=Chris Crook
-qgisMinimumVersion=2.4
+qgisMinimumVersion=3.10
 description=For maintaining the NZGB gazetteer.
-version=version 1.8.2
+version=2.0.4-UAT
 experimental=False
+repository=https://github.com/linz/gazetteer
