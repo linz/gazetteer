@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:buster
 
 # Pass via env, like: docker build --build-arg PGSQL_VERSION=12 ...
 ARG  PGSQL_VERSION=8.4
@@ -22,9 +22,9 @@ RUN apt-get update && apt-get install -y \
   postgresql-server-dev-${PGSQL_VERSION} \
   build-essential autoconf libtool libcunit1-dev \
   xsltproc docbook-xsl docbook-mathml \
-  libproj-dev libjson0-dev libxml2-dev \
+  libproj-dev libjson-c-dev libxml2-dev \
   flex bison unzip imagemagick \
-  libgdal-dev \
+  libprotobuf-c-dev protobuf-c-compiler libgdal-dev python \
   && apt-get clean
 
 # Install GEOS from source

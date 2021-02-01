@@ -1,4 +1,4 @@
-DOCKERNAME = linz-gazetteer
+DOCKERNAME = linz-gazetteer-db
 
 .PHONY: help
 help:
@@ -15,21 +15,21 @@ docker-8.4: ## Build the $(DOCKERNAME):8.4 docker image
 	docker build -t $(DOCKERNAME):8.4 --build-arg PGSQL_VERSION=8.4 .
 
 .PHONY: docker-12
-docker-12: ## Build the $(DOCKERNAME):8.4 docker image
+docker-12: ## Build the $(DOCKERNAME):12 docker image
 	docker build -t $(DOCKERNAME):12 \
     --build-arg PGSQL_VERSION=12 \
-    --build-arg PGIS_VERSION=3.0.2 \
+    --build-arg PGIS_VERSION=3.1.1 \
     .
 
 .PHONY: docker
 docker: docker-8.4 docker-12 ## Build all versions of the $(DOCKERNAME) docker image
 
 .PHONY: docker-start-8.4
-docker-start-8.4: ## Start the linz-gazetteer-db docker container
+docker-start-8.4: ## Start the linz-gazetteer-db:8.4 docker container
 	docker run -d --name gazetteer-db -p 7432:5432 $(DOCKERNAME):8.4
 
 .PHONY: docker-start-12
-docker-start-12: ## Start the linz-gazetteer-db docker container
+docker-start-12: ## Start the linz-gazetteer-db:12 docker container
 	docker run -d --name gazetteer-db -p 7432:5432 $(DOCKERNAME):12
 
 .PHONY: docker-stop

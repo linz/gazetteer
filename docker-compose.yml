@@ -1,13 +1,13 @@
-version: "2.1"
+version: "2.2"
 
 services:
   db:
-    image: "linz-gazetteer-db:${PGSQL_VERSION:-8.4}--${PGIS_VERSION:-1.5.8}"
+    image: "linz-gazetteer-db:${PGSQL_VERSION:-12}"
     build:
       context: src/sql/
       args:
-        - PGSQL_VERSION=${PGSQL_VERSION:-8.4}
-        - PGIS_VERSION=${PGIS_VERSION:-1.5.8}
+        - PGSQL_VERSION=${PGSQL_VERSION:-12}
+        - PGIS_VERSION=${PGIS_VERSION:-3.1.1}
     ports:
       - "5432"
     volumes:
