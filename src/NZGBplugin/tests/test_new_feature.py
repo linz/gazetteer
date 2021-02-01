@@ -334,7 +334,7 @@ class TestNewFeature(unittest.TestCase):
 
         # Check status value - Should indicate a new name
         process = data_div_paragraphs[3].toPlainText()
-        self.assertEqual(process, "Status: Proposed")
+        self.assertEqual(process, "Status: New name")
 
         # Check header (Other Names)
         subheader = subheaders[0].toPlainText()
@@ -613,7 +613,7 @@ class TestNewFeature(unittest.TestCase):
         self.html_doc = self.web_view.page().mainFrame().documentElement().document()
 
         self.assertEqual(
-            self.html_doc.findAll("p")[4].toPlainText(), "Something Else (Proposed)"
+            self.html_doc.findAll("p")[4].toPlainText(), "Something Else (New name)"
         )
 
         # Check the database record exists
