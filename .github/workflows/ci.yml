@@ -41,7 +41,7 @@ jobs:
     strategy:
         matrix:
             pg: [ '12' ]
-            pgis: [ '3.1' ]
+            pgis: [ '3' ]
     env:
       # Make apt non-interactive by default, and not showing progress
       APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
