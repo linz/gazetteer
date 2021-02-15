@@ -13,6 +13,9 @@ help:
 docker-3.10: ## Build the $(DOCKERNAME):3.10 docker image
 	docker build -t $(DOCKERNAME):3.10 --build-arg UPSTREAM_TAG=release-3_10 .
 
+.PHONY: docker
+docker: docker-3.10 ## Build all versions of the $(DOCKERNAME) docker image
+
 .PHONY: docker-qgis-shell-3.10
 docker-qgis-shell-3.10: docker-3.10 ## Start a shell in the containerized qgis 3.10
 	docker run -v $(PWD):/plugin --rm -it --name qgis $(DOCKERNAME):3.10 /bin/bash
