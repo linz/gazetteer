@@ -106,12 +106,10 @@ jobs:
     - name: Run qgis tests agains QGIS 3.10
       run: |
         QGIS_TAG=3.10 make docker-qgis-test
-        make docker-down
 
     - name: Run db tests
       run: |
         make docker-db-test
-        make docker-down
 
 
   deploy:
