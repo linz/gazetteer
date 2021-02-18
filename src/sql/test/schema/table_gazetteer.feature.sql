@@ -54,7 +54,7 @@ SELECT col_is_null(      'gazetteer', 'feature', 'update_date', 'Column gazettee
 SELECT col_hasnt_default('gazetteer', 'feature', 'update_date', 'Column gazetteer.feature.update_date should not  have a default');
 
 SELECT has_column(       'gazetteer', 'feature', 'ref_point', 'Column gazetteer.feature.ref_point should exist');
-SELECT col_type_is(      'gazetteer', 'feature', 'ref_point', 'geometry', 'Column gazetteer.feature.ref_point should be type geometry');
+SELECT col_type_is(      'gazetteer', 'feature', 'ref_point', 'geometry(Point,4167)', 'Column gazetteer.feature.ref_point should be type geometry(Point,4167)');
 SELECT col_is_null(      'gazetteer', 'feature', 'ref_point', 'Column gazetteer.feature.ref_point should allow NULL');
 SELECT col_hasnt_default('gazetteer', 'feature', 'ref_point', 'Column gazetteer.feature.ref_point should not  have a default');
 
