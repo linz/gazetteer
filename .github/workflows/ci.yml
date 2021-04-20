@@ -40,12 +40,12 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
         matrix:
-            pg: [ '11', '12', '13' ]
-            pgis: ['2.5', '3' ]
+            pg: [ 11, 12, 13 ]
+            pgis: [ 2.5, 3 ]
             exclude:
                 # exclude pgis 2.5 on pg 13
-                - pg: '13'
-                    pgis: '2.5'
+                - pg: 13
+                    pgis: 2.5
     env:
       # Make apt non-interactive by default, and not showing progress
       APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
