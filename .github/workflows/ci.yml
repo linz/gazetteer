@@ -41,7 +41,7 @@ jobs:
     strategy:
         matrix:
             pg: [ 11, 12, 13 ]
-            pgis: [ 2.5, 3 ]
+            pgis: [ 2.5, 3, 3.1 ]
             exclude:
                 # exclude pgis 2.5 on pg 13
                 - pg: 13
