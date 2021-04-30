@@ -1,4 +1,4 @@
-[![Conventional Commits](https://badgen.net/badge/Commits/conventional?labelColor=2e3a44&color=EC5772)](https://conventionalcommits.org)
+[![Conventional Commits](https://badgen.net/badge/Commits/conventional?labelColor=2e3a44&color=EC5772)](https://conventionalcommits.org) ![CodeQL](https://github.com/linz/gazetteer/workflows/CodeQL/badge.svg)
 
 New Zealand Geographic Board gazetteer application
 ==================================================
