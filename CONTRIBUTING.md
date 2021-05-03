@@ -54,3 +54,29 @@ This ensures that CI does not fail unexpectedly due to commit message formatting
 `pip install gitlint`
 2. gitlint will use the [.gitlint](.gitlint) configuration settings found in the top level directory of this project.
 3. run `gitlint install-hook` to install the git-hook based on the [.gitlint](.gitlint) configuration
+
+
+## Deployment (CI/CD)
+The Gazetteer Plugin is deployed via Continuous Deployment (CD) when a tag of a specific format is pushed
+and providing all Continuous Integration (CI) tests pass. This is configured via the GitHub Actions [ci
+workflow](https://github.com/linz/gazetteer/blob/master/.github/workflows/ci.yml). The Plugin is deployed to the
+[LINZ QGIS Plugin repository](https://plugins.qgis.linz.govt.nz/v1/plugin). For more on the LINZ QGIS plugin repository
+please see the source code repository - https://github.com/linz/qgis-plugin-repository
+
+### Triggering a deployment
+A deployment can be either triggered to publish the Gazetteer Plugin to the LINZ QGIS development or production Plugin
+Repository.
+
+#### Development Version Deployment
+Development versions are most commonly released to get feedback from users. This is most often to support
+user acceptance testing (UAT).
+
+Trigger a development deployment via pushing a tag that starts with `v` and ends with `UAT`
+
+For example: `v1.0.0-UAT`
+
+#### Production Version Deployment
+Deploying a production version will prompt the Gazetteer plugin users to upgrade their version to the newly
+published version.
+
+Trigger a production version deployment via pushing a tag that starts with `v` and increments the version of the last tag.

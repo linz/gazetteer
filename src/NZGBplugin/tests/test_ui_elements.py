@@ -79,6 +79,29 @@ class TestUi(unittest.TestCase):
         layers = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
         assert layers == expected_loaded_layers
 
+    def test_AA_layer_order(self):
+        """
+        Layers must be loaded in the below particular order
+        """
+
+        root = QgsProject.instance().layerTreeRoot()
+        layer_order = root.layerOrder()
+
+        # Test layer order by layer name
+        self.assertSequenceEqual(
+            [layer.name() for layer in layer_order],
+            [
+                "Gazetteer feature refpt",
+                "Gazetteer feature point",
+                "Gazetteer feature line",
+                "Gazetteer feature poly",
+                "Gazetteer search refpt",
+                "Gazetteer search point",
+                "Gazetteer search line",
+                "Gazetteer search poly",
+            ],
+        )
+
     def test_B_tools_enabled_on_start(self):
         """
         Test starting the plugin enables the correct tools

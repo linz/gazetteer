@@ -8,6 +8,11 @@ help:
 			'BEGIN {FS = ":.*?## "}; \
 			{ printf "\033[36m%-30s\033[0m%s%s\n", $$1, "\n ", $$2 }'
 
+.PHONY: docker
+docker: ## Build all docker images
+	make -C src/NZGBplugin/ docker
+	make -C src/sql docker
+
 .PHONY: docker-up
 docker-up: ## Start the containerized environment
 	docker-compose up -d
@@ -17,11 +22,11 @@ docker-down: ## Stop the containerized environment
 	docker-compose down
 
 .PHONY: docker-qgis-shell
-docker-qgis-shell: docker-up ## Start a shell in the containerized qgis
+docker-qgis-shell: docker-up ## Start a shell in the containerized qgis (version QGIS_TAG)
 	docker-compose exec qgis /bin/bash
 
 .PHONY: docker-qgis-start
-docker-qgis-start: docker-up ## Start the containerized qgis
+docker-qgis-start: docker-up ## Start the containerized qgis (version QGIS_TAG)
 	xhost +
 	docker-compose exec qgis sh -c 'DISPLAY=$$1 qgis' sh "$$DISPLAY"
 
@@ -31,10 +36,8 @@ docker-qgis-start-dba: docker-up ## Start the containerized qgis
 	docker-compose exec qgis sh -c 'DISPLAY=$$1 PGUSER=gazdba PGPASSWORD=gazdba qgis' sh "$$DISPLAY"
 
 .PHONY: docker-qgis-test
-docker-qgis-test: docker-up ## Run python tests against QGIS isntance
+docker-qgis-test: docker-up ## Run python tests against QGIS instance (version QGIS_TAG)
 	docker-compose exec -T qgis sh -c "/usr/bin/xvfb-run --server-args=-screen\ 0\ 1920x1200x24 -- qgis_testrunner.sh tests_directory.run_tests.run_test_modules"
-
-
 
 .PHONY: docker-db-connect
 docker-db-connect: docker-up ## Connect to the containerized db using psql

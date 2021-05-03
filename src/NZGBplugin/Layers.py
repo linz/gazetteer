@@ -31,24 +31,14 @@ class Layers(QObject):
 
     _layerDefs = [
         {
-            "id": "fpoly",
+            "id": "frefpt",
             "group": "feature",
-            "table": "feature_polygon",
-            "geom": "shape",
-            "key": "geom_id",
-            "form": "featgeom.ui",
-            "init": "openFeatGeomForm",
-            "wkbtype": QgsWkbTypes.MultiPolygon,
-        },
-        {
-            "id": "fline",
-            "group": "feature",
-            "table": "feature_line",
-            "geom": "shape",
-            "key": "geom_id",
-            "form": "featgeom.ui",
-            "init": "openFeatGeomForm",
-            "wkbtype": QgsWkbTypes.MultiLineString,
+            "table": "feature_ref_point",
+            "geom": "ref_point",
+            "key": "feat_id",
+            "form": "featrefpt.ui",
+            "init": "openFeatRefPointForm",
+            "wkbtype": QgsWkbTypes.Point,
         },
         {
             "id": "fpoint",
@@ -61,30 +51,33 @@ class Layers(QObject):
             "wkbtype": QgsWkbTypes.MultiPoint,
         },
         {
-            "id": "frefpt",
+            "id": "fline",
             "group": "feature",
-            "table": "feature_ref_point",
-            "geom": "ref_point",
-            "key": "feat_id",
-            "form": "featrefpt.ui",
-            "init": "openFeatRefPointForm",
-            "wkbtype": QgsWkbTypes.Point,
-        },
-        {
-            "id": "spoly",
-            "group": "search",
-            "table": "feature_polygon",
-            "geom": "shape",
-            "key": "geom_id",
-            "wkbtype": QgsWkbTypes.MultiPolygon,
-        },
-        {
-            "id": "sline",
-            "group": "search",
             "table": "feature_line",
             "geom": "shape",
             "key": "geom_id",
+            "form": "featgeom.ui",
+            "init": "openFeatGeomForm",
             "wkbtype": QgsWkbTypes.MultiLineString,
+        },
+        {
+            "id": "fpoly",
+            "group": "feature",
+            "table": "feature_polygon",
+            "geom": "shape",
+            "key": "geom_id",
+            "form": "featgeom.ui",
+            "init": "openFeatGeomForm",
+            "wkbtype": QgsWkbTypes.MultiPolygon,
+        },
+        {
+            "id": "srefpt",
+            "group": "search",
+            "table": "feature_ref_point",
+            "geom": "ref_point",
+            "key": "feat_id",
+            "init": "openFeatRefPointForm",
+            "wkbtype": QgsWkbTypes.Point,
         },
         {
             "id": "spoint",
@@ -95,13 +88,20 @@ class Layers(QObject):
             "wkbtype": QgsWkbTypes.MultiPoint,
         },
         {
-            "id": "srefpt",
+            "id": "sline",
             "group": "search",
-            "table": "feature_ref_point",
-            "geom": "ref_point",
-            "key": "feat_id",
-            "init": "openFeatRefPointForm",
-            "wkbtype": QgsWkbTypes.Point,
+            "table": "feature_line",
+            "geom": "shape",
+            "key": "geom_id",
+            "wkbtype": QgsWkbTypes.MultiLineString,
+        },
+        {
+            "id": "spoly",
+            "group": "search",
+            "table": "feature_polygon",
+            "geom": "shape",
+            "key": "geom_id",
+            "wkbtype": QgsWkbTypes.MultiPolygon,
         },
     ]
 
@@ -238,7 +238,7 @@ class Layers(QObject):
             # data source.
             uri = QgsDataSourceUri(maplayer.dataProvider().dataSourceUri())
             uri.setSql("feat_id=-1")
-            if uri.uri() == glayer["uri"]:
+            if uri.uri().replace("checkPrimaryKeyUnicity='1' ", "") == glayer["uri"]:
                 glayer["layer"] = maplayer
                 glayer["layerid"] = maplayer.id()
             else:
@@ -264,7 +264,6 @@ class Layers(QObject):
                     ok = False
                     continue
                 layer.setSubsetString("feat_id=-1")
-                layer.setCustomProperty(Layers.idProperty, glayer["id"])
                 glayer["layer"] = layer
                 glayer["layerid"] = layer.id()
                 qml = os.path.join(self._qmldir, glayer["id"] + ".qml")
@@ -273,6 +272,7 @@ class Layers(QObject):
                         layer.loadNamedStyle(qml)
                     except:
                         pass
+                layer.setCustomProperty(Layers.idProperty, glayer["id"])
                 QgsProject.instance().addMapLayer(layer)
                 updated = True
             if "form" in ldef:
@@ -296,8 +296,8 @@ class Layers(QObject):
         # If updated, then add layers to group...
 
         if updated:
-            self.moveLayersIntoGroup("search", "Gazetteer search results")
             self.moveLayersIntoGroup("feature", "Gazetteer feature")
+            self.moveLayersIntoGroup("search", "Gazetteer search results")
 
         # Find the MultiCurveM
         self._layersOk = ok
@@ -352,8 +352,25 @@ class Layers(QObject):
         self.selectEditLayer(addNew)
         self.startEdit.emit()
 
+    def isEditableByAPP(self, currentLayer):
+        if not currentLayer:
+            return False
+
+        if currentLayer.name() not in [
+            "Gazetteer feature refpt",
+            "Gazetteer feature point",
+            "Gazetteer feature line",
+            "Gazetteer feature poly",
+        ]:
+            return False
+        return True
+
     def selectEditLayer(self, addNew=False):
-        currentLayer = self._iface.mapCanvas().currentLayer()
+        currentLayer = self._iface.activeLayer()
+        editable = self.isEditableByAPP(currentLayer)
+        if not editable:
+            return None
+
         nfeat = -1
         editlayer = None
         for glayer in self.layerDefs():
@@ -555,6 +572,9 @@ class Layers(QObject):
             return
 
         gtypes = (
+            (QgsWkbTypes.MultiPoint, "point", "fpoint"),
+            (QgsWkbTypes.MultiLineString, "line", "fline"),
+            (QgsWkbTypes.MultiPolygon, "polygon", "fpoly"),
             (QgsWkbTypes.Point, "point", "fpoint"),
             (QgsWkbTypes.LineString, "line", "fline"),
             (QgsWkbTypes.Polygon, "polygon", "fpoly"),
@@ -607,7 +627,7 @@ class Layers(QObject):
             ndel = layer.selectedFeatureCount()
             if ndel == 0:
                 continue
-            gtype = layer.geometryType()
+            gtype = layer.wkbType()
             if gtype not in geometries:
                 geometries[gtype] = 0
             geometries[gtype] += ndel
@@ -621,9 +641,9 @@ class Layers(QObject):
             return
 
         gtypes = (
-            (QgsWkbTypes.Point, "point", "fpoint"),
-            (QgsWkbTypes.LineString, "line", "fline"),
-            (QgsWkbTypes.Polygon, "polygon", "fpoly"),
+            (QgsWkbTypes.MultiPoint, "point", "fpoint"),
+            (QgsWkbTypes.MultiLineString, "line", "fline"),
+            (QgsWkbTypes.MultiPolygon, "polygon", "fpoly"),
         )
         summary = []
         for gtype in gtypes:

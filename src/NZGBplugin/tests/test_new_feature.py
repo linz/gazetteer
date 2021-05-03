@@ -3,6 +3,7 @@ from io import StringIO
 import sys
 import re
 import xml.etree.ElementTree as ET
+import os
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -60,6 +61,8 @@ class TestNewFeature(unittest.TestCase):
         else:
             cls.gazetteer_plugin = plugins.get("NZGBplugin")
             cls.gazetteer_plugin._runaction.trigger()
+
+        os.environ["MODALITY"] = "show"
 
     @classmethod
     def tearDownClass(cls):

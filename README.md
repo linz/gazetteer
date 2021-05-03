@@ -1,4 +1,4 @@
-[![Conventional Commits](https://badgen.net/badge/Commits/conventional?labelColor=2e3a44&color=EC5772)](https://conventionalcommits.org)
+[![Conventional Commits](https://badgen.net/badge/Commits/conventional?labelColor=2e3a44&color=EC5772)](https://conventionalcommits.org) ![CodeQL](https://github.com/linz/gazetteer/workflows/CodeQL/badge.svg)
 
 New Zealand Geographic Board gazetteer application
 ==================================================
@@ -21,9 +21,8 @@ web. The web application is not included in this repository, however the
 database schema from which it publishes is.
 
 More details of the technology implementation are available in the
-developer notes at /src/NZGBplugin/help/devnotes.html. User help is
-in the file /src/NZGBplugin/help/index.html. QGIS Plugin deployment notes
-are at /src/NZGBplugin/README.md.
+developer notes at [/src/NZGBplugin/help/devnotes.html](https://github.com/linz/gazetteer/blob/master/src/NZGBplugin/help/devnotes.html). User help is
+in the file [/src/NZGBplugin/help/index.html](https://github.com/linz/gazetteer/blob/master/src/NZGBplugin/help/index.html). Both these sets of notes are also veiwable via the plugin's help tab.
 
 ## Contributing
 Before contributing to this project please see [CONTRIBUTING.md](CONTRIBUTING.md).

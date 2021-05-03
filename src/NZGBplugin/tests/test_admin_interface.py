@@ -128,34 +128,6 @@ class TestAdminInterface(unittest.TestCase):
         self.assertEqual(info_text[3], f'Database name: {os.environ["PGDATABASE"]}')
         self.assertEqual(info_text[4], f'Database user: { os.environ["PGUSER"] }')
 
-    def test_B_publish(self):
-        """
-        Test the publish functionality via the admin interface
-        """
-
-        # Open and get reference to the admin interface
-        self.gazetteer_plugin._adminaction.trigger()
-        admin_widget = self.gazetteer_plugin.adminDlg.layout().itemAt(0).widget()
-        admin_widget.uUserIsAdmin.setChecked(False)
-
-        # select the data tab
-        qtab = self.gazetteer_plugin.adminDlg.findChild(QTabWidget)
-        qtab.setCurrentIndex(0)
-        current_Tab = qtab.currentIndex()
-
-        # validate the current tab is a expected
-        self.assertEqual(qtab.tabText(current_Tab), "Publish gazetteer data")
-
-        # Click on publish button
-        QTimer.singleShot(500, self.activeModalWindowAccept)
-        admin_widget.uPublishDatabase.click()
-
-        QTest.qWait(800)
-
-        # Check the label has update indicating the publish functionality has run
-        self.assertEqual(admin_widget.uUpdatingLabel.text(), "Data published")
-        self.assertTrue(admin_widget.uUpdatingLabel.isVisible())
-
     def test_C_add_user(self):
         """
         Add a user via the plugin interface

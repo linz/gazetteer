@@ -1018,7 +1018,7 @@ insert into tmp_all_shapes1 (feat_id, geom_type, geom )
 select
 	g.feat_id,
 	g.geom_type,
-	st_union(ST_Force_2D(g.shape))
+	st_union(ST_Force2D(g.shape))
 from
    feature_geometry g
    join feature f on g.feat_id = f.feat_id
