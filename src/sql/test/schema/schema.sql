@@ -1,6 +1,6 @@
 SET client_encoding = 'UTF-8';
 BEGIN;
-SELECT plan(129);
+SELECT plan(130);
 
 SELECT schemas_are(ARRAY[
     'gazetteer',
@@ -334,7 +334,7 @@ SELECT is(md5(p.prosrc), '3f9e2fb64cea9c0f32f03b49d948b491', 'Function gweb_simp
    AND proname = 'gweb_simplify_shapes'
    AND proargtypes::text = '23 23';
 
-SELECT is(md5(p.prosrc), '6e6dc290ab64c0770b48db2235aad65e', 'Function gweb_update_gaz_all_shapes body should match checksum')
+SELECT is(md5(p.prosrc), '69bf600d504c9266edfba5bb892dfe36', 'Function gweb_update_gaz_all_shapes body should match checksum')
   FROM pg_catalog.pg_proc p
   JOIN pg_catalog.pg_namespace n ON p.pronamespace = n.oid
  WHERE n.nspname = 'gazetteer'
@@ -516,10 +516,10 @@ SELECT is(md5(p.prosrc), '93d9bd6fe49b3a0f9286bd07eb9a5bc5', 'Function trgfunc_s
    AND proname = 'trgfunc_system_code_update'
    AND proargtypes::text = '';
 
-SELECT is(md5(p.prosrc), 'e36bd76b21fda2912e2477b5b0e4f4e6', 'Function gaz_update_export_database body should match checksum')
+SELECT is(md5(p.prosrc), 'c6e5c854ac2ddd9ff04d6e37351c1e25', 'Function gaz_update_export_database body should match checksum')
   FROM pg_catalog.pg_proc p
   JOIN pg_catalog.pg_namespace n ON p.pronamespace = n.oid
- WHERE n.nspname = 'gazetteer_export'
+ WHERE n.nspname = 'gazetteer'
    AND proname = 'gaz_update_export_database'
    AND proargtypes::text = '';
 

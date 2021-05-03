@@ -372,7 +372,7 @@ BEGIN
         NEX.desc_code,
         NEX.rev_gaz_ref,
         NEX.rev_treaty_legislation,
-        ST_Transform(ST_Force_2D(ST_Union(array_agg(ST_Buffer(POLY.shape,0)))), 4326) AS shape
+        ST_Transform(ST_Force2D(ST_Union(array_agg(ST_Buffer(POLY.shape,0)))), 4326) AS shape
     FROM gazetteer.name_export NEX
     JOIN gazetteer.feature_polygon POLY ON NEX.feat_id = POLY.feat_id
     GROUP BY
