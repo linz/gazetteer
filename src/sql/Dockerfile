@@ -1,8 +1,8 @@
 FROM debian:buster
 
 # Pass via env, like: docker build --build-arg PGSQL_VERSION=12 ...
-ARG  PGSQL_VERSION=8.4
-ARG  PGIS_VERSION=1.5.8
+ARG  PGSQL_VERSION=12
+ARG  PGIS_VERSION=3.1.1
 ARG  GEOS_VERSION=3.8.1
 
 # Install postgresql.org APT source
