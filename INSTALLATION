@@ -2,13 +2,8 @@ These are pointers rather than complete notes on installation.
 
 # Requirements
 
-Use of the QGIS (2.x) plugin requires that sqlalchemy
-(<0.9) and geoalchemy python modules are installed.
-You can use `pip install -r src/NZGBplugin/requirements.txt`
-to install both.
-
 The install.sh and similar scripts in the src/sql folder assist
-installing the PostgreSQL database (8.4 minimum version supported).
+installing the PostgreSQL database (12 minimum version supported).
 
 Several files need updating to include database strings etc.
 These include:
