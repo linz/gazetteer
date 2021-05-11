@@ -11,7 +11,7 @@ SELECT schemas_are(ARRAY[
 ]);
 
 SELECT schema_owner_is('gazetteer','gazetteer_dba');
---SELECT schema_owner_is('gazetteer_export','postgres');
+SELECT schema_owner_is('gazetteer_export','gazetteer_dba');
 SELECT schema_owner_is('gazetteer_history','gazetteer_dba');
 SELECT schema_owner_is('gazetteer_web','postgres');
 SELECT tables_are('gazetteer', ARRAY[
