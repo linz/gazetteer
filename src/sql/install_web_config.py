@@ -9,9 +9,9 @@
 #
 ################################################################################
 
-import database
 import re
 import sys
+import database
 
 db = database.db()
 dbc = db.cursor()
@@ -19,7 +19,7 @@ dbc.execute("set search_path=gazetteer_web, public")
 
 
 def update_config_item(code, value, description="Description not available"):
-    vfield = "intval" if type(value) == int else "value"
+    vfield = "intval" if isinstance(value) == int else "value"
     dbc.execute("select count(*) from gaz_web_config where code=%s", (code,))
     if dbc.fetchone()[0]:
         dbc.execute(
