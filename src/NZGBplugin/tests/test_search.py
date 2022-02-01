@@ -131,9 +131,7 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(search_table.rowCount(), 0)
 
     def test_B_get_unique_search_results(self):
-        """
-
-        """
+        """ """
 
         # Move search tab to the front
         self.gazetteer_plugin._editor.findChildren(QTabBar)[1].setCurrentIndex(0)
