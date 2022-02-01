@@ -1,10 +1,14 @@
 # Change Log
 
-All notable changes for the LINZ BDE schema are documented in this file.
+All notable changes for the gazetteer are documented in this file.
 
-## 2.0.0 - 2020-xx-xx
+## 2.1 - 2022-02-01
 ### Features
-- QGIS3 Porting - PLACEHOLDER, STILL TO BE RELEASED
+- Gazetteer database migration
+
+## 2.0.4 - 2020-10-29
+### Features
+- QGIS3 Porting.
 
 ## 1.8.2 - 2020-02-04
 ### Features
