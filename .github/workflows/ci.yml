@@ -39,7 +39,7 @@ jobs:
     name: DB schema
     runs-on: ubuntu-18.04
     strategy:
-        matrix
+        matrix:
             include:
                 - pg: 12
                   pgis: 3
