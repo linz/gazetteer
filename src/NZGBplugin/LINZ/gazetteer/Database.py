@@ -24,7 +24,7 @@ from sqlalchemy import event
 from sqlalchemy.pool import Pool
 from sqlalchemy.sql import text
 
-_host = os.environ.get("PGHOST") or "prdgeo01"
+_host = os.environ.get("PGHOST") or "prdassgzdb01"
 _port = os.environ.get("PGPORT") or "5432"
 _database = os.environ.get("PGDATABASE") or "gazetteer"
 _schema = os.environ.get("PGSCHEMA") or "gazetteer"
