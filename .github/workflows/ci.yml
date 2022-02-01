@@ -39,13 +39,10 @@ jobs:
     name: DB schema
     runs-on: ubuntu-18.04
     strategy:
-        matrix:
-            pg: [ 11, 12, 13 ]
-            pgis: [ 2.5, 3 ]
-            exclude:
-                # exclude incompatible versions of PostGIS
-                - pg: 13
-                  pgis: 2.5
+        matrix
+            include:
+                - pg: 12
+                  pgis: 3
     env:
       # Make apt non-interactive by default, and not showing progress
       APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
