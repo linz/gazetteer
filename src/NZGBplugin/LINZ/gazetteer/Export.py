@@ -39,7 +39,7 @@ class UnicodeWriter(object):
         )
 
     def writerow(self, row):
-        self.stream.write(u",".join([self.encodefield(f) for f in row]))
+        self.stream.write(",".join([self.encodefield(f) for f in row]))
         self.stream.write("\r\n")
 
 

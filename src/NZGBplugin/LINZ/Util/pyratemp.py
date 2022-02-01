@@ -234,8 +234,7 @@ def sindex(string, row, col):
 
 
 def dictkeyclean(d):
-    """Convert all keys of the dict `d` to strings.
-    """
+    """Convert all keys of the dict `d` to strings."""
     new_d = {}
     for k, v in d.items():
         new_d[str(k)] = v
@@ -246,8 +245,7 @@ def dictkeyclean(d):
 
 
 def dummy(*args, **kwargs):
-    """Dummy function, doing nothing.
-    """
+    """Dummy function, doing nothing."""
     pass
 
 
@@ -301,22 +299,22 @@ def escape(s, format=HTML):
     if format is None or format == NONE:
         pass
     elif format == HTML:
-        s = s.replace(u"&", u"&amp;")  # must be done first!
-        s = s.replace(u"<", u"&lt;")
-        s = s.replace(u">", u"&gt;")
-        s = s.replace(u'"', u"&quot;")
-        s = s.replace(u"'", u"&#39;")
+        s = s.replace("&", "&amp;")  # must be done first!
+        s = s.replace("<", "&lt;")
+        s = s.replace(">", "&gt;")
+        s = s.replace('"', "&quot;")
+        s = s.replace("'", "&#39;")
     elif format == LATEX:
         # TODO: which are the "reserved" characters for LaTeX?
         #      are there more than these?
-        s = s.replace("\\", u"\\backslash{}")  # must be done first!
-        s = s.replace("#", u"\\#")
-        s = s.replace("$", u"\\$")
-        s = s.replace("%", u"\\%")
-        s = s.replace("&", u"\\&")
-        s = s.replace("_", u"\\_")
-        s = s.replace("{", u"\\{")
-        s = s.replace("}", u"\\}")
+        s = s.replace("\\", "\\backslash{}")  # must be done first!
+        s = s.replace("#", "\\#")
+        s = s.replace("$", "\\$")
+        s = s.replace("%", "\\%")
+        s = s.replace("&", "\\&")
+        s = s.replace("_", "\\_")
+        s = s.replace("{", "\\{")
+        s = s.replace("}", "\\}")
     else:
         raise ValueError("Invalid format (only None, HTML and LATEX are supported).")
     return str(s)
@@ -391,8 +389,7 @@ class LoaderString(object):
         self.encoding = encoding
 
     def load(self, string):
-        """Return template-string as unicode.
-        """
+        """Return template-string as unicode."""
         if isinstance(string, str):
             u = string
         else:
@@ -1171,7 +1168,7 @@ class TemplateBase(object):
         """
         self.current_data = self.data.copy()
         self.current_data.update(override)
-        u = u"".join(self._render(self.parsetree, self.current_data))
+        u = "".join(self._render(self.parsetree, self.current_data))
         self.current_data = self.data  # restore current_data
         return _dontescape(u)  # (see class _dontescape)
 

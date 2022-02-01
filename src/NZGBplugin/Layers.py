@@ -398,7 +398,7 @@ class Layers(QObject):
                 modified = True
         rollback = True
         if modified and self._name and not cancel:
-            message = u"Save spatial changes to " + self._name.name
+            message = "Save spatial changes to " + self._name.name
             result = QMessageBox.question(
                 self._iface.mainWindow(),
                 "Save spatial changes",

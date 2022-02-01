@@ -88,7 +88,7 @@ class LabelLinker(WidgetLinker):
         return self._widget.text()
 
     def setValue(self, value):
-        self._widget.setText(str(value) if value else u"")
+        self._widget.setText(str(value) if value else "")
 
 
 class LineEditLinker(WidgetLinker):
@@ -103,7 +103,7 @@ class LineEditLinker(WidgetLinker):
         return self._widget.text()
 
     def setValue(self, value):
-        self._widget.setText(str(value) if value else u"")
+        self._widget.setText(str(value) if value else "")
 
 
 class PlainTextLinker(WidgetLinker):
