@@ -2,7 +2,7 @@
 
 All notable changes for the gazetteer are documented in this file.
 
-## 2.1.0 - 2022-02-01
+## 2.1.1 - 2022-02-01
 ### Features
 - Gazetteer database migration
 
