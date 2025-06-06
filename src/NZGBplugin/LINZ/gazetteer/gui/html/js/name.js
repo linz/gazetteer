@@ -49,6 +49,7 @@ gazetteer.startEdit = function()
     $('span.author').show();
     $('div.editable-item').addClass('edit-item');
     $('.enable-edit').show();
+    $('.hide-during-edit').hide();
     gazetteer.editButton.hide();
     gazetteer.saveButton.show();
     gazetteer.cancelButton.show();
@@ -98,6 +99,7 @@ gazetteer.cancelEdit = function()
     $('span.author').hide();
     $('div.editable-item').removeClass('edit-item');
     $('.enable-edit').hide();
+    $('.hide-during-edit').show();
     gazetteer.editButton.show();
     gazetteer.saveButton.hide();
     gazetteer.cancelButton.hide();
@@ -576,6 +578,13 @@ gazetteer.createEditButtons = function()
 
 gazetteer.setup = function()
 {
+    const backgroundColor = window.getComputedStyle( document.body ,null).getPropertyValue('background-color');
+    if(backgroundColor === 'rgba(0, 0, 0, 0)') {
+        $('.data').addClass("NightMapping");
+    }
+    else {
+        $('.data').removeClass("NightMapping");
+    }
     gazetteer.getControllerData('editdata','pageData',{});
 
     $('.edit-update').each( gazetteer.setupEditUpdate );

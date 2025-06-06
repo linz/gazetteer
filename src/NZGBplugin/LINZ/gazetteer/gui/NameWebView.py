@@ -123,7 +123,7 @@ class NameWebView(QWebView):
             return pyratemp.escape(text, pyratemp.HTML)
 
         @staticmethod
-        def selectOptions(mlist):
+        def selectOptions(mlist, defaultSelected=None):
             """
             Generates a set of <option> entries for a given
             a list of (value,text) tuples. Assumes that the
@@ -131,7 +131,9 @@ class NameWebView(QWebView):
             """
             return "".join(
                 [
-                    '<option value="'
+                    '<option '
+                    +('selected ' if defaultSelected == x[0] else '')
+                    + 'value="'
                     + x[0]
                     + '">'
                     + NameWebView.Template.escape(x[1])
@@ -149,7 +151,7 @@ class NameWebView(QWebView):
             text = text.replace("\n", "<br />")
             return text
 
-        def lookupOptions(self, code_group, showDescriptions=False):
+        def lookupOptions(self, code_group, showDescriptions=False, defaultSelected=None):
             """
             Forms an option list from a code matching a SystemCode
             code_group can be selected
@@ -160,7 +162,7 @@ class NameWebView(QWebView):
             mapping = Model.SystemCode.codeGroup(code_group)
             mlist = [(c.code, vfunc(c)) for c in mapping]
             mlist.sort(key=lambda x: x[1])
-            return self.selectOptions(mlist)
+            return self.selectOptions(mlist, defaultSelected=defaultSelected)
 
         def dateFormat(self, dt):
             """
@@ -227,6 +229,12 @@ class NameWebView(QWebView):
             """
             return sorted(events, key=lambda x: x.event_date, reverse=True)
 
+        def sortSubEvents(self, sub_events):
+            """
+            Used to define the order of displaying sub events
+            """
+            return sorted(sub_events, key=lambda x: x.sub_event_date, reverse=True)
+
         def sortAnnotations(self, code, annotations):
             """
             Used to define the order of displaying annotations.  Based on the
@@ -261,6 +269,7 @@ class NameWebView(QWebView):
                 "lookupOptions": self.lookupOptions,
                 "id": self.id,
                 "sortEvents": self.sortEvents,
+                "sortSubEvents": self.sortSubEvents,
                 "sortNameAnnotations": self.sortNameAnnotations,
                 "sortFeatureAnnotations": self.sortFeatureAnnotations,
             }
@@ -617,6 +626,14 @@ class NameWebView(QWebView):
         return json.dumps(validators)
 
     eventReferenceValidators = pyqtProperty(str, fget=getEventReferenceValidators)
+
+    def getSubEventReferenceValidators(self):
+        validators = {}
+        for c in Model.SystemCode.codeGroup("APSE"):
+            validators[c.code] = {"re": c.value, "message": c.description}
+        return json.dumps(validators)
+
+    subEventReferenceValidators = pyqtProperty(str, fget=getSubEventReferenceValidators)
 
     def getEventTypes(self):
         mapping = Model.SystemCode.codeMapping("AUTH")

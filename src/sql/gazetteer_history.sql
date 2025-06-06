@@ -141,6 +141,7 @@ SELECT gaz_create_history_trigger( 'feature_annotation', 'feat_id', NULL );
 SELECT gaz_create_history_trigger( 'feature_association', 'feat_id_from', 'feat_id_to' );
 SELECT gaz_create_history_trigger( 'name','name_id', NULL );
 SELECT gaz_create_history_trigger( 'name_event','name_id', NULL );
+SELECT gaz_create_history_trigger( 'sub_event','event_id', NULL );
 SELECT gaz_create_history_trigger( 'name_annotation','name_id', NULL );
 SELECT gaz_create_history_trigger( 'name_association', 'name_id_from', 'name_id_to' );
 SELECT gaz_create_history_trigger( 'feature_geometry', 'feat_id', NULL );

@@ -19,7 +19,7 @@ DELETE FROM system_code WHERE code_group='CODE' AND code='APSD';
 
 INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('CODE','APSD','USER','Application data',NULL),
-('APSD','VRSN',NULL,'2.1.1','Current application version'),
+('APSD','VRSN',NULL,'2.2.0','Current application version'),
 ('APSD','NAOR',NULL,'NPUB HORM FLRF NNOT CPAL SCID SCRB SCHT UFGT UFAC UFRG UFAD UFGP NTDC NTAR DOCC DOCR MGRS','Order in which to display name annotations'),
 ('APSD','FAOR',NULL,'NPUB LDIS ISLD FNOT','Order in which to display feature annotations');
 
@@ -38,6 +38,16 @@ INSERT INTO system_code (code_group, code, category, value, description ) VALUES
 ('APEV','DOCG',NULL,E'^(19|20)\\d\\d\\s+\\(\\d+\\)\\s+p\\.\\d+$','DOC gazette references must be formatted as "1995 (94) p.213"'),
 ('APEV','TSLG',NULL,E'^Section\\s+\\d+\\s+\\S.*\\sAct\\s+(19|20)\\d\\d$','Treaty settlement references must be formatted as "Section 21 ... Act 2012"'),
 ('APEV','TSLR',NULL,E'^Section\\s+\\d+\\s+\\S.*\\sAct\\s+(19|20)\\d\\d$','Treaty settlement references must be formatted as "Section 21 ... Act 2012"');
+
+-- Reference validation regular expressions for sub events based on authority
+-- Value is the regular expression
+-- Description is the error message if not validated
+
+DELETE FROM system_code WHERE code_group='APSE';
+DELETE FROM system_code WHERE code_group='CODE' AND code='APSE';
+INSERT INTO system_code (code_group, code, category, value, description ) VALUES
+('CODE','APSE','USER','Sub-event reference regular expression validators',NULL),
+('APSE','NZGB',NULL,E'^(?:19|20)\\d{2}\\-ln\\d{2,4}$','Gazette references must be formatted as "1900-ln01" or "2000-ln1234"');
 
 -- Name annotation validation regular expressions for the annotation based
 -- on the annotation type.

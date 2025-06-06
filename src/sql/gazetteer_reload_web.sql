@@ -57,6 +57,26 @@ LANGUAGE sql
 SET search_path FROM CURRENT;
 
 -- ----------------------------------------------------------------------------
+-- Populate gaz_sub_event
+
+CREATE OR REPLACE FUNCTION gazetteer.gweb_update_gaz_sub_event()
+RETURNS INTEGER
+AS
+$code$
+truncate gaz_sub_event;
+
+insert into gaz_sub_event(sub_event_id, event_id, sub_event_date, sub_event_type, sub_event_reference)
+select sub_event_id, event_id, sub_event_date, sub_event_type, gaz_plaintext(sub_event_reference) from sub_event;
+
+ANALYZE gaz_sub_event;
+
+SELECT 1;
+
+$code$
+LANGUAGE sql
+SET search_path FROM CURRENT;
+
+-- ----------------------------------------------------------------------------
 -- Populate gaz_code
 
 CREATE OR REPLACE FUNCTION gazetteer.gweb_update_gaz_code()
@@ -67,10 +87,10 @@ truncate gaz_code;
 
 -- Added FCLS to code group types for updated web app
 insert into gaz_code (code_group, code, category, value)
-select code_group, code, category, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH','FCLS');
+select code_group, code, category, value from system_code where code_group in ('FTYP','FSTS','NSTS','NEVT','AUTH','FCLS','SEVT');
 
 insert into gaz_code (code_group, code, category, value)
-select code_group, code, category, value from system_code where code='CODE' and code in ('FTYP','FSTS','NSTS','NEVT','AUTH');
+select code_group, code, category, value from system_code where code_group='CODE' and code in ('FTYP','FSTS','NSTS','NEVT','AUTH','SEVT');
 
 insert into gaz_code (code_group, code, value )
 values ('CODE','ARFT','Annotation reference type');
@@ -1064,6 +1084,7 @@ DECLARE
 BEGIN
     PERFORM gweb_update_gaz_code();
     PERFORM gweb_update_gaz_event();
+    PERFORM gweb_update_gaz_sub_event();
     PERFORM gweb_update_gaz_feature();
     PERFORM gweb_update_gaz_name();
     PERFORM gweb_update_gaz_annotation();
@@ -1093,6 +1114,7 @@ SET search_path FROM CURRENT;
 ALTER FUNCTION gazetteer.gweb_html_encode( TEXT ) OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_code() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_event() OWNER TO gazetteer_dba;
+ALTER FUNCTION gazetteer.gweb_update_gaz_sub_event() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_feature() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_name() OWNER TO gazetteer_dba;
 ALTER FUNCTION gazetteer.gweb_update_gaz_annotation() OWNER TO gazetteer_dba;
