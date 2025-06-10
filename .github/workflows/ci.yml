@@ -110,9 +110,9 @@ jobs:
       run: |
         make docker
 
-    - name: Run qgis tests against QGIS 3.10
+    - name: Run qgis tests against QGIS 3.28
       run: |
-        QGIS_TAG=3.10 make docker-qgis-test
+        QGIS_TAG=3.28 make docker-qgis-test
 
     - name: Run db tests
       run: |
