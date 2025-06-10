@@ -9,9 +9,6 @@
 #
 ################################################################################
 
-from builtins import str
-from builtins import object
-
 import sys
 import os.path
 import datetime
@@ -22,10 +19,10 @@ try:
 except ImportError:
     import simplejson as json
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWebKitWidgets import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import Qt, pyqtSignal, QObject, QUrl, pyqtProperty, pyqtSlot
+from qgis.PyQt.QtWidgets import QMessageBox, QDockWidget
+from qgis.PyQt.QtWebKit import QWebSettings
+from qgis.PyQt.QtWebKitWidgets import QWebView, QWebPage, QWebPage
 
 from . import DatabaseConfiguration
 

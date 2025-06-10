@@ -10,12 +10,6 @@
 ################################################################################
 
 
-from builtins import str
-import os.path
-
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-
 from LINZ.gazetteer.gui.Controller import Controller
 from LINZ.gazetteer.Model import SystemCode
 from LINZ.Widgets import QtUtils

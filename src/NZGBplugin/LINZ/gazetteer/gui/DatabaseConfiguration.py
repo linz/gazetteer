@@ -12,7 +12,6 @@
 
 
 import getpass
-from PyQt5.QtCore import *
 
 from . import Config
 

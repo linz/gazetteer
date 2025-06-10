@@ -9,13 +9,10 @@
 #
 ################################################################################
 
-
-from builtins import str
 import sys
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import pyqtSignal, Qt, QEvent
+from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QApplication, QDockWidget, QDialog, QVBoxLayout
 
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.ListModelConnector import ListModelConnector

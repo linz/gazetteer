@@ -9,12 +9,9 @@
 #
 ################################################################################
 
-
-from builtins import str
-from builtins import range
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import Qt, QAbstractTableModel, pyqtSignal, QModelIndex
+from qgis.PyQt.QtGui import QBrush
+from qgis.PyQt.QtWidgets import QTableView, QAbstractItemView
 
 
 class ListModelConnector(QAbstractTableModel):

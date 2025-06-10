@@ -9,10 +9,8 @@
 #
 ################################################################################
 
-
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-
+from qgis.PyQt.QtCore import QRegExp
+from qgis.PyQt.QtGui import QRegExpValidator
 
 class UCaseRegExpValidator(QRegExpValidator):
     def __init__(self, regexp, parent=None):

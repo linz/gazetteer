@@ -9,12 +9,10 @@
 #
 ################################################################################
 
-
-from builtins import str
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 import sys
+
+from qgis.PyQt.QtCore import QObject, pyqtSignal
+from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLineEdit, QPlainTextEdit, QTextEdit, QTableView, QWidget
 
 from .Adaptor import Adaptor
 

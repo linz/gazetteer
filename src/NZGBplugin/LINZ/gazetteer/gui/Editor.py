@@ -10,10 +10,8 @@
 #
 ################################################################################
 
-
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import Qt, QUrl
+from qgis.PyQt.QtWidgets import QMainWindow, QDockWidget, QApplication
 
 
 class Editor(QMainWindow):
