@@ -284,7 +284,7 @@ class Layers(QObject):
                 layer.setReadOnly(False)
                 editFormConfig = layer.editFormConfig()
                 editFormConfig.setUiForm(os.path.join(self._formdir, ldef["form"]))
-                editFormConfig.setLayout(editFormConfig.UiFileLayout)
+                editFormConfig.setLayout(QgsEditFormConfig.UiFileLayout)
 
                 if "init" in ldef:
                     editFormConfig.setInitCodeSource(QgsEditFormConfig.CodeSourceFile)
