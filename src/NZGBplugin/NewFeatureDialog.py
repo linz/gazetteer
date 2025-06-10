@@ -11,11 +11,10 @@
 
 
 import os
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from qgis.core import *
 
+from qgis.PyQt.QtWidgets import QDialog
+
+from qgis.core import Qgis
 
 from .LINZ.gazetteer.gui.Controller import Controller
 from .LINZ.gazetteer.gui import FormUtils

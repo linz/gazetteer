@@ -9,17 +9,24 @@
 #
 ################################################################################
 
-
-from builtins import str
 import os.path
-import sys
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import QObject, pyqtSignal
+from qgis.PyQt.QtWidgets import QMessageBox, QAction
 
-from qgis.core import *
-from qgis.core import QgsEditFormConfig
+from qgis.core import (
+    QgsEditFormConfig,
+    QgsWkbTypes,
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsCoordinateTransform,
+    QgsGeometry,
+    QgsDataSourceUri,
+    QgsMapLayer,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsFeatureRequest,
+)
 
 from .LINZ.gazetteer.gui.Controller import Controller
 
