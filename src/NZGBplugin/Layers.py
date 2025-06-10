@@ -126,8 +126,7 @@ class Layers(QObject):
         self._searchIds = []
         self._name = None
         self._layers = {}
-        self._dbCrs = QgsCoordinateReferenceSystem()
-        self._dbCrs.createFromString("epsg:" + str(Layers.dbCrsEpsg))
+        self._dbCrs = QgsCoordinateReferenceSystem("EPSG:{}".format(Layers.dbCrsEpsg))
         self._layersOk = False
         self._qmldir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "styles"
