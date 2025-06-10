@@ -83,7 +83,7 @@ class Adaptor(object):
                 iattr += 1
             self.addAttribute(attr, atype)
 
-        for attr in sorted(attributes.keys()):
+        for key in sorted(attributes.keys()):
             self.addAttribute(key, attributes[key])
 
     def addAttribute(self, attribute, atype, editable=False, isid=False, islist=False):

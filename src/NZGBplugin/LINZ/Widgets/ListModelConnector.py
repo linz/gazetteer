@@ -311,7 +311,7 @@ class ListModelConnector(QAbstractTableModel):
         col = index.column()
         if not self._editable[col]:
             return False
-        object, attr = self.itemFromIndex(index)
+        item, attr = self.itemFromIndex(index)
         self._adaptor.setValue(item, attr, str(value))
         self.dataChanged.emit(index, index)
         return True
