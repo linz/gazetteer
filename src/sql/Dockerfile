@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
   libproj-dev libjson-c-dev libxml2-dev \
   flex bison unzip imagemagick \
   libprotobuf-c-dev protobuf-c-compiler libgdal-dev python3 \
+  libtap-parser-sourcehandler-pgtap-perl \
   && apt-get clean
 
 # Install gazeteer schema
@@ -67,9 +68,6 @@ ADD test/pgtap_load /pgtap_load
 RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     cd /tmp && \
     su postgres -c 'sh /pgtap_load gazetteer'
-
-RUN apt-get update && apt-get install -y \
-    libtap-parser-sourcehandler-pgtap-perl
 
 ENV PGSQL_VERSION=${PGSQL_VERSION}
 
