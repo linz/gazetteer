@@ -11,11 +11,8 @@
 
 
 from past.builtins import cmp
-from builtins import str
-from builtins import range
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+
+from qgis.PyQt.QtWidgets import QComboBox
 
 
 class PythonComboBox(QComboBox):

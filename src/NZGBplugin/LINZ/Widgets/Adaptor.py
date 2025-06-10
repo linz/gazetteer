@@ -10,10 +10,6 @@
 ################################################################################
 
 
-from builtins import str
-from builtins import object
-
-
 class Adaptor(object):
     """
     Adaptor class is a base class for adaptors to connect classes or other
