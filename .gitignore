@@ -1,1 +1,3 @@
 *.pyc
+src/NZGBplugin/geoalchemy2
+src/NZGBplugin/sqlalchemy/
