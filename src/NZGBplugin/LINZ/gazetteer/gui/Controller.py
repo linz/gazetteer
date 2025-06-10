@@ -11,11 +11,9 @@
 
 
 from builtins import str
-import re
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
+from qgis.PyQt.QtWidgets import QDockWidget, QApplication
 
 from . import DatabaseConfiguration
 

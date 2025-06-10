@@ -9,12 +9,9 @@
 #
 ################################################################################
 
-
-from builtins import str
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-
+from qgis.PyQt.QtCore import QObject, QRegExp
+from qgis.PyQt.QtGui import QRegExpValidator, QValidator
+from qgis.PyQt.QtWidgets import QLineEdit
 
 class ValidatorList(QObject):
     class Validator(QObject):

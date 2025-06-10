@@ -9,7 +9,6 @@
 #
 ################################################################################
 
-from builtins import str
 import sys
 import os.path
 
@@ -19,10 +18,9 @@ if __name__ == "__main__":
     lib = dirname(dirname(dirname(dirname(abspath(__file__)))))
     sys.path.append(lib)
 
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QFileDialog, QDialog, QVBoxLayout, QApplication
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor

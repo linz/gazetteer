@@ -9,8 +9,6 @@
 #
 ################################################################################
 
-from builtins import str
-
 if __name__ == "__main__":
     import sys
     from os.path import dirname, abspath
@@ -18,10 +16,7 @@ if __name__ == "__main__":
     lib = dirname(dirname(dirname(dirname(abspath(__file__)))))
     sys.path.append(lib)
 
-
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QWidget
+from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QApplication, QDialog, QVBoxLayout
 
 from .Ui_SystemCodeEditorWidget import Ui_SystemCodeEditorWidget
 
