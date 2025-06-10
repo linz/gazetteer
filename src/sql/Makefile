@@ -14,7 +14,6 @@ help:
 docker-12: ## Build the $(DOCKERNAME):12 docker image
 	docker build -t $(DOCKERNAME):12 \
     --build-arg PGSQL_VERSION=12 \
-    --build-arg PGIS_VERSION=3.1.1 \
     .
 
 .PHONY: docker
