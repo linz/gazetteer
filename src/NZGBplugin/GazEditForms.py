@@ -9,12 +9,8 @@
 #
 ################################################################################
 
-from builtins import str
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from qgis.core import *
-from PyQt5.QtWidgets import *
-
+from qgis.PyQt.QtWidgets import QWidget, QDialogButtonBox, QMessageBox
+from qgis.core import QgsProject, QgsWkbTypes
 
 from LINZ.gazetteer import Model
 from LINZ.gazetteer.gui import FormUtils
