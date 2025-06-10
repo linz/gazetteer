@@ -505,10 +505,7 @@ class Layers(QObject):
             )
             request.setFlags(QgsFeatureRequest.NoGeometry)
             request.setFlags(QgsFeatureRequest.ExactIntersect)
-            # SJ: old vectorLayer API
-            # layer.select(attlist,extent,False,True)
 
-            # if layer.nextFeature(feat):
             if layer.getFeatures(request).nextFeature(feat):
                 try:
                     feat_id = int(feat[attlist[0]])
