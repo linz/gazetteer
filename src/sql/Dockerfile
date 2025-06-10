@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
   xsltproc docbook-xsl docbook-mathml \
   libproj-dev libjson-c-dev libxml2-dev \
   flex bison unzip imagemagick \
-  libprotobuf-c-dev protobuf-c-compiler libgdal-dev python \
+  libprotobuf-c-dev protobuf-c-compiler libgdal-dev python3 \
   && apt-get clean
 
 # Install gazeteer schema
