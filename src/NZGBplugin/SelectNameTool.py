@@ -50,6 +50,6 @@ class SelectNameTool(QgsMapTool):
         if feat_id:
             self._controller.showFeatId(
                 feat_id,
-                (QApplication.keyboardModifiers() & Qt.ShiftModifier)
+                (e.modifiers() & Qt.ShiftModifier)
                 == Qt.ShiftModifier,
             )
