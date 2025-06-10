@@ -19,6 +19,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from qgis.core import *
+from qgis.core import QgsEditFormConfig
 
 from .LINZ.gazetteer.gui.Controller import Controller
 
@@ -280,7 +281,7 @@ class Layers(QObject):
                 editFormConfig.setLayout(editFormConfig.UiFileLayout)
 
                 if "init" in ldef:
-                    editFormConfig.setInitCodeSource(1)
+                    editFormConfig.setInitCodeSource(QgsEditFormConfig.CodeSourceFile)
                     editFormConfig.setInitFilePath(
                         os.path.join(os.path.dirname(__file__), "GazEditForms.py")
                     )
