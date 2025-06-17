@@ -66,7 +66,7 @@ class TestDataHandler:
         Using the PK get the last featured add to the DB
         """
 
-        last_added_name_statement = f"""
+        last_added_name_statement = """
             SELECT  name_id,
                     feat_id,
                     name,
