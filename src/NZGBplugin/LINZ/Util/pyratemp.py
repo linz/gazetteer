@@ -296,7 +296,7 @@ def escape(s, format=HTML):
     # Note: This is one of the most time-consuming parts of the template.
     #      So maybe speed this up.
 
-    if format is None or format == NONE:
+    if format is None or format is NONE:
         pass
     elif format == HTML:
         s = s.replace("&", "&amp;")  # must be done first!

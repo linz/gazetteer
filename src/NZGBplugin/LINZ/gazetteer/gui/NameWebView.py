@@ -91,7 +91,7 @@ class NameWebView(QWebView):
             self._editdata = {}
 
         def _load(self):
-            if self._template == None or self._stat != os.path.getmtime(self._file):
+            if self._template is None or self._stat != os.path.getmtime(self._file):
                 try:
                     if not os.path.exists(self._file):
                         raise ValueError(

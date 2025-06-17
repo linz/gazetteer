@@ -38,7 +38,7 @@ class Controller(QObject):
 
     @staticmethod
     def instance():
-        if Controller._controller == None:
+        if Controller._controller is None:
             Controller._controller = Controller(QApplication.instance())
         return Controller._controller
 
@@ -137,7 +137,7 @@ class Controller(QObject):
             if view.getNameId() == name_id:
                 nameview = view
                 break
-            if not forcenew and targetview == None and not view.editing():
+            if not forcenew and targetview is None and not view.editing():
                 targetview = view
 
         if not nameview:
@@ -153,7 +153,7 @@ class Controller(QObject):
         self.viewNameId.emit(name_id)
 
     def currentName(self):
-        if self._name_id == None:
+        if self._name_id is None:
             return
         return Name.get(self._name_id)
 

@@ -332,7 +332,7 @@ class Layers(QObject):
 
     def layers(self, group=None):
         for glayer in self.layerDefs():
-            if group == None or glayer["def"]["group"] == group:
+            if group is None or glayer["def"]["group"] == group:
                 yield glayer["layer"]
 
     def featureLayers(self):

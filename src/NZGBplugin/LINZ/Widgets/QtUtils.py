@@ -34,7 +34,7 @@ def populateCombo(widget, rows, display=""):
     elif display:
         addItem = lambda r: widget.addItem(str(r.__getattribute__(display)), r)
     for r in rows:
-        if addItem == None:
+        if addItem is None:
             if isinstance(r, list) or isinstance(r, tuple):
                 if len(r) > 1:
                     addItem = lambda r: widget.addItem(str(r[1]), r[0])

@@ -46,7 +46,7 @@ def objectId(item):
     Create a string id for a database derived object that can be
     used to identify the object in application code
     """
-    if item == None:
+    if item is None:
         return None
     if "__table__" not in dir(item):
         return None

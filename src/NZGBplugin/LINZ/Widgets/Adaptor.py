@@ -144,7 +144,7 @@ class Adaptor(object):
             self._typename
             if self._typename
             else object.__class__.__name__
-            if object != None
+            if object is not None
             else self.__class__.__name__
         )
 
@@ -247,7 +247,7 @@ class Adaptor(object):
         """
         Gets the value of an attribute of an object
         """
-        if object == None:
+        if object is None:
             return None
         elif "." in attribute:
             adaptor, member, attribute = self._getMemberObject(object, attribute)
@@ -308,7 +308,7 @@ class Adaptor(object):
                 + self.typename(object)
                 + " cannot be edited"
             )
-        if value != None:
+        if value is not None:
             t = attrdef.type()
             try:
                 value = t(value)
