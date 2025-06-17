@@ -12,12 +12,12 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
-      - name: Use Python 3.6
-        uses: actions/setup-python@v1
+      - name: Use Python 3.13
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.6
+          python-version: 3.13
 
       - name: Install Required Python Modules
         run: |
@@ -43,7 +43,7 @@ jobs:
   test_schema:
 
     name: DB schema
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     strategy:
         matrix:
             include:
@@ -55,7 +55,7 @@ jobs:
       # Avoid warnings on apt-key usage
       APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -100,19 +100,19 @@ jobs:
 
   test_docker:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     env:
       DOCKER_COMPOSE_VERSION: 1.7.1
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Build all docker images
       run: |
         make docker
 
-    - name: Run qgis tests agains QGIS 3.10
+    - name: Run qgis tests against QGIS 3.28
       run: |
-        QGIS_TAG=3.10 make docker-qgis-test
+        QGIS_TAG=3.28 make docker-qgis-test
 
     - name: Run db tests
       run: |
@@ -123,10 +123,10 @@ jobs:
     name: deploy
     if: startswith(github.ref, 'refs/tags/v')
     needs: [linter, test_schema, test_docker]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2-beta
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
       - name: Build project

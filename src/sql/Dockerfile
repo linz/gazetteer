@@ -1,9 +1,7 @@
-FROM debian:buster
+FROM debian:bookworm
 
 # Pass via env, like: docker build --build-arg PGSQL_VERSION=12 ...
 ARG  PGSQL_VERSION=12
-ARG  PGIS_VERSION=3.1.1
-ARG  GEOS_VERSION=3.8.1
 
 # Install postgresql.org APT source
 RUN apt-get update && apt-get install -y \
@@ -12,34 +10,23 @@ RUN apt-get update && apt-get install -y \
   gnupg \
   lsb-release \
   && apt-get clean
-RUN curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN install -d /usr/share/postgresql-common/pgdg
+RUN curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+RUN echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 
 # Install PostgreSQL and packages needed to build
 # PostGIS from source
 RUN apt-get update && apt-get install -y \
   postgresql-${PGSQL_VERSION} \
   postgresql-server-dev-${PGSQL_VERSION} \
+  postgresql-${PGSQL_VERSION}-postgis-3 \
   build-essential autoconf libtool libcunit1-dev \
   xsltproc docbook-xsl docbook-mathml \
   libproj-dev libjson-c-dev libxml2-dev \
   flex bison unzip imagemagick \
-  libprotobuf-c-dev protobuf-c-compiler libgdal-dev python \
+  libprotobuf-c-dev protobuf-c-compiler libgdal-dev python3 \
+  libtap-parser-sourcehandler-pgtap-perl \
   && apt-get clean
-
-# Install GEOS from source
-RUN curl -s -L \
-  https://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 | \
-  tar xj && cd geos-${GEOS_VERSION} && \
-  ./configure && make && make install && \
-  ldconfig -v && cd .. && rm geos-${GEOS_VERSION} -rf
-
-# Install PostGIS ${PGIS_VERSION} from source
-RUN curl -s -L \
-  https://ftp.osuosl.org/pub/osgeo/download/postgis/source/postgis-${PGIS_VERSION}.tar.gz | \
-  tar xz && cd postgis-${PGIS_VERSION} && \
-  ./configure && make && make install && \
-  cd .. && rm postgis-${PGIS_VERSION} -rf
 
 # Install gazeteer schema
 ADD *.sql build_gazetteer_export.py install.sh /sql/
@@ -81,9 +68,6 @@ ADD test/pgtap_load /pgtap_load
 RUN pg_ctlcluster ${PGSQL_VERSION} main start && \
     cd /tmp && \
     su postgres -c 'sh /pgtap_load gazetteer'
-
-RUN apt-get update && apt-get install -y \
-    libtap-parser-sourcehandler-pgtap-perl
 
 ENV PGSQL_VERSION=${PGSQL_VERSION}
 
