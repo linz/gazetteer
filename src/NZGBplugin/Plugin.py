@@ -20,7 +20,6 @@ from qgis.PyQt.QtWidgets import QAction, QLineEdit, QMessageBox, QDockWidget
 from qgis.core import Qgis
 from qgis.gui import QgsMapToolEmitPoint
 
-from . import Resources
 from .SelectNameTool import SelectNameTool
 
 

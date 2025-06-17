@@ -10,7 +10,6 @@
 ################################################################################
 
 
-from LINZ.gazetteer.gui.Controller import Controller
 from LINZ.gazetteer.Model import SystemCode
 from LINZ.Widgets import QtUtils
 

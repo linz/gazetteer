@@ -199,7 +199,7 @@ class Adaptor(object):
         Split off member objects from a dotted attribute
         """
         member, memberattr = attribute.split(".", 1)
-        if not member in self._attrdef:
+        if member not in self._attrdef:
             raise RuntimeError(
                 member + " is not defined in the Adaptor for " + self.typename(object)
             )

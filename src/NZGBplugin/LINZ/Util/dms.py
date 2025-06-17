@@ -9,8 +9,6 @@
 #
 ################################################################################
 
-from builtins import input
-from builtins import str
 import re
 
 latlon_patterns = [
@@ -121,10 +119,6 @@ def parse_lonlat(llstr):
 if __name__ == "__main__":
     import sys
 
-    try:
-        import readline
-    except:
-        pass
     while True:
         x = input("Enter a lat/lon string: ")
         if not x:

@@ -12,7 +12,6 @@
 from qgis.PyQt.QtWidgets import QWidget, QDialogButtonBox, QMessageBox
 from qgis.core import QgsProject, QgsWkbTypes
 
-from LINZ.gazetteer import Model
 from LINZ.gazetteer.gui import FormUtils
 
 # def getFeatureAttributes( layerId, featureId ):

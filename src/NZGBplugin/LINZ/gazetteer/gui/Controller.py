@@ -10,15 +10,12 @@
 ################################################################################
 
 
-from builtins import str
-
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
 from qgis.PyQt.QtWidgets import QDockWidget, QApplication
 
-from . import DatabaseConfiguration
 
 from LINZ.gazetteer import Database
-from LINZ.gazetteer.Model import *
+from LINZ.gazetteer.Model import Name, Feature
 from .NameWebView import NameWebDock
 
 
