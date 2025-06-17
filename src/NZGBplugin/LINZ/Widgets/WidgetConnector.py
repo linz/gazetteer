@@ -9,7 +9,6 @@
 #
 ################################################################################
 
-import sys
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal
 from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLineEdit, QPlainTextEdit, QTextEdit, QTableView, QWidget

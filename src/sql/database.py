@@ -13,7 +13,6 @@
 import sys
 import getpass
 import psycopg2
-from osgeo import ogr
 
 db_def = dict(
     host="localhost", database="gazetteer", user=getpass.getuser(), password=""

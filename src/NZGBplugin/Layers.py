@@ -12,7 +12,7 @@
 import os.path
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal
-from qgis.PyQt.QtWidgets import QMessageBox, QAction
+from qgis.PyQt.QtWidgets import QMessageBox
 
 from qgis.core import (
     QgsEditFormConfig,

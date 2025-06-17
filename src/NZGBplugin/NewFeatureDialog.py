@@ -16,7 +16,6 @@ from qgis.PyQt.QtWidgets import QDialog
 
 from qgis.core import Qgis
 
-from .LINZ.gazetteer.gui.Controller import Controller
 from .LINZ.gazetteer.gui import FormUtils
 
 from .Ui_NewFeatureDialog import Ui_NewFeatureDialog

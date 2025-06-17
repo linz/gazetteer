@@ -20,7 +20,6 @@ class Editor(QMainWindow):
         # Import delayed to facilitate using as standalone module,
         # Makes setting path before import cleaner.
 
-        from . import DatabaseConfiguration
         from .Controller import Controller
         from .NameSearchWidget import NameSearchDock
         from .NameWebView import NameWebDock
@@ -58,7 +57,7 @@ class Editor(QMainWindow):
         dock.raise_()
 
     def showHelp(self, helpfile):
-        from PyQt5.QtWebKitWidgets import QWebView
+        from qgis.PyQt.QtWebKitWidgets import QWebView
 
         dock = self._helpWindow
         if not dock:
@@ -88,7 +87,6 @@ if __name__ == "__main__":
 
     lib = dirname(dirname(dirname(dirname(abspath(__file__)))))
     sys.path.append(lib)
-    from . import DatabaseConfiguration
 
     opts, args = getopt.getopt(sys.argv[1:], "d")
     showSysCodes = False
