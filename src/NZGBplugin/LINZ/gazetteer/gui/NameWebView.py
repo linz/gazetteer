@@ -131,8 +131,8 @@ class NameWebView(QWebView):
             """
             return "".join(
                 [
-                    '<option '
-                    +('selected ' if defaultSelected == x[0] else '')
+                    "<option "
+                    + ("selected " if defaultSelected == x[0] else "")
                     + 'value="'
                     + x[0]
                     + '">'
@@ -151,7 +151,9 @@ class NameWebView(QWebView):
             text = text.replace("\n", "<br />")
             return text
 
-        def lookupOptions(self, code_group, showDescriptions=False, defaultSelected=None):
+        def lookupOptions(
+            self, code_group, showDescriptions=False, defaultSelected=None
+        ):
             """
             Forms an option list from a code matching a SystemCode
             code_group can be selected
