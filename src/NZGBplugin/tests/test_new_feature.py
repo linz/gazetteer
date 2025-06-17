@@ -5,14 +5,14 @@ import re
 import xml.etree.ElementTree as ET
 import os
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtTest import QTest
+from qgis.PyQt.QtWidgets import QDockWidget, QTabBar
+from qgis.PyQt.QtWebKitWidgets import QWebPage
+
 from qgis.core import QgsProject, QgsPointXY
 from qgis.utils import plugins, iface, reloadPlugin
-from PyQt5.QtTest import QTest
 from qgis.gui import QgsMapTool
-from PyQt5.QtWebKitWidgets import QWebPage
 
 from utils.data_handler import TestDataHandler
 
