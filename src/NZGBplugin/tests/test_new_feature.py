@@ -799,7 +799,7 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(self.format_console_log(stdout[0]), "LDIS")
 
         # Now edit the annotation text
-        self.html_doc.findFirst(f"textarea[name='annotation']").evaluateJavaScript(
+        self.html_doc.findFirst("textarea[name='annotation']").evaluateJavaScript(
             """this.value = 'An annotation'; this.dispatchEvent(new Event('change'))"""
         )
 
@@ -887,7 +887,7 @@ class TestNewFeature(unittest.TestCase):
         self.assertEqual(self.format_console_log(stdout[0]), "NZGB")
 
         # Now edit the date text to an invalid date
-        self.html_doc.findFirst(f"input[name='event_date']").evaluateJavaScript(
+        self.html_doc.findFirst("input[name='event_date']").evaluateJavaScript(
             """this.value = '11-11-2015'; this.dispatchEvent(new Event('change'))"""
         )
 
@@ -899,7 +899,7 @@ class TestNewFeature(unittest.TestCase):
             """Event date must be formatted as (for example) 23-Jun-2005\n\nGazette references must be formatted as "1995 (94) p.213"\n\n""",
         )
         # Now edit the date text to an valid date
-        self.html_doc.findFirst(f"input[name='event_date']").evaluateJavaScript(
+        self.html_doc.findFirst("input[name='event_date']").evaluateJavaScript(
             """this.value = '11-Jun-2015'; this.dispatchEvent(new Event('change'))"""
         )
 
@@ -912,7 +912,7 @@ class TestNewFeature(unittest.TestCase):
         )
 
         # Now edit the ref text to an invalid reference
-        self.html_doc.findFirst(f"input[name='event_reference']").evaluateJavaScript(
+        self.html_doc.findFirst("input[name='event_reference']").evaluateJavaScript(
             """this.value = 'Go look at the gazetteer'; this.dispatchEvent(new Event('change'))"""
         )
 
@@ -925,7 +925,7 @@ class TestNewFeature(unittest.TestCase):
         )
 
         # Now edit the ref text to a valid reference
-        self.html_doc.findFirst(f"input[name='event_reference']").evaluateJavaScript(
+        self.html_doc.findFirst("input[name='event_reference']").evaluateJavaScript(
             """this.value = '1995 (94) p.213'; this.dispatchEvent(new Event('change'))"""
         )
 
@@ -938,7 +938,7 @@ class TestNewFeature(unittest.TestCase):
         )
 
         # Edit event notes
-        self.html_doc.findFirst(f"""textarea[name="notes"]""").evaluateJavaScript(
+        self.html_doc.findFirst("""textarea[name="notes"]""").evaluateJavaScript(
             """this.value = 'A New Note'; this.dispatchEvent(new Event('change'))"""
         )
 
@@ -1014,7 +1014,7 @@ class TestNewFeature(unittest.TestCase):
 
         # Now edit the annotation text with an invalid input
         self.html_doc.findFirst('div[object_type="NameAnnotation"]').findFirst(
-            f"textarea[name='annotation']"
+            "textarea[name='annotation']"
         ).evaluateJavaScript(
             """this.value = 'An annotation'; this.dispatchEvent(new Event('change'))"""
         )
@@ -1029,7 +1029,7 @@ class TestNewFeature(unittest.TestCase):
 
         # Now edit the annotation text with an valid input
         self.html_doc.findFirst('div[object_type="NameAnnotation"]').findFirst(
-            f"textarea[name='annotation']"
+            "textarea[name='annotation']"
         ).evaluateJavaScript(
             """this.value = 'Yes'; this.dispatchEvent(new Event('change'))"""
         )
