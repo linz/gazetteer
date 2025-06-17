@@ -26,9 +26,7 @@ from .Controller import Controller
 from LINZ.gazetteer.Model import SystemCode
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.ListModelConnector import ListModelConnector
-from LINZ.Widgets.WidgetConnector import WidgetConnector
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
-from LINZ.Widgets.ValidatorList import ValidatorList
 from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
 
 

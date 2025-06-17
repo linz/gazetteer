@@ -1,6 +1,5 @@
 import os
 import psycopg2
-from psycopg2 import Error
 
 import configparser
 import sys
@@ -31,7 +30,7 @@ class Database:
                     port=self.port,
                     dbname=self.dbname,
                 )
-            except psycopg2.DatabaseError as error:
+            except psycopg2.DatabaseError:
                 sys.exit()
 
     def execute(self, statement):

@@ -19,9 +19,8 @@ import sqlalchemy.exc
 import sqlalchemy.schema
 import geoalchemy2 as ga
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Unicode, DateTime
+from sqlalchemy import Column, Integer, Unicode, DateTime
 from sqlalchemy.schema import Table, MetaData, PrimaryKeyConstraint
-from sqlalchemy.sql.expression import Function
 
 from . import Database
 

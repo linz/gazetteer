@@ -15,19 +15,13 @@ from qgis.PyQt.QtCore import pyqtSignal, Qt, QEvent
 from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QApplication, QDockWidget, QDialog, QVBoxLayout
 
 from LINZ.Widgets import QtUtils
-from LINZ.Widgets.ListModelConnector import ListModelConnector
 from LINZ.Widgets.DictionaryAdaptor import DictionaryAdaptor
-from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
-from LINZ.Widgets.ValidatorList import ValidatorList
-from LINZ.Widgets.WidgetConnector import WidgetConnector
 from LINZ.Widgets.ErrorHandler import handleException
 
-from . import DatabaseConfiguration
 from LINZ.gazetteer.Model import Name
 from . import FormUtils
 from LINZ.gazetteer.Model import SystemCode
 
-from . import FormUtils
 from .Ui_NameSearchWidget import Ui_NameSearchWidget
 
 from .Controller import Controller

@@ -22,7 +22,6 @@ from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QFileDialog, QDialog, QVBoxLayout, QApplication
 
 
-from LINZ.Widgets import QtUtils
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
 
 # Import controller before model components to ensure database is configured..

@@ -22,9 +22,8 @@ except ImportError:
 from qgis.PyQt.QtCore import Qt, pyqtSignal, QObject, QUrl, pyqtProperty, pyqtSlot
 from qgis.PyQt.QtWidgets import QMessageBox, QDockWidget
 from qgis.PyQt.QtWebKit import QWebSettings
-from qgis.PyQt.QtWebKitWidgets import QWebView, QWebPage, QWebPage
+from qgis.PyQt.QtWebKitWidgets import QWebView, QWebPage
 
-from . import DatabaseConfiguration
 
 from LINZ.gazetteer import Model
 from LINZ.gazetteer import Database
