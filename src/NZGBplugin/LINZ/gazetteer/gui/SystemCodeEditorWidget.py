@@ -117,7 +117,7 @@ class SystemCodeEditorWidget(QWidget, Ui_SystemCodeEditorWidget):
 
     def populateCodeList(self, code=None):
         code_group = self.selectedCodeGroup()
-        self.uNewCodeButton.setEnabled(code_group != None)
+        self.uNewCodeButton.setEnabled(code_group is not None)
         if not code_group:
             self.uCodesTable.setList([])
         else:
@@ -134,7 +134,7 @@ class SystemCodeEditorWidget(QWidget, Ui_SystemCodeEditorWidget):
     def codeSelected(self, row):
         if self._loadCodeOnSelect:
             self.loadCode()
-        self.uDeleteCodeButton.setEnabled(self.selectedCode() != None)
+        self.uDeleteCodeButton.setEnabled(self.selectedCode() is not None)
 
     def selectedCode(self):
         return self.uCodesTable.selectedItem()

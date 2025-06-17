@@ -77,22 +77,22 @@ def setConnection(
 ):
     global _host, _database, _schema, _user, _port, _password
     changed = False
-    if host != None and host != _host:
+    if host is not None and host != _host:
         _host = host
         changed = True
-    if port != None and port != _port:
+    if port is not None and port != _port:
         _port = port
         changed = True
-    if database != None and database != _database:
+    if database is not None and database != _database:
         _database = database
         changed = True
-    if schema != None and schema != schema:
+    if schema is not None and schema != schema:
         _schema = schema
         changed = True
-    if user != None and user != _user:
+    if user is not None and user != _user:
         _user = user
         changed = True
-    if password != None and password != _password:
+    if password is not None and password != _password:
         _password = password
         changed = True
     if changed and _instance:

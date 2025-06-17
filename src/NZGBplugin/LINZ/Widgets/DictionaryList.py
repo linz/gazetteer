@@ -55,7 +55,7 @@ class DictionaryListView(QTableView):
         QTableView.selectionChanged(self, selected, deselected)
         self.rowSelectionChanged.emit()
         row = self.selectedRow()
-        if row != None:
+        if row is not None:
             self.rowSelected.emit(row)
 
     def setList(self, list, columns=None, headers=None):
@@ -89,7 +89,7 @@ class DictionaryListView(QTableView):
             self._alternativeId = None
             return
         self._selectedId = self.selectedId()
-        if self._selectedId != None:
+        if self._selectedId is not None:
             row = self.selectedRow() + 1
             self._alternativeId = self._dictionaryList.getId(row)
 
@@ -109,13 +109,13 @@ class DictionaryListView(QTableView):
 
     def onDoubleClicked(self, index):
         row = self.selectedRow()
-        if row != None:
+        if row is not None:
             self.rowDoubleClicked.emit(row)
 
     def selectId(self, id):
-        if self._dictionaryList and id != None:
+        if self._dictionaryList and id is not None:
             row = self._dictionaryList.getIdDisplayRow(id)
-            if row != None:
+            if row is not None:
                 self.selectRow(row)
                 return True
         return False
@@ -180,7 +180,7 @@ class DictionaryListModel(QAbstractTableModel):
 
     def setList(self, list, columns=None, headers=None, idColumn=None):
         self.resettingModel.emit()
-        self._list = list if list != None else []
+        self._list = list if list is not None else []
         if not columns:
             columns = []
 
@@ -245,11 +245,11 @@ class DictionaryListModel(QAbstractTableModel):
         self._lookup = None
 
     def getDisplayRow(self, row):
-        if row == None:
+        if row is None:
             return None
         if row < 0 or row >= len(self._list):
             return None
-        if self._lookup == None:
+        if self._lookup is None:
             lookup = [None] * len(self._list)
             for i in range(len(self._index)):
                 lookup[self._index[i]] = i
@@ -276,7 +276,7 @@ class DictionaryListModel(QAbstractTableModel):
         return len(self._columns) if not parent.isValid() else 0
 
     def getItem(self, row):
-        if row != None and row >= 0 and row < len(self._index):
+        if row is not None and row >= 0 and row < len(self._index):
             return self._list[self._index[row]]
         return None
 
@@ -347,7 +347,7 @@ class DictionaryListModel(QAbstractTableModel):
         self.layoutChanged.emit()
 
     def _sortIndex(self):
-        if self._sortColumn == None:
+        if self._sortColumn is None:
             return
         key = self._columns[self._sortColumn]
         keyfunc = lambda x: self._list[x].get(key)
@@ -358,7 +358,7 @@ class DictionaryListModel(QAbstractTableModel):
         row = self.getDisplayRow(index)
         showing = True
         if self._filter:
-            showing = row != None
+            showing = row is not None
             show = self._filter(self._list[index])
             if showing != show:
                 self.resettingModel.emit()

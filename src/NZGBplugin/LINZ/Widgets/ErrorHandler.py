@@ -15,6 +15,6 @@ from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 
 def handleException():
     type, value, traceback = sys.exc_info()
-    if type == None:
+    if type is None:
         return
     QMessageBox.warning(QApplication.instance().activeWindow(), "Error", str(value))

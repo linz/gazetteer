@@ -119,7 +119,7 @@ class ConnectedWidget(QWidget):
         if self._object and not overwrite and not self.querySave():
             return False
         self._object = object_
-        self._isnew = isNew and object_ != None
+        self._isnew = isNew and object_ is not None
         self._load()
         self.loaded.emit(self._object)
         return True
@@ -157,7 +157,7 @@ class ConnectedWidget(QWidget):
         Returns True if the object is successfully saved, or the user
         chose not to save it, or False if user cancelled the save operation.
         """
-        if self._object == None or not self._connector.isDirty():
+        if self._object is None or not self._connector.isDirty():
             return True
         result = QMessageBox.question(
             self,

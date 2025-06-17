@@ -185,11 +185,11 @@ class ListModelConnector(QAbstractTableModel):
         """
         Get the list index corresponding to a view row
         """
-        if row == None:
+        if row is None:
             return None
         if row < 0 or row >= len(self._list):
             return None
-        if self._lookup == None:
+        if self._lookup is None:
             lookup = [None] * len(self._list)
             for i in range(len(self._index)):
                 lookup[self._index[i]] = i
@@ -224,7 +224,7 @@ class ListModelConnector(QAbstractTableModel):
         """
         Get the item for a specific view row
         """
-        if row != None and row >= 0 and row < len(self._index):
+        if row is not None and row >= 0 and row < len(self._index):
             return self._list[self._index[row]]
         return None
 
@@ -247,7 +247,7 @@ class ListModelConnector(QAbstractTableModel):
         """
         Get the id of the object in the specified row
         """
-        if self._idColumn == None:
+        if self._idColumn is None:
             return None
         item = self.getItem(row)
         if not item:
@@ -290,7 +290,7 @@ class ListModelConnector(QAbstractTableModel):
         if role == Qt.DisplayRole or role == Qt.EditRole:
             object, attr = self.itemFromIndex(index)
             attr = self._getItemAttribute(object, attr)
-            if attr == None:
+            if attr is None:
                 return ""
             return str(attr)
         elif (
@@ -341,7 +341,7 @@ class ListModelConnector(QAbstractTableModel):
         Rebuild the sorted index (self._index) mapping between sorted (displayed) list
         and actual list order.  This doesn't change the base list, just the display order
         """
-        if self._sortColumn == None:
+        if self._sortColumn is None:
             return
         key = self._columns[self._sortColumn]
         keyfunc = lambda x: str(self._getItemAttribute(self._list[x], key))
@@ -355,7 +355,7 @@ class ListModelConnector(QAbstractTableModel):
         row = self.getDisplayRow(index)
         showing = True
         if self._filter:
-            showing = row != None
+            showing = row is not None
             show = self._filter(self._list[index])
             if showing != show:
                 self.resettingModel.emit()
@@ -478,7 +478,7 @@ class ListModelTableView(QTableView):
             self._alternativeId = None
             return
         self._selectedId = self.selectedId()
-        if self._selectedId != None:
+        if self._selectedId is not None:
             row = self.selectedRow() + 1
             self._alternativeId = self._modelList.getId(row)
 
@@ -498,13 +498,13 @@ class ListModelTableView(QTableView):
 
     def onDoubleClicked(self, index):
         row = self.selectedRow()
-        if row != None:
+        if row is not None:
             self.rowDoubleClicked.emit(row)
 
     def selectId(self, id):
-        if self._modelList and id != None:
+        if self._modelList and id is not None:
             row = self._modelList.getIdDisplayRow(id)
-            if row != None:
+            if row is not None:
                 self.selectRow(row)
                 return True
         return False
