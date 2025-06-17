@@ -1,10 +1,10 @@
 import unittest
 import os
 
+from qgis.PyQt.QtCore import Qt, QTimer, QVariant
+from qgis.PyQt.QtWidgets import QApplication, QMessageBox, QDialog
+from qgis.PyQt.QtTest import QTest
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 from qgis.core import (
     QgsProject,
     QgsPointXY,
@@ -16,7 +16,6 @@ from qgis.core import (
     QgsLayerTreeLayer,
 )
 from qgis.utils import plugins, iface, reloadPlugin
-from PyQt5.QtTest import QTest
 from qgis.gui import QgsMapTool
 
 from utils.data_handler import TestDataHandler
