@@ -18,7 +18,6 @@ from PyQt5.QtWidgets import *
 
 class Editor(QMainWindow):
     def __init__(self, parent=None):
-
         # Import delayed to facilitate using as standalone module,
         # Makes setting path before import cleaner.
 

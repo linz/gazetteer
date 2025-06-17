@@ -35,7 +35,6 @@ from LINZ.Util import pyratemp, dms
 
 
 class NameWebView(QWebView):
-
     Debug = False
     _months = (
         "Jan",
@@ -695,7 +694,6 @@ class NameWebView(QWebView):
 
 
 class NameWebDock(QDockWidget):
-
     nameChanged = pyqtSignal(int, str, name="nameChanged")
     closed = pyqtSignal(name="closed")
 

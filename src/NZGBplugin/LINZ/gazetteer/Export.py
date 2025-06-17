@@ -44,7 +44,6 @@ class UnicodeWriter(object):
 
 
 class Export(object):
-
     fields = None
 
     def __init__(self):
@@ -66,9 +65,7 @@ class Export(object):
            and attnum > 0
         order by
            attnum
-        """.replace(
-            "{table}", table
-        )
+        """.replace("{table}", table)
         columns = [r[0] for r in Database.querysql(sql)]
         return columns
 

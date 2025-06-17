@@ -25,7 +25,6 @@ from PyQt5.QtWidgets import *
 
 
 class DictionaryListView(QTableView):
-
     rowSelected = pyqtSignal(int, name="rowSelected")
     rowDoubleClicked = pyqtSignal(int, name="rowDoubleClicked")
     rowSelectionChanged = pyqtSignal(name="rowSelectionChanged")
@@ -158,7 +157,6 @@ class DictionaryListView(QTableView):
 
 
 class DictionaryListModel(QAbstractTableModel):
-
     itemUpdated = pyqtSignal(int, name="itemUpdated")
     resettingModel = pyqtSignal(name="resettingModel")
 

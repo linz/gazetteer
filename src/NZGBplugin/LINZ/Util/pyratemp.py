@@ -902,12 +902,12 @@ class Parser(object):
 # Evaluation
 
 # some checks
-assert (
-    len(eval("dir()", {"__builtins__": {"dir": dir}})) == 1
-), "FATAL: 'eval' does not work as expected (%s)."
-assert compile("0 .__class__", "<string>", "eval").co_names == (
-    "__class__",
-), "FATAL: 'compile' does not work as expected."
+assert len(eval("dir()", {"__builtins__": {"dir": dir}})) == 1, (
+    "FATAL: 'eval' does not work as expected (%s)."
+)
+assert compile("0 .__class__", "<string>", "eval").co_names == ("__class__",), (
+    "FATAL: 'compile' does not work as expected."
+)
 
 
 class EvalPseudoSandbox(object):

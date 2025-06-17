@@ -19,7 +19,6 @@ from qgis.gui import *
 
 
 class SelectNameTool(QgsMapTool):
-
     tolerance = 5
     featureSelected = pyqtSignal(int, name="featureSelected")
 

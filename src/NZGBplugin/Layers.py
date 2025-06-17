@@ -24,7 +24,6 @@ from .LINZ.gazetteer.gui.Controller import Controller
 
 
 class Layers(QObject):
-
     startEdit = pyqtSignal(name="startEdit")
     endEdit = pyqtSignal(name="endEdit")
     nameSelected = pyqtSignal(str, name="nameSelected")
@@ -216,7 +215,6 @@ class Layers(QObject):
         self._layersOk = False
 
     def createLayers(self):
-
         updated = False
         featureGroup = None
 

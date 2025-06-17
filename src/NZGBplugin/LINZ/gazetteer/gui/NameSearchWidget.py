@@ -37,7 +37,6 @@ from .Controller import Controller
 
 
 class NameSearchWidget(QWidget, Ui_NameSearchWidget):
-
     nameSelected = pyqtSignal(int, bool, name="nameSelected")
 
     def __init__(self, parent=None, userOnly=True):
@@ -281,7 +280,6 @@ class NameSearchWidget(QWidget, Ui_NameSearchWidget):
 
 
 class NameSearchDock(QDockWidget):
-
     nameSelected = pyqtSignal(int, int, name="nameSelected")
 
     def __init__(self, parent=None):

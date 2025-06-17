@@ -21,7 +21,6 @@ class TestNewFeature(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-
         # Insert required sys_codes to allow new feature creation
         cls.data_handler = TestDataHandler()
         cls.data_handler.insert_sys_codes()
@@ -369,7 +368,6 @@ class TestNewFeature(unittest.TestCase):
         self.assertTrue(place_name in names)
 
     def test_E_search_in_map_area(self):
-
         # Create a feature for the test
         place_name = self.get_random_string(12)
         self.init_feature(place_name)

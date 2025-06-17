@@ -36,13 +36,13 @@ class TestDataHandler:
 
         for codes in self.data[self.table_sys_code]:
             insert_statement = f"""INSERT INTO {self.table_sys_code}
-                                    VALUES ('{codes['code_group']}',
-                                    '{codes['code']}',
-                                    '{codes['category']}',
-                                    '{codes['value']}',
-                                    '{codes['description']}',
-                                    '{codes['updated_by']}',
-                                    '{codes['update_date']}')"""
+                                    VALUES ('{codes["code_group"]}',
+                                    '{codes["code"]}',
+                                    '{codes["category"]}',
+                                    '{codes["value"]}',
+                                    '{codes["description"]}',
+                                    '{codes["updated_by"]}',
+                                    '{codes["update_date"]}')"""
             self.db.execute(insert_statement)
 
     def delete_sys_codes(self):
@@ -55,8 +55,8 @@ class TestDataHandler:
             delete_statement = f"""
                 DELETE
                 FROM {self.table_sys_code}
-                WHERE   code_group = '{codes['code_group']}'
-                AND     code = '{codes['code']}'
+                WHERE   code_group = '{codes["code_group"]}'
+                AND     code = '{codes["code"]}'
             """
 
             self.db.execute(delete_statement)

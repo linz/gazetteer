@@ -20,7 +20,6 @@ from .Adaptor import Adaptor
 
 
 class WidgetLinker(QObject):
-
     dataChanged = pyqtSignal()
 
     def __init__(self, widget):
@@ -57,7 +56,6 @@ class WidgetLinker(QObject):
 
 
 class ComboLinker(WidgetLinker):
-
     types = [QComboBox]
 
     def __init__(self, widget):
@@ -78,7 +76,6 @@ class ComboLinker(WidgetLinker):
 
 
 class LabelLinker(WidgetLinker):
-
     types = [QLabel]
 
     def __init__(self, widget):
@@ -92,7 +89,6 @@ class LabelLinker(WidgetLinker):
 
 
 class LineEditLinker(WidgetLinker):
-
     types = [QLineEdit]
 
     def __init__(self, widget):
@@ -107,7 +103,6 @@ class LineEditLinker(WidgetLinker):
 
 
 class PlainTextLinker(WidgetLinker):
-
     types = [QPlainTextEdit, QTextEdit]
 
     def __init__(self, widget):
@@ -122,7 +117,6 @@ class PlainTextLinker(WidgetLinker):
 
 
 class TableViewLinker(WidgetLinker):
-
     types = [QTableView]
 
     def __init__(self, widget):
@@ -156,7 +150,6 @@ class TableViewLinker(WidgetLinker):
 
 
 class Linkage(QObject):
-
     """
     Class for linking a specific attribute of an object with a
     particular widget.

@@ -30,7 +30,6 @@ class TestNewFeature(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-
         # Insert required sys_codes to allow new feature creation
         cls.data_handler = TestDataHandler()
         cls.data_handler.insert_sys_codes()
