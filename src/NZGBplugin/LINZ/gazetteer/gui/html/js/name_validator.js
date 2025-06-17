@@ -78,7 +78,7 @@ gazetteer.validators.validate_SubEvent = function(evt)
     return '';
 }
 
-// 
+//
 gazetteer.validators.validate_Event = function(evt)
 {
     if( ! gazetteer.validators.eventReferenceValidators )

@@ -308,7 +308,7 @@ class Event(base):
 
     def __str__(self):
         return "NameEvent<" + str(self.event_id) + ">"
-    
+
 class SubEvent(base):
     __table__ = Table("sub_event", meta, autoload=True)
 
