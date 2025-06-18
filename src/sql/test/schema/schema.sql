@@ -1,6 +1,6 @@
 SET client_encoding = 'UTF-8';
 BEGIN;
-SELECT plan(147);
+SELECT plan(139);
 
 SELECT schemas_are(ARRAY[
     'gazetteer',
