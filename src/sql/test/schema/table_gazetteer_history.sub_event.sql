@@ -1,6 +1,6 @@
 SET client_encoding = 'UTF-8';
 BEGIN;
-SELECT plan(40);
+SELECT plan(56);
 
 SELECT has_table(
     'gazetteer_history', 'sub_event',
