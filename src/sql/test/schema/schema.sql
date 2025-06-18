@@ -1,6 +1,6 @@
 SET client_encoding = 'UTF-8';
 BEGIN;
-SELECT plan(146);
+SELECT plan(147);
 
 SELECT schemas_are(ARRAY[
     'gazetteer',
@@ -26,7 +26,7 @@ SELECT tables_are('gazetteer', ARRAY[
     'name_association',
     'name_event',
     'system_code',
-    'sub_events'
+    'sub_event'
 ]);
 
 SELECT table_owner_is('gazetteer','app_favourites','gazetteer_dba','gazetteer.app_favourites owner is gazetteer_dba');
@@ -40,7 +40,7 @@ SELECT table_owner_is('gazetteer','name_annotation','gazetteer_dba','gazetteer.n
 SELECT table_owner_is('gazetteer','name_association','gazetteer_dba','gazetteer.name_association owner is gazetteer_dba');
 SELECT table_owner_is('gazetteer','name_event','gazetteer_dba','gazetteer.name_event owner is gazetteer_dba');
 SELECT table_owner_is('gazetteer','system_code','gazetteer_dba','gazetteer.system_code owner is gazetteer_dba');
-SELECT table_owner_is('gazetteer', 'sub_events','gazetteer_dba','gazetteer.sub_events owner is gazetteer_dba');
+SELECT table_owner_is('gazetteer', 'sub_event','gazetteer_dba','gazetteer.sub_event owner is gazetteer_dba');
 SELECT views_are('gazetteer', ARRAY[
     'feature_line',
     'feature_point',
@@ -140,7 +140,7 @@ SELECT functions_are('gazetteer', ARRAY[
     'trgfunc_name_update',
     'trgfunc_system_code_history',
     'trgfunc_system_code_update',
-    'gweb_update_sub_event',
+    'gweb_update_gaz_sub_event',
     'trgfunc_sub_event_history',
     'trgfunc_sub_event_update'
 ]);
@@ -530,21 +530,21 @@ SELECT is(md5(p.prosrc), '2349824cfa20f6654e163b8f39f9df0c', 'Function gaz_updat
    AND proname = 'gaz_update_export_database'
    AND proargtypes::text = '';
 
-SELECT is(md5(p.prosrc), 'tmp', 'Function gweb_update_gaz_code body should match checksum')
+SELECT is(md5(p.prosrc), 'e64db7a96eafedbcca77cb47bf332804', 'Function gweb_update_gaz_code body should match checksum')
   FROM pg_catalog.pg_proc p
   JOIN pg_catalog.pg_namespace n ON p.pronamespace = n.oid
  WHERE n.nspname = 'gazetteer'
    AND proname = 'gweb_update_gaz_code'
    AND proargtypes::text = '';
 
-SELECT is(md5(p.prosrc), 'tmp', 'trgfunc_sub_event_history body should match checksum')
+SELECT is(md5(p.prosrc), '7d099af8471e5aac05cd69c18d2c3fd7', 'trgfunc_sub_event_history body should match checksum')
   FROM pg_catalog.pg_proc p
   JOIN pg_catalog.pg_namespace n ON p.pronamespace = n.oid
  WHERE n.nspname = 'gazetteer'
    AND proname = 'trgfunc_sub_event_history'
    AND proargtypes::text = '';
 
-SELECT is(md5(p.prosrc), 'tmp', 'trgfunc_sub_event_update body should match checksum')
+SELECT is(md5(p.prosrc), '93d9bd6fe49b3a0f9286bd07eb9a5bc5', 'trgfunc_sub_event_update body should match checksum')
   FROM pg_catalog.pg_proc p
   JOIN pg_catalog.pg_namespace n ON p.pronamespace = n.oid
  WHERE n.nspname = 'gazetteer'
@@ -619,7 +619,7 @@ SELECT table_owner_is('gazetteer_web','gaz_name','gaz_owner','gazetteer_web.gaz_
 SELECT table_owner_is('gazetteer_web','gaz_shape','gaz_owner','gazetteer_web.gaz_shape owner is gaz_owner');
 SELECT table_owner_is('gazetteer_web','gaz_web_config','gaz_owner','gazetteer_web.gaz_web_config owner is gaz_owner');
 SELECT table_owner_is('gazetteer_web','gaz_word','gaz_owner','gazetteer_web.gaz_word owner is gaz_owner');
-SLECT table_owner_is('gazetteer_web','gaz_sub_event','gaz_owner','gazetteer_web.gaz_sub_event owner is gaz_owner');
+SELECT table_owner_is('gazetteer_web','gaz_sub_event','gaz_owner','gazetteer_web.gaz_sub_event owner is gaz_owner');
 SELECT sequences_are('gazetteer_web', ARRAY[
     'gaz_annotation_id_seq',
     'gaz_shape_id_seq'
