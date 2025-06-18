@@ -25,10 +25,11 @@ SELECT columns_are('gazetteer'::name, 'sub_event'::name, ARRAY[
 ]);
 
 SELECT has_column(       'gazetteer', 'sub_event', 'sub_event_id', 'Column gazetteer.sub_event.sub_event_id should exist');
-SELECT col_type_is(      'gazetteer', 'sub_event', 'sub_event_id', 'serial', 'Column gazetteer.sub_event.sub_event_id should be type serial');
+SELECT col_type_is(      'gazetteer', 'sub_event', 'sub_event_id', 'integer', 'Column gazetteer.sub_event.sub_event_id should be type integer');
 SELECT col_not_null(     'gazetteer', 'sub_event', 'sub_event_id', 'Column gazetteer.sub_event.sub_event_id should be NOT NULL');
-SELECT col_hasnt_default('gazetteer', 'sub_event', 'sub_event_id', 'Column gazetteer.sub_event.sub_event_id should not have a default');
-SELECT col_hasnt_default('gazetteer', 'sub_event', 'sub_event_id', 'Column gazetteer.sub_event.sub_event_id should not have a default');
+SELECT col_has_default(  'gazetteer', 'sub_event', 'sub_event_id', 'Column gazetteer.sub_event.sub_event_id should have a default');
+SELECT col_default_is(   'gazetteer', 'sub_event', 'sub_event_id', 'nextval(''gazetteer.sub_event_sub_event_id_seq''::regclass)', 'Column gazetteer.sub_event.sub_event_id default is');
+
 
 SELECT has_column(       'gazetteer', 'sub_event', 'event_id', 'Column gazetteer.sub_event.event_id should exist');
 SELECT col_type_is(      'gazetteer', 'sub_event', 'event_id', 'integer', 'Column gazetteer.sub_event.event_id should be type integer');
@@ -36,7 +37,7 @@ SELECT col_not_null(     'gazetteer', 'sub_event', 'event_id', 'Column gazetteer
 SELECT col_hasnt_default('gazetteer', 'sub_event', 'event_id', 'Column gazetteer.sub_event.event_id should not have a default');
 
 SELECT has_column(       'gazetteer', 'sub_event', 'sub_event_date', 'Column gazetteer.sub_event.sub_event_date should exist');
-SELECT col_type_is(      'gazetteer', 'sub_event', 'sub_event_date', 'timestamp without time zone', 'Column gazetteer.sub_event.sub_event_date should be type timestamp without time zone');
+SELECT col_type_is(      'gazetteer', 'sub_event', 'sub_event_date', 'date', 'Column gazetteer.sub_event.sub_event_date should be type date');
 SELECT col_is_null(      'gazetteer', 'sub_event', 'sub_event_date', 'Column gazetteer.sub_event.sub_event_date should allow NULL');
 SELECT col_hasnt_default('gazetteer', 'sub_event', 'sub_event_date', 'Column gazetteer.sub_event.sub_event_date should not have a default');
 
