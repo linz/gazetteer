@@ -10,11 +10,8 @@
 ################################################################################
 
 
-from builtins import str
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-import sys
+from qgis.PyQt.QtCore import QObject, pyqtSignal
+from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLineEdit, QPlainTextEdit, QTextEdit, QTableView, QWidget
 
 from .Adaptor import Adaptor
 
@@ -171,18 +168,18 @@ class Linkage(QObject):
 
     def load(self, object):
         self._dirty = False
-        if object != None:
+        if object is not None:
             value = self._adaptor.getValue(object, self._attr)
         else:
             value = ""
         self._value = None
-        if self._linker != None:
+        if self._linker is not None:
             self._linker.setValue(value)
             self._value = self._linker.getValue()
             self._dirty = False
 
     def save(self, object, overwrite):
-        if self._linker != None and not self._linker.readOnly():
+        if self._linker is not None and not self._linker.readOnly():
             try:
                 value = self._linker.getValue()
                 self._adaptor.setValue(object, self._attr, value, overwrite)
@@ -253,7 +250,7 @@ class WidgetConnector(QObject):
         return False
 
     def onDataChanged(self):
-        if self._object != None:
+        if self._object is not None:
             self.dataChanged.emit(self.isDirty())
 
     def setAdaptor(self, adaptor):

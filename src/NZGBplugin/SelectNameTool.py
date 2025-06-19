@@ -9,14 +9,10 @@
 #
 ################################################################################
 
+from qgis.PyQt.QtCore import pyqtSignal, QPoint, Qt
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-
-from qgis.core import *
-from qgis.gui import *
-
+from qgis.core import QgsRectangle
+from qgis.gui import QgsMapTool
 
 class SelectNameTool(QgsMapTool):
     tolerance = 5
@@ -54,6 +50,6 @@ class SelectNameTool(QgsMapTool):
         if feat_id:
             self._controller.showFeatId(
                 feat_id,
-                (QApplication.keyboardModifiers() & Qt.ShiftModifier)
+                (e.modifiers() & Qt.ShiftModifier)
                 == Qt.ShiftModifier,
             )

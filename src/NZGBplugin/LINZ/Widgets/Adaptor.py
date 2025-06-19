@@ -10,10 +10,6 @@
 ################################################################################
 
 
-from builtins import str
-from builtins import object
-
-
 class Adaptor(object):
     """
     Adaptor class is a base class for adaptors to connect classes or other
@@ -87,7 +83,7 @@ class Adaptor(object):
                 iattr += 1
             self.addAttribute(attr, atype)
 
-        for attr in sorted(attributes.keys()):
+        for key in sorted(attributes.keys()):
             self.addAttribute(key, attributes[key])
 
     def addAttribute(self, attribute, atype, editable=False, isid=False, islist=False):
@@ -148,7 +144,7 @@ class Adaptor(object):
             self._typename
             if self._typename
             else object.__class__.__name__
-            if object != None
+            if object is not None
             else self.__class__.__name__
         )
 
@@ -203,7 +199,7 @@ class Adaptor(object):
         Split off member objects from a dotted attribute
         """
         member, memberattr = attribute.split(".", 1)
-        if not member in self._attrdef:
+        if member not in self._attrdef:
             raise RuntimeError(
                 member + " is not defined in the Adaptor for " + self.typename(object)
             )
@@ -251,7 +247,7 @@ class Adaptor(object):
         """
         Gets the value of an attribute of an object
         """
-        if object == None:
+        if object is None:
             return None
         elif "." in attribute:
             adaptor, member, attribute = self._getMemberObject(object, attribute)
@@ -312,7 +308,7 @@ class Adaptor(object):
                 + self.typename(object)
                 + " cannot be edited"
             )
-        if value != None:
+        if value is not None:
             t = attrdef.type()
             try:
                 value = t(value)

@@ -9,16 +9,24 @@
 #
 ################################################################################
 
-
-from builtins import str
 import os.path
-import sys
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import QObject, pyqtSignal
+from qgis.PyQt.QtWidgets import QMessageBox
 
-from qgis.core import *
+from qgis.core import (
+    QgsEditFormConfig,
+    QgsWkbTypes,
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsCoordinateTransform,
+    QgsGeometry,
+    QgsDataSourceUri,
+    QgsMapLayer,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsFeatureRequest,
+)
 
 from .LINZ.gazetteer.gui.Controller import Controller
 
@@ -118,8 +126,7 @@ class Layers(QObject):
         self._searchIds = []
         self._name = None
         self._layers = {}
-        self._dbCrs = QgsCoordinateReferenceSystem()
-        self._dbCrs.createFromString("epsg:" + str(Layers.dbCrsEpsg))
+        self._dbCrs = QgsCoordinateReferenceSystem("EPSG:{}".format(Layers.dbCrsEpsg))
         self._layersOk = False
         self._qmldir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "styles"
@@ -277,10 +284,10 @@ class Layers(QObject):
                 layer.setReadOnly(False)
                 editFormConfig = layer.editFormConfig()
                 editFormConfig.setUiForm(os.path.join(self._formdir, ldef["form"]))
-                editFormConfig.setLayout(editFormConfig.UiFileLayout)
+                editFormConfig.setLayout(QgsEditFormConfig.UiFileLayout)
 
                 if "init" in ldef:
-                    editFormConfig.setInitCodeSource(1)
+                    editFormConfig.setInitCodeSource(QgsEditFormConfig.CodeSourceFile)
                     editFormConfig.setInitFilePath(
                         os.path.join(os.path.dirname(__file__), "GazEditForms.py")
                     )
@@ -325,7 +332,7 @@ class Layers(QObject):
 
     def layers(self, group=None):
         for glayer in self.layerDefs():
-            if group == None or glayer["def"]["group"] == group:
+            if group is None or glayer["def"]["group"] == group:
                 yield glayer["layer"]
 
     def featureLayers(self):
@@ -498,10 +505,7 @@ class Layers(QObject):
             )
             request.setFlags(QgsFeatureRequest.NoGeometry)
             request.setFlags(QgsFeatureRequest.ExactIntersect)
-            # SJ: old vectorLayer API
-            # layer.select(attlist,extent,False,True)
 
-            # if layer.nextFeature(feat):
             if layer.getFeatures(request).nextFeature(feat):
                 try:
                     feat_id = int(feat[attlist[0]])

@@ -9,10 +9,6 @@
 #
 ################################################################################
 
-from builtins import str
-from builtins import object
-import re
-import os.path
 import codecs
 from . import Database
 from .Model import SystemCode
@@ -29,7 +25,7 @@ class UnicodeWriter(object):
         self.stream = f
 
     def encodefield(self, field):
-        if field == None:
+        if field is None:
             return ""
         field = str(field)
         return (

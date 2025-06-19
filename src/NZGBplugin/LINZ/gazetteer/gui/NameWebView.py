@@ -9,9 +9,6 @@
 #
 ################################################################################
 
-from builtins import str
-from builtins import object
-
 import sys
 import os.path
 import datetime
@@ -22,12 +19,11 @@ try:
 except ImportError:
     import simplejson as json
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWebKitWidgets import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import Qt, pyqtSignal, QObject, QUrl, pyqtProperty, pyqtSlot
+from qgis.PyQt.QtWidgets import QMessageBox, QDockWidget
+from qgis.PyQt.QtWebKit import QWebSettings
+from qgis.PyQt.QtWebKitWidgets import QWebView, QWebPage
 
-from . import DatabaseConfiguration
 
 from LINZ.gazetteer import Model
 from LINZ.gazetteer import Database
@@ -95,7 +91,7 @@ class NameWebView(QWebView):
             self._editdata = {}
 
         def _load(self):
-            if self._template == None or self._stat != os.path.getmtime(self._file):
+            if self._template is None or self._stat != os.path.getmtime(self._file):
                 try:
                     if not os.path.exists(self._file):
                         raise ValueError(

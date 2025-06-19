@@ -3,14 +3,12 @@ import random
 import string
 import os
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from qgis.PyQt.QtCore import QTimer, QItemSelection, QItemSelectionModel
+from qgis.PyQt.QtWidgets import QApplication, QMessageBox, QTabWidget
+from qgis.PyQt.QtTest import QTest
+
 from qgis.core import QgsProject
-
-
 from qgis.utils import plugins, reloadPlugin
-from PyQt5.QtTest import QTest
 
 from utils.data_handler import TestDataHandler
 

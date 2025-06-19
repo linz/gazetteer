@@ -9,8 +9,6 @@
 #
 ################################################################################
 
-from builtins import str
-
 if __name__ == "__main__":
     import sys
     from os.path import dirname, abspath
@@ -18,10 +16,7 @@ if __name__ == "__main__":
     lib = dirname(dirname(dirname(dirname(abspath(__file__)))))
     sys.path.append(lib)
 
-
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QWidget
+from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QApplication, QDialog, QVBoxLayout
 
 from .Ui_SystemCodeEditorWidget import Ui_SystemCodeEditorWidget
 
@@ -31,9 +26,7 @@ from .Controller import Controller
 from LINZ.gazetteer.Model import SystemCode
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.ListModelConnector import ListModelConnector
-from LINZ.Widgets.WidgetConnector import WidgetConnector
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
-from LINZ.Widgets.ValidatorList import ValidatorList
 from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
 
 
@@ -124,7 +117,7 @@ class SystemCodeEditorWidget(QWidget, Ui_SystemCodeEditorWidget):
 
     def populateCodeList(self, code=None):
         code_group = self.selectedCodeGroup()
-        self.uNewCodeButton.setEnabled(code_group != None)
+        self.uNewCodeButton.setEnabled(code_group is not None)
         if not code_group:
             self.uCodesTable.setList([])
         else:
@@ -141,7 +134,7 @@ class SystemCodeEditorWidget(QWidget, Ui_SystemCodeEditorWidget):
     def codeSelected(self, row):
         if self._loadCodeOnSelect:
             self.loadCode()
-        self.uDeleteCodeButton.setEnabled(self.selectedCode() != None)
+        self.uDeleteCodeButton.setEnabled(self.selectedCode() is not None)
 
     def selectedCode(self):
         return self.uCodesTable.selectedItem()

@@ -1,9 +1,7 @@
 import unittest
 
+from qgis.PyQt.QtWidgets import QTabBar
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 from qgis.core import QgsProject
 from qgis.utils import plugins, reloadPlugin
 

@@ -11,11 +11,8 @@
 
 
 from past.builtins import cmp
-from builtins import str
-from builtins import range
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+
+from qgis.PyQt.QtWidgets import QComboBox
 
 
 class PythonComboBox(QComboBox):
@@ -39,7 +36,7 @@ class PythonComboBox(QComboBox):
         elif display:
             addItem = lambda r: self.addItem(str(r.__getattribute__(display)), r)
         for r in rows:
-            if addItem == None:
+            if addItem is None:
                 if isinstance(r, list) or isinstance(r, tuple):
                     if len(r) > 1:
                         addItem = lambda r: self.addItem(str(r[1]), r[0])

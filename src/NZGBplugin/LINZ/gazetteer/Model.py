@@ -19,9 +19,8 @@ import sqlalchemy.exc
 import sqlalchemy.schema
 import geoalchemy2 as ga
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Unicode, DateTime
+from sqlalchemy import Column, Integer, Unicode, DateTime
 from sqlalchemy.schema import Table, MetaData, PrimaryKeyConstraint
-from sqlalchemy.sql.expression import Function
 
 from . import Database
 
@@ -47,7 +46,7 @@ def objectId(item):
     Create a string id for a database derived object that can be
     used to identify the object in application code
     """
-    if item == None:
+    if item is None:
         return None
     if "__table__" not in dir(item):
         return None
