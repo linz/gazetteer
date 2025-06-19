@@ -22,7 +22,6 @@ class TestAdminInterface(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-
         # Insert required sys_codes to allow new feature creation
         cls.data_handler = TestDataHandler()
         cls.data_handler.insert_sys_codes()
@@ -124,9 +123,9 @@ class TestAdminInterface(unittest.TestCase):
         info_text = self.text.split("\n")
         self.assertEqual(info_text[0], "Application: NZGBplugin")
         self.assertEqual(info_text[1], f"Version: {self.gazetteer_plugin.Version}")
-        self.assertEqual(info_text[2], f'Database host: {os.environ["PGHOST"]}')
-        self.assertEqual(info_text[3], f'Database name: {os.environ["PGDATABASE"]}')
-        self.assertEqual(info_text[4], f'Database user: { os.environ["PGUSER"] }')
+        self.assertEqual(info_text[2], f"Database host: {os.environ['PGHOST']}")
+        self.assertEqual(info_text[3], f"Database name: {os.environ['PGDATABASE']}")
+        self.assertEqual(info_text[4], f"Database user: {os.environ['PGUSER']}")
 
     def test_C_add_user(self):
         """

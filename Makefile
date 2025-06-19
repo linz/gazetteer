@@ -57,18 +57,10 @@ docker-db-shell: docker-up ## Start a shell to the containerized db
 # Targets for src code validation and formating
 ##################################################
 
-.PHONY: formatting-validate-trailing-whitespace
-formatting-validate-trailing-whitespace: ##  Test for trailing whitespace
-	! find . -type f | grep -v '\.git/' | grep -v '\.png$' | xargs grep -n '[[:space:]]$'
+.PHONY: format
+format: ##  Apply ruff formatting
+	ruff format
 
-.PHONY: formatting-clean-trailing-whitespace
-formatting-clean-trailing-whitespace: ## Remove trailing whitespace
-	find . !  -name '*.git' !  -name '*.png'  -type f -print0 | xargs -r0 sed -e 's/[[:space:]]\+$//' -i
-
-.PHONY: formatting-validate-black
-formatting-validate-black: ## Ensure src code is Black compliant
-	black src/NZGBplugin/ --check --diff
-
-.PHONY: formatting-clean-black
-formatting-clean-black: ## Black formatting
-	black src/NZGBplugin/
+.PHONY: formatting-validate
+formatting-validate: ## Ensure src code is ruff compliant
+	ruff check

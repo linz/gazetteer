@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
 #  Crown copyright (c) 2020, Land Information New Zealand on behalf of
@@ -308,9 +308,7 @@ XDSC|LDSO||BASE CPAN USEA ANTA RCRD REMV GMPT OFFC|Gazetteer official names only
 XDSN|REPT|REPT|gaz_report_base_table|Published data table used as basis of reporting
 XDSC|REPT||BASE CPAN USEA ANTA RCRD REMV GMPT REPT|Gazetteer official names only
 
-""".split(
-    "\n"
-)
+""".split("\n")
 
 export_view_sql = """
 CREATE OR REPLACE VIEW

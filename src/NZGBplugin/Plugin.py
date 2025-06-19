@@ -27,7 +27,6 @@ from .SelectNameTool import SelectNameTool
 
 
 class Plugin(object):
-
     file_path = os.path.join(os.path.dirname(__file__), "metadata.txt")
     parser = configparser.ConfigParser()
     parser.read(file_path)
@@ -47,7 +46,6 @@ class Plugin(object):
         self._maptool = None
 
     def initGui(self):
-
         self._runaction = QAction(
             QIcon(":/plugins/GazetteerEditor/icon.png"),
             "Open the gazetteer editor",
