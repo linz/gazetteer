@@ -92,7 +92,7 @@ jobs:
   deploy:
     name: deploy
     if: startswith(github.ref, 'refs/tags/v')
-    needs: [linter, test_schema, test_docker]
+    needs: [test_schema, test_docker]
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Code
