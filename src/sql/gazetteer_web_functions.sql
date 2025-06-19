@@ -45,6 +45,8 @@ $body$
        replace(
        replace(
        replace(
+       replace(
+       replace(
             $1,
             'ó','o'),
             'Ó','O'),
@@ -72,6 +74,8 @@ $body$
             'Ï','I'),
             'Ö','O'),
             'Ü','U'),
+            'Á','A'),
+            'á','a'),
             '’','''')
 $body$
 LANGUAGE sql IMMUTABLE;

@@ -163,6 +163,12 @@ CREATE TABLE name_annotation
 
 CREATE INDEX idx_name_annot_name ON name_annotation( name_id, annotation_type );
 
+-- Identifies names that are published separately as part of the Tangata whenua place names maps.
+
+CREATE TABLE tangata_whenua_name
+(
+    name_id INT NOT NULL PRIMARY KEY
+);
 
 GRANT SELECT ON  system_code TO gazetteer_user;
 GRANT SELECT ON  feature TO gazetteer_user;
@@ -173,6 +179,7 @@ GRANT SELECT ON  feature_association TO gazetteer_user;
 GRANT SELECT ON  name_association TO gazetteer_user;
 GRANT SELECT ON  feature_annotation TO gazetteer_user;
 GRANT SELECT ON  name_annotation TO gazetteer_user;
+GRANT SELECT ON  tangata_whenua_name TO gazetteer_user;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON  system_code TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  feature TO gazetteer_admin;
@@ -183,3 +190,4 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON  feature_association TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  name_association TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  feature_annotation TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  name_annotation TO gazetteer_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON  tangata_whenua_name TO gazetteer_admin;
