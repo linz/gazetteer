@@ -97,7 +97,7 @@ CREATE TABLE name_event
     event_id serial NOT NULL PRIMARY KEY,
     name_id INT NOT NULL REFERENCES name( name_id ),
     event_date DATE,
-    event_type CHAR(4) NOT NULL, -- system code EVTT
+    event_type CHAR(4) NOT NULL, -- system code NEVT
     authority CHAR(4) NOT NULL,  -- system code AUTH
     event_reference TEXT,
     notes TEXT,
@@ -106,6 +106,22 @@ CREATE TABLE name_event
 );
 
 CREATE INDEX idx_name_event_name_id ON name_event( name_id );
+
+-- The sub event table - defines sub events (mostly corrigenda) associated with an name_event
+
+CREATE TABLE sub_event
+(
+    sub_event_id serial NOT NULL PRIMARY KEY,
+    event_id INT NOT NULL REFERENCES name_event( event_id ),
+    sub_event_date DATE,
+    sub_event_type CHAR(4) NOT NULL, -- system code SEVT
+    authority CHAR(4) NOT NULL,  -- system code AUTH
+    sub_event_reference TEXT,
+    notes TEXT,
+    updated_by NAME,
+    update_date TIMESTAMP
+);
+CREATE INDEX idx_sub_event_event_id ON sub_event( event_id );
 
 -- Association between features
 
@@ -169,6 +185,7 @@ GRANT SELECT ON  feature TO gazetteer_user;
 GRANT SELECT ON  feature_geometry TO gazetteer_user;
 GRANT SELECT ON  name TO gazetteer_user;
 GRANT SELECT ON  name_event TO gazetteer_user;
+GRANT SELECT ON  sub_event TO gazetteer_user;
 GRANT SELECT ON  feature_association TO gazetteer_user;
 GRANT SELECT ON  name_association TO gazetteer_user;
 GRANT SELECT ON  feature_annotation TO gazetteer_user;
@@ -179,6 +196,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON  feature TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  feature_geometry TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  name TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  name_event TO gazetteer_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON  sub_event TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  feature_association TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  name_association TO gazetteer_admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON  feature_annotation TO gazetteer_admin;

@@ -217,6 +217,15 @@ create table gaz_event
   event_reference text
 );
 
+create table gaz_sub_event
+(
+  sub_event_id integer not null primary key,
+  event_id integer not null,
+  sub_event_date date,
+  sub_event_type character(4),
+  sub_event_reference text
+);
+
 CREATE TABLE gaz_all_shapes
 (
   feat_id integer NOT NULL,
@@ -232,6 +241,7 @@ grant select on  gaz_annotation to gaz_web_reader;
 grant select on  gaz_code to gaz_web_reader;
 grant select on  gaz_web_config to gaz_web_reader;
 grant select on  gaz_event to gaz_web_reader;
+grant select on  gaz_sub_event to gaz_web_reader;
 grant select on  gaz_all_shapes to gaz_web_reader;
 
 grant all on  gaz_feature to gaz_web_admin;
@@ -241,6 +251,7 @@ grant all on  gaz_shape to gaz_web_admin;
 grant all on  gaz_annotation to gaz_web_admin;
 grant all on  gaz_code to gaz_web_admin;
 grant all on  gaz_event to gaz_web_admin;
+grant all on  gaz_sub_event to gaz_web_admin;
 grant all on  gaz_all_shapes to gaz_web_admin;
 
 grant all on  gaz_web_config to gaz_web_developer;

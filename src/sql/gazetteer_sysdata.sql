@@ -77,6 +77,14 @@ INSERT INTO system_code (code_group, code, category, value ) VALUES
 -- ('NEVT','VLDT',NULL,'Validated'),
 -- ('NEVT','WTHD',NULL,'Withdrawn');
 
+DELETE FROM system_code WHERE code_group='SEVT';
+DELETE FROM system_code WHERE code_group='CODE' AND code='SEVT';
+DELETE FROM system_code WHERE code_group='CUSG' AND code='SEVT';
+INSERT INTO system_code (code_group, code, category, value ) VALUES
+('CODE','SEVT','USER','Sub event type'),
+('CUSG','SEVT',NULL,'sub_event.sub_event_type'),
+('SEVT','CORR',NULL,'Corrigendum / Amending Gazette');
+
 DELETE FROM system_code WHERE code_group='AUTH';
 DELETE FROM system_code WHERE code_group='CODE' AND code='AUTH';
 DELETE FROM system_code WHERE code_group='CUSG' AND code='AUTH';

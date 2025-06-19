@@ -51,6 +51,7 @@ SELECT gaz_create_update_trigger( 'name_event' );
 SELECT gaz_create_update_trigger( 'name_annotation' );
 SELECT gaz_create_update_trigger( 'name_association' );
 SELECT gaz_create_update_trigger( 'system_code' );
+SELECT gaz_create_update_trigger( 'sub_event' );
 
 DROP FUNCTION gaz_create_update_trigger( name );
 

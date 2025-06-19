@@ -40,7 +40,45 @@ gazetteer.validators.validate_Event_event_date = function(dstr)
     return gazetteer.validators.validateDateString( 'Event date', dstr );
 }
 
+gazetteer.validators.validate_SubEvent_sub_event_date = function(dstr)
+{
+    dstr = dstr.trim();
+    if( dstr == '' )
+    {
+        return "You must supply a date";
+    }
+    return gazetteer.validators.validateDateString( 'SubEvent date', dstr );
+}
 
+gazetteer.validators.validate_SubEvent = function(evt)
+{
+    if( ! gazetteer.validators.subEventReferenceValidators )
+    {
+        var validators = {};
+        try
+        {
+            validators = JSON.parse(window.qcontroller.subEventReferenceValidators);
+        }
+        catch(err)
+        {
+        }
+        gazetteer.validators.subEventReferenceValidators = validators;
+    }
+    validators = gazetteer.validators.subEventReferenceValidators;
+
+    var ref = evt.sub_event_reference;
+    if( evt.authority in validators ) {
+        var vdt = validators[evt.authority];
+        if( ! ref.match(RegExp(vdt.re)) ) return vdt.message;
+    }
+    else if( evt.sub_event_reference.match(/^\s*$/))
+    {
+        return "You must supply a reference for the sub event";
+    }
+    return '';
+}
+
+//
 gazetteer.validators.validate_Event = function(evt)
 {
     if( ! gazetteer.validators.eventReferenceValidators )

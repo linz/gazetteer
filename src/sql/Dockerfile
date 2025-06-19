@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean
 
 # Install gazeteer schema
-ADD *.sql build_gazetteer_export.py install.sh /sql/
+ADD *.sql build_gazetteer_export.py _export_helpers.py install.sh /sql/
 RUN touch /sql/gazetteer_export.sql && \
     chown postgres /sql/gazetteer_export.sql
 

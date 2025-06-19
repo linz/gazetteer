@@ -304,9 +304,17 @@ class Name(base):
 
 class Event(base):
     __table__ = Table("name_event", meta, autoload=True)
+    sub_events = relationship("SubEvent", backref="event", cascade="all, delete-orphan")
 
     def __str__(self):
         return "NameEvent<" + str(self.event_id) + ">"
+
+
+class SubEvent(base):
+    __table__ = Table("sub_event", meta, autoload=True)
+
+    def __str__(self):
+        return "SubEvent<" + str(self.sub_event_id) + ">"
 
 
 class FeatureAnnotation(base):

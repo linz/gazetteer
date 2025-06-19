@@ -192,7 +192,10 @@
     <!--(if len(name.events) == 0 )-->
     <p>There are no events associated with this name</p>
     <!--(end)-->
-    <!--(for event in sortEvents(name.events))-->
+    <!--(for idx, event in enumerate(sortEvents(name.events)))-->
+        <!--(if idx != 0 )-->
+        <hr class="hide-during-edit"  />
+        <!--(end)-->
         <div id="@!id(event)!@" class="editable-item can-delete">
         <p class="event"><span class="infotype">@!lookup('NEVT',event.event_type)!@</span>
         <span class="eventdate">(@!dateFormat(event.event_date)!@)</span>:
@@ -202,6 +205,90 @@
         <!--(if event.notes)-->
         <p class="eventnotes"><span class="infotype">Notes:</span> $! htmlText(event.notes) !$</p>
         <!--(end)-->
+        <div id="new_event_template" class="edit-new-template object-type" object_type="SubEvent">
+            <p>New sub-event details</p>
+            <input type="hidden" class="edit-value" name="event_id" value="@!event.event_id!@" />
+            <div class="form_row">
+                <span class="form_label">Event Type: </span><select name="sub_event_type" class="edit-value">
+            $!lookupOptions('SEVT')!$
+            </select>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Authority: </span><select name="authority" class="edit-value">
+            $!lookupOptions('AUTH', defaultSelected = 'NZGB')!$
+            </select>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Date: </span>
+                <div class="form_row_input">
+                <input name="sub_event_date" class="edit-value" type="text" size="12"/>
+            </div>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Reference: </span>
+                <div class="form_row_input">
+                <input name="sub_event_reference" class="edit-value fill" type="text" size="50"/>
+            </div>
+            </div>
+            <div class="form_row">
+                <span class="form_label">Notes: </span>
+                <div class="form_row_input">
+                <textarea onclick="autoGrow(this);" onkeyup="autoGrow(this);" name="notes" class="edit-value" ></textarea>
+            </div>
+            </div>
+        </div>
+        <!--(if len(event.sub_events) == 0 )-->
+            <!-- <br /> -->
+            <!-- <br /> -->
+        <!-- <p>There are no sub_events associated with this event</p> -->
+        <!--(end)-->
+        <!--(for idx, sub_event in enumerate(sortSubEvents(event.sub_events)))-->
+            <!--(if idx != 0 )-->
+            <hr class="hide-during-edit" style="margin-left: 2em;" />
+            <!--(end)-->
+        <div id="@!id(sub_event)!@" class="editable-item can-delete sub_event_wrapper" style="padding-left: 2em;">
+            <p class="sub_event">
+                <span class="infotype">@!lookup('SEVT',sub_event.sub_event_type)!@</span>
+                <span class="subeventdate">(@!dateFormat(sub_event.sub_event_date)!@)</span>:
+                @!sub_event.sub_event_reference!@
+                <span class="author">(@!sub_event.updated_by!@: @!dateFormat(sub_event.update_date)!@)</span>
+            </p>
+            <!--(if sub_event.notes)-->
+            <p class="subeventnotes"><span class="infotype">Notes:</span> $! htmlText(sub_event.notes) !$</p>
+            <!--(end)-->
+            <div class="edit-update can-delete object-type" object_type="SubEvent">
+                <div class="form_row">
+                    <span class="form_label">Event Type: </span><select name="sub_event_type" class="edit-value" id="@!id(sub_event,'sub_event_type')!@">
+                $!lookupOptions('SEVT')!$
+                </select>
+                </div>
+                <div class="form_row">
+                    <span class="form_label">Authority: </span><select name="authority" class="edit-value" id="@!id(sub_event,'authority')!@">
+                $!lookupOptions('AUTH')!$
+                </select>
+                </div>
+                <div class="form_row">
+                    <span class="form_label">Date: </span>
+                    <div class="form_row_input">
+                    <input name="sub_event_date" class="edit-value" type="text" size="12" id="@!id(sub_event,'sub_event_date')!@" />
+                </div>
+                </div>
+                <div class="form_row">
+                    <span class="form_label">Reference: </span>
+                    <div class="form_row_input">
+                    <input name="sub_event_reference" class="edit-value fill" type="text" size="50" id="@!id(sub_event,'sub_event_reference')!@" />
+                </div>
+                </div>
+                <div class="form_row">
+                    <span class="form_label">Notes: </span>
+                    <div class="form_row_input">
+                    <textarea onclick="autoGrow(this);" onkeyup="autoGrow(this);" class="edit-value" name="notes" id="@!id(sub_event,'notes')!@"></textarea>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!--(end)-->
+
         <div class="edit-update can-delete object-type" object_type="Event">
             <div class="form_row">
                 <span class="form_label">Type: </span><select name="event_type" class="edit-value" id="@!id(event,'event_type')!@">

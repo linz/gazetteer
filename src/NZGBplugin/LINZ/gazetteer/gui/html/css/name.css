@@ -5,6 +5,9 @@ body
 	margin: 8px 8px 8px 28px;
 }
 
+.data.NightMapping {
+	color: #fff;
+}
 
 h1
 {
@@ -23,10 +26,23 @@ h2
 
 span.infotype,
 span.eventdate,
+span.subeventdate,
 span.author,
 div.idblock
 {
 	color: #888888;
+}
+
+hr {
+	opacity: 0.25;
+}
+
+.data.NightMapping span.infotype,
+.data.NightMapping span.eventdate,
+.data.NightMapping span.subeventdate,
+.data.NightMapping span.author,
+.data.NightMapping div.idblock {
+	color: #777777;
 }
 
 span.author
@@ -51,6 +67,11 @@ div.edit-new-item
 	padding: 2px 5px 2px 5px;
 }
 
+.data.NightMapping div.edit-item,
+.data.NightMapping div.edit-new-item {
+	background-color: #111111;
+	border-color: #444444;
+}
 
 .edit-update,
 .edit-restore,
@@ -58,6 +79,22 @@ div.edit-new-item
 div.edit-new-item
 {
 	background-color: yellow;
+}
+
+.data.NightMapping .edit-update,
+.data.NightMapping .edit-restore,
+.data.NightMapping .edit-new-item,
+.data.NightMapping div.edit-new-item
+{
+	background-color: #989800;
+}
+.data.NightMapping select,
+.data.NightMapping textarea,
+.data.NightMapping input {
+	color: white;
+}
+.data.NightMapping select option {
+	background-color: #111111;
 }
 
 div.edit-new-template
