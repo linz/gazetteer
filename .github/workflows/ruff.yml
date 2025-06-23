@@ -4,12 +4,18 @@ jobs:
   ruff:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: chartboost/ruff-action@v1
+      - uses: actions/checkout@v4
+
+      - name: Use Python 3.13
+        uses: actions/setup-python@v5
         with:
-          src: src
-          args: format --check
-      - uses: chartboost/ruff-action@v1
-        with:
-          src: src
-          args: check
+          python-version: 3.13
+
+      - name: Install Required Python Modules
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Format (ruff)
+        run: |
+          ruff format --check --diff src/NZGBplugin/
