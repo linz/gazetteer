@@ -10,7 +10,8 @@
 ################################################################################
 
 
-from past.builtins import cmp
+def cmp(a, b):
+    return (a > b) - (a < b)
 
 
 def populateCombo(widget, rows, display=""):

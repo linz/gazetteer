@@ -10,9 +10,11 @@
 ################################################################################
 
 
-from past.builtins import cmp
-
 from qgis.PyQt.QtWidgets import QComboBox
+
+
+def cmp(a, b):
+    return (a > b) - (a < b)
 
 
 class PythonComboBox(QComboBox):
