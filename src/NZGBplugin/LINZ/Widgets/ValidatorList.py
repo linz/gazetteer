@@ -13,6 +13,7 @@ from qgis.PyQt.QtCore import QObject, QRegExp
 from qgis.PyQt.QtGui import QRegExpValidator, QValidator
 from qgis.PyQt.QtWidgets import QLineEdit
 
+
 class ValidatorList(QObject):
     class Validator(QObject):
         def __init__(self, parent, widget, validator, message):

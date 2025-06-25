@@ -13,6 +13,7 @@ import sys
 
 from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 
+
 def handleException():
     type, value, traceback = sys.exc_info()
     if type is None:

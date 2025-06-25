@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 #
 #  New Zealand Geographic Board gazetteer application,
 #  Crown copyright (c) 2020, Land Information New Zealand on behalf of

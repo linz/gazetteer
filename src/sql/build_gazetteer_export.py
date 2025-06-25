@@ -127,9 +127,9 @@ from
    join feature f on f.feat_id = n.feat_id
    join system_code ftsc on ftsc.code_group='FTYP' and ftsc.code=f.feat_type
    join system_code sts on sts.code_group='NSTS' and sts.code=n.status
-   left join lateral ({event_ref_inner_query('NZGZ', None, True)}) nzgb_event on true
-   left join lateral ({event_ref_inner_query('DOCG', None, True)}) doc_gaz_event on true
-   left join lateral ({event_ref_inner_query('NZGR', None, True)}) rev_gaz_event on true
+   left join lateral ({event_ref_inner_query("NZGZ", None, True)}) nzgb_event on true
+   left join lateral ({event_ref_inner_query("DOCG", None, True)}) doc_gaz_event on true
+   left join lateral ({event_ref_inner_query("NZGR", None, True)}) rev_gaz_event on true
    left join lateral (SELECT * FROM name_event where authority='NZGB' and name_id=n.name_id order by event_date desc limit 1) last_nzgb on true,
    nztm
 where

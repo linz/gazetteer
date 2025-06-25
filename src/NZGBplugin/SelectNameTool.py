@@ -14,6 +14,7 @@ from qgis.PyQt.QtCore import pyqtSignal, QPoint, Qt
 from qgis.core import QgsRectangle
 from qgis.gui import QgsMapTool
 
+
 class SelectNameTool(QgsMapTool):
     tolerance = 5
     featureSelected = pyqtSignal(int, name="featureSelected")
@@ -50,6 +51,5 @@ class SelectNameTool(QgsMapTool):
         if feat_id:
             self._controller.showFeatId(
                 feat_id,
-                (e.modifiers() & Qt.ShiftModifier)
-                == Qt.ShiftModifier,
+                (e.modifiers() & Qt.ShiftModifier) == Qt.ShiftModifier,
             )

@@ -12,6 +12,7 @@
 from qgis.PyQt.QtCore import QRegExp
 from qgis.PyQt.QtGui import QRegExpValidator
 
+
 class UCaseRegExpValidator(QRegExpValidator):
     def __init__(self, regexp, parent=None):
         QRegExpValidator.__init__(self, QRegExp(regexp), parent)

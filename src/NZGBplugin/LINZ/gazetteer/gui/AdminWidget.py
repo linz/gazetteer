@@ -19,7 +19,14 @@ if __name__ == "__main__":
     sys.path.append(lib)
 
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QFileDialog, QDialog, QVBoxLayout, QApplication
+from qgis.PyQt.QtWidgets import (
+    QWidget,
+    QMessageBox,
+    QFileDialog,
+    QDialog,
+    QVBoxLayout,
+    QApplication,
+)
 
 
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
