@@ -10,14 +10,15 @@
 ################################################################################
 
 import sys
-import os.path
+import os
 
 if __name__ == "__main__":
-    from os.path import dirname, abspath
-
-    lib = dirname(dirname(dirname(dirname(abspath(__file__)))))
+    lib = os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    )
     sys.path.append(lib)
 
+from qgis.PyQt import uic
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import (
     QWidget,
@@ -36,11 +37,14 @@ from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
 from .Controller import Controller
 from LINZ.gazetteer.Model import User
 from LINZ.gazetteer.Model import SystemCode
-from .Ui_AdminWidget import Ui_AdminWidget
 from . import Config
 
+UI_ADMIN_WIDGET, _ = uic.loadUiType(
+    os.path.join(os.path.dirname(__file__), "Ui_AdminWidget.ui")
+)
 
-class AdminWidget(QWidget, Ui_AdminWidget):
+
+class AdminWidget(QWidget, UI_ADMIN_WIDGET):
     def __init__(self, parent=None, userOnly=True):
         QWidget.__init__(self, parent)
         self.setupUi(self)

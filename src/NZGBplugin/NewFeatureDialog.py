@@ -12,13 +12,15 @@
 
 import os
 
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
 from qgis.core import Qgis
 
+from .gui import GuiUtils
+
 from .LINZ.gazetteer.gui import FormUtils
 
-from .Ui_NewFeatureDialog import Ui_NewFeatureDialog
 
 # Set window to modal for better UX.
 # Can also be set to "show" so that the
@@ -26,7 +28,12 @@ from .Ui_NewFeatureDialog import Ui_NewFeatureDialog
 MODALITY = os.environ.get("MODALITY", "exec_")
 
 
-class NewFeatureDialog(QDialog, Ui_NewFeatureDialog):
+UI_NEW_FEATURE_DIALOG, _ = uic.loadUiType(
+    GuiUtils.get_ui_file_path("Ui_NewFeatureDialog.ui")
+)
+
+
+class NewFeatureDialog(UI_NEW_FEATURE_DIALOG, QDialog):
     @staticmethod
     def createNewFeature(lon, lat, controller, iface):
         iface.dlg_create_new = NewFeatureDialog(iface, controller)
