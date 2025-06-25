@@ -9,8 +9,10 @@
 #
 ################################################################################
 
+import os
 import sys
 
+from qgis.PyQt import uic
 from qgis.PyQt.QtCore import pyqtSignal, Qt, QEvent
 from qgis.PyQt.QtWidgets import (
     QWidget,
@@ -29,12 +31,14 @@ from LINZ.gazetteer.Model import Name
 from . import FormUtils
 from LINZ.gazetteer.Model import SystemCode
 
-from .Ui_NameSearchWidget import Ui_NameSearchWidget
-
 from .Controller import Controller
 
+UI_NAME_SEARCH_WIDGET, _ = uic.loadUiType(
+    os.path.join(os.path.dirname(__file__), "Ui_NameSearchWidget.ui")
+)
 
-class NameSearchWidget(QWidget, Ui_NameSearchWidget):
+
+class NameSearchWidget(UI_NAME_SEARCH_WIDGET, QWidget):
     nameSelected = pyqtSignal(int, bool, name="nameSelected")
 
     def __init__(self, parent=None, userOnly=True):

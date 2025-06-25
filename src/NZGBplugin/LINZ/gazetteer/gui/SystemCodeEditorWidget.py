@@ -16,9 +16,9 @@ if __name__ == "__main__":
     lib = dirname(dirname(dirname(dirname(abspath(__file__)))))
     sys.path.append(lib)
 
+import os
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QApplication, QDialog, QVBoxLayout
-
-from .Ui_SystemCodeEditorWidget import Ui_SystemCodeEditorWidget
 
 # Import controller before model components to ensure database is configured..
 
@@ -29,8 +29,12 @@ from LINZ.Widgets.ListModelConnector import ListModelConnector
 from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
 from LINZ.Widgets.UCaseRegExpValidator import UCaseRegExpValidator
 
+UI_SYSTEM_CODE_EDITOR_WIDGET, _ = uic.loadUiType(
+    os.path.join(os.path.dirname(__file__), "Ui_SystemCodeEditorWidget.ui")
+)
 
-class SystemCodeEditorWidget(QWidget, Ui_SystemCodeEditorWidget):
+
+class SystemCodeEditorWidget(UI_SYSTEM_CODE_EDITOR_WIDGET, QWidget):
     def __init__(self, parent=None, userOnly=True):
         QWidget.__init__(self, parent)
         self._controller = Controller.instance()
