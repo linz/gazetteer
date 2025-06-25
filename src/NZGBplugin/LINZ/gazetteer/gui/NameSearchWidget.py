@@ -12,7 +12,14 @@
 import sys
 
 from qgis.PyQt.QtCore import pyqtSignal, Qt, QEvent
-from qgis.PyQt.QtWidgets import QWidget, QMessageBox, QApplication, QDockWidget, QDialog, QVBoxLayout
+from qgis.PyQt.QtWidgets import (
+    QWidget,
+    QMessageBox,
+    QApplication,
+    QDockWidget,
+    QDialog,
+    QVBoxLayout,
+)
 
 from LINZ.Widgets import QtUtils
 from LINZ.Widgets.DictionaryAdaptor import DictionaryAdaptor

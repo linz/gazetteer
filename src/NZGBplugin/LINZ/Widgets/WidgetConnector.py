@@ -11,7 +11,15 @@
 
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal
-from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLineEdit, QPlainTextEdit, QTextEdit, QTableView, QWidget
+from qgis.PyQt.QtWidgets import (
+    QComboBox,
+    QLabel,
+    QLineEdit,
+    QPlainTextEdit,
+    QTextEdit,
+    QTableView,
+    QWidget,
+)
 
 from .Adaptor import Adaptor
 
