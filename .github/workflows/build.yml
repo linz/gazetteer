@@ -35,11 +35,21 @@ jobs:
         echo "VERSION=$(echo ${TAG} | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')-alpha" >> $GITHUB_ENV
         echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
+    - name: Embed external dependencies
+      run: |
+        wget https://github.com/geoalchemy/geoalchemy2/archive/0.8.4.zip
+        unzip 0.8.4.zip
+        cp -r geoalchemy2-0.8.4/geoalchemy2/ src/NZGBplugin/
+        wget https://github.com/sqlalchemy/sqlalchemy/archive/rel_1_3_12.zip
+        unzip rel_1_3_12.zip
+        cp -r sqlalchemy-rel_1_3_12/lib/sqlalchemy/ src/NZGBplugin/
+
     - name: Build package
       run: |
-        qgis-plugin-ci --no-validation package ${{ env.VERSION }}
+        qgis-plugin-ci --no-validation package ${{ env.VERSION }} --asset-path src/NZGBplugin/geoalchemy2 --asset-path src/NZGBplugin/sqlalchemy
         mkdir tmp
         unzip src/NZGBplugin.${{ env.VERSION }}.zip -d tmp
+        mv tmp/nzgbplugin tmp/NZGBplugin
 
     - name: Save PR number to zips
       run: |
