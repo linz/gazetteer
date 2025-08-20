@@ -12,3 +12,5 @@ description=For maintaining the NZGB gazetteer.
 version=2.2.0
 experimental=False
 repository=https://github.com/linz/gazetteer
+tracker=https://github.com/linz/gazetteer/issues
+homepage=https://github.com/linz/gazetteer

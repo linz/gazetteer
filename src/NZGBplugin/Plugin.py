@@ -21,6 +21,7 @@ from qgis.core import Qgis
 from qgis.gui import QgsMapToolEmitPoint
 
 from .SelectNameTool import SelectNameTool
+from .gui import GuiUtils
 
 
 class Plugin(object):
@@ -44,21 +45,21 @@ class Plugin(object):
 
     def initGui(self):
         self._runaction = QAction(
-            QIcon(":/plugins/GazetteerEditor/icon.png"),
+            GuiUtils.get_icon("icon.svg"),
             "Open the gazetteer editor",
             self._iface.mainWindow(),
         )
         self._runaction.setWhatsThis("Open the gazetteer editor window")
         self._runaction.triggered.connect(self._run)
 
-        # self._helpaction = QAction(QIcon(":/plugins/GazetteerEditor/help.png"),
+        # self._helpaction = QAction(GuiUtils.get_icon("help.svg"),
         #     "Help on gazetter application", self._iface.mainWindow())
         # self._helpaction.setWhatsThis("Help on using the gazetteer application")
         # self._helpaction.setEnabled( True )
         # self._helpaction.triggered.connect( self._showHelp )
 
         self._infoaction = QAction(
-            QIcon(":/plugins/GazetteerEditor/help.png"),
+            GuiUtils.get_icon("help.svg"),
             "About gazetteer application",
             self._iface.mainWindow(),
         )
@@ -67,7 +68,7 @@ class Plugin(object):
         self._infoaction.triggered.connect(self._showInfo)
 
         self._adminaction = QAction(
-            QIcon(":/plugins/GazetteerEditor/admin.png"),
+            GuiUtils.get_icon("admin.svg"),
             "Administration functions",
             self._iface.mainWindow(),
         )
@@ -76,7 +77,7 @@ class Plugin(object):
         self._adminaction.triggered.connect(self._runAdmin)
 
         self._ptraction = QAction(
-            QIcon(":/plugins/GazetteerEditor/searchpointer.png"),
+            GuiUtils.get_icon("searchpointer.svg"),
             "Identify/select search result",
             self._iface.mainWindow(),
         )
@@ -87,7 +88,7 @@ class Plugin(object):
         self._ptraction.triggered.connect(self._activateSelectTool)
 
         self._addselaction = QAction(
-            QIcon(":/plugins/GazetteerEditor/addselected.png"),
+            GuiUtils.get_icon("addselected.svg"),
             "Add selected geometries to feature",
             self._iface.mainWindow(),
         )
@@ -96,7 +97,7 @@ class Plugin(object):
         self._addselaction.triggered.connect(self._addSelectedGeometries)
 
         self._delselaction = QAction(
-            QIcon(":/plugins/GazetteerEditor/delselected.png"),
+            GuiUtils.get_icon("delselected.svg"),
             "Remove selected geometries from feature",
             self._iface.mainWindow(),
         )
@@ -109,7 +110,7 @@ class Plugin(object):
         iface = self._iface
 
         self._editshift = QAction(
-            QIcon(":/plugins/GazetteerEditor/editshift.png"),
+            GuiUtils.get_icon("editshift.svg"),
             "Move feature geometries",
             self._iface.mainWindow(),
         )
@@ -120,7 +121,7 @@ class Plugin(object):
         )
 
         self._editnodes = QAction(
-            QIcon(":/plugins/GazetteerEditor/editnodes.png"),
+            GuiUtils.get_icon("editnodes.svg"),
             "Move feature geometry nodes",
             self._iface.mainWindow(),
         )
@@ -133,7 +134,7 @@ class Plugin(object):
         )
 
         self._editnew = QAction(
-            QIcon(":/plugins/GazetteerEditor/editnew.png"),
+            GuiUtils.get_icon("editnew.svg"),
             "New feature geometries",
             self._iface.mainWindow(),
         )
@@ -144,7 +145,7 @@ class Plugin(object):
         )
 
         self._editsave = QAction(
-            QIcon(":/plugins/GazetteerEditor/editsave.png"),
+            GuiUtils.get_icon("editsave.svg"),
             "Save feature geometry edits",
             self._iface.mainWindow(),
         )
@@ -153,7 +154,7 @@ class Plugin(object):
         self._editsave.triggered.connect(lambda: self._layers.endFeatureEdits(False))
 
         self._editcancel = QAction(
-            QIcon(":/plugins/GazetteerEditor/editcancel.png"),
+            GuiUtils.get_icon("editcancel.svg"),
             "Discard feature geometry edits",
             self._iface.mainWindow(),
         )
@@ -162,7 +163,7 @@ class Plugin(object):
         self._editcancel.triggered.connect(lambda: self._layers.endFeatureEdits(True))
 
         self._newfeat = QAction(
-            QIcon(":/plugins/GazetteerEditor/newfeat.png"),
+            GuiUtils.get_icon("newfeat.svg"),
             "Create a new feature",
             self._iface.mainWindow(),
         )
