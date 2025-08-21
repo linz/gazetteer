@@ -578,13 +578,13 @@ gazetteer.createEditButtons = function()
 
 gazetteer.setup = function()
 {
-    const backgroundColor = window.getComputedStyle( document.body ,null).getPropertyValue('background-color');
-    if(backgroundColor === 'rgba(0, 0, 0, 0)') {
-        $('.data').addClass("NightMapping");
-    }
-    else {
-        $('.data').removeClass("NightMapping");
-    }
+    // const backgroundColor = window.getComputedStyle( document.body ,null).getPropertyValue('background-color');
+    // if(backgroundColor === 'rgba(0, 0, 0, 0)') {
+    //     $('.data').addClass("NightMapping");
+    // }
+    // else {
+    //     $('.data').removeClass("NightMapping");
+    // }
     gazetteer.getControllerData('editdata','pageData',{});
 
     $('.edit-update').each( gazetteer.setupEditUpdate );
