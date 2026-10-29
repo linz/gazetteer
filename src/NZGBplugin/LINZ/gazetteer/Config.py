@@ -30,6 +30,10 @@ def set(item, value):
     settings().setValue(item, value)
 
 
+def contains(key) -> bool:
+    return settings().contains(key)
+
+
 def get(item, default=""):
     value = settings().value(item, default)
     if "toString" in dir(value):

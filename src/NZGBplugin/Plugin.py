@@ -12,6 +12,7 @@
 import sys
 import os.path
 import configparser
+from typing import Optional
 
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QIcon
@@ -21,7 +22,7 @@ from qgis.core import Qgis
 from qgis.gui import QgsMapToolEmitPoint
 
 from .SelectNameTool import SelectNameTool
-from .gui import GuiUtils
+from .gui import GuiUtils, DbManagerDialog
 
 
 class Plugin(object):
@@ -42,11 +43,12 @@ class Plugin(object):
         self._controller = None
         self._selectptr = None
         self._maptool = None
+        self._configure_database_action: Optional[QAction] = None
 
     def initGui(self):
         self._runaction = QAction(
             GuiUtils.get_icon("icon.svg"),
-            "Open the gazetteer editor",
+            "Open the Gazetteer Editor…",
             self._iface.mainWindow(),
         )
         self._runaction.setWhatsThis("Open the gazetteer editor window")
@@ -60,16 +62,23 @@ class Plugin(object):
 
         self._infoaction = QAction(
             GuiUtils.get_icon("help.svg"),
-            "About gazetteer application",
+            "About Gazetteer Application…",
             self._iface.mainWindow(),
         )
         self._infoaction.setWhatsThis("Information on gazetteer application settings")
         self._infoaction.setEnabled(True)
         self._infoaction.triggered.connect(self._showInfo)
 
+        self._configure_database_action = QAction(
+            GuiUtils.get_icon("database_connection.svg"),
+            "Configure Database Connection…",
+            self._iface.mainWindow(),
+        )
+        self._configure_database_action.triggered.connect(self._configure_database)
+
         self._adminaction = QAction(
             GuiUtils.get_icon("admin.svg"),
-            "Administration functions",
+            "Administration Functions…",
             self._iface.mainWindow(),
         )
         self._adminaction.setWhatsThis("Update the web database, administer users, etc")
@@ -189,12 +198,14 @@ class Plugin(object):
         self._toolbar.addWidget(self._currNameLabel)
 
         self._iface.addPluginToMenu(self._menuName, self._runaction)
+        self._iface.addPluginToMenu(self._menuName, self._configure_database_action)
         self._iface.addPluginToMenu(self._menuName, self._adminaction)
         # self._iface.addPluginToMenu(self._menuName, self._helpaction)
         self._iface.addPluginToMenu(self._menuName, self._infoaction)
 
     def unload(self):
         self._toolbar = self._iface.mainWindow().removeToolBar(self._toolbar)
+        self._iface.removePluginMenu(self._menuName, self._configure_database_action)
         self._iface.removePluginMenu(self._menuName, self._adminaction)
         self._iface.removePluginMenu(self._menuName, self._runaction)
         # self._iface.removePluginMenu(self._menuName,self._helpaction)
@@ -212,7 +223,7 @@ class Plugin(object):
 
             self._controller = Controller.instance()
             # Check if user is valid - will raise exception if not
-            dbinstance = self._controller.database().instance()
+            _ = self._controller.database().Database.instance()
 
             # Check version of application
             version = self._controller.database().scalar(
@@ -278,6 +289,21 @@ class Plugin(object):
     #                self._editorDock.showNormal()
     #            self._editorDock.show()
     #            self._editorDock.raise_()
+
+    def _configure_database(self):
+        from .LINZ.gazetteer.Database import Database
+
+        dialog = DbManagerDialog()
+        dialog.setWindowTitle("Configure Database Connection")
+        dialog.set_selected_connection_details(
+            Database.stored_connection_name(),
+            Database.get_connection_details()["schema"],
+        )
+        if dialog.exec():
+            Database.set_stored_connection_details(
+                dialog.selected_connection_name(), dialog.selected_schema_name()
+            )
+            Database.update_connection_details()
 
     def _runAdmin(self):
         self._run()

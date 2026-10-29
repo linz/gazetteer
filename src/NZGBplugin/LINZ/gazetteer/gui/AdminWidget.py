@@ -37,7 +37,7 @@ from LINZ.Widgets.SqlAlchemyAdaptor import SqlAlchemyAdaptor
 from .Controller import Controller
 from LINZ.gazetteer.Model import User
 from LINZ.gazetteer.Model import SystemCode
-from . import Config
+from LINZ.gazetteer import Config
 
 UI_ADMIN_WIDGET, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "Ui_AdminWidget.ui")
